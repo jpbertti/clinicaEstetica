@@ -1,0 +1,47 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+
+# Android
+android/**/generated/
+android/key.properties
+android/local.properties
+
+# iOS
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcscheme
+*.xcuserstate
+
+# Project specific
+.env
+apk_extracted/
+tmp/
+*.bak
+*.old
+*.tmp
+*.log
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+.pub-cache/
+.packages
+.dart_tool/
+
+# OS
+.DS_Store
+Thumbs.db

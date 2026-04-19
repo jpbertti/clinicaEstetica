@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Montserrat:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2F5E46",
+                        "gold": "#C7A36B",
+                        "off-white": "#F6F4EF",
+                        "soft-green": "#6E8F7B",
+                        "premium-gray": "#2B2B2B",
+                        "background-light": "#F6F4EF",
+                        "background-dark": "#161c19",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "body": ["Montserrat", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #F6F4EF;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light text-premium-gray">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light p-6 pb-2 justify-between">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-sm cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-primary font-playfair text-xl font-bold leading-tight tracking-tight flex-1 text-center">Meu Perfil</h2>
+</div>
+<!-- Profile Hero -->
+<div class="flex p-8 flex-col items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-white shadow-xl" data-alt="Elegant woman smiling for profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZ7mqTTzDdUN4HUnKg--Q3FEEGw9goNXy4PyCQBdRU6LpRE2sGmz1lXe5ypAup6kftSBj00oOTAP8Y07xNGIS3L2GsdbNHXEar5g6iFkxoOBQEM040gAMjut7-ElnisMFaJ3LztpDXSI6YMn_VpZbtepUOvdFC8tDx26bqzu7IHb5o7ZK60ptQe5ns_TdNJ7n4YfSa7wzzQooBbCeZ6vLZrX2IKM5f4ucwohsaiYd8hu5UYplxFgtIDyz903AWGLSc8z1u57BHdP8x");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-gold text-white p-1.5 rounded-full border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">verified</span>
+</div>
+</div>
+<div class="mt-6 flex flex-col items-center text-center">
+<h1 class="text-premium-gray font-playfair text-3xl font-bold tracking-tight">Maria Oliveira</h1>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-gold material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">stars</span>
+<p class="text-soft-green text-sm font-medium tracking-wide uppercase">Membro Premium Gold</p>
+</div>
+<p class="text-soft-green/70 text-xs mt-1 font-normal italic">Cliente desde Junho, 2023</p>
+</div>
+</div>
+<!-- Content Sections -->
+<div class="px-6 pb-24 space-y-4">
+<!-- Personal Information -->
+<div class="bg-white p-5 rounded-xl shadow-sm border border-gold/10">
+<div class="flex items-center gap-4 mb-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<h3 class="text-primary font-playfair text-lg font-bold">Informações Pessoais</h3>
+</div>
+<div class="space-y-3 pl-12"><div><p class="text-soft-green text-[10px] uppercase font-bold tracking-widest">Nome Completo</p><p class="text-premium-gray text-sm">Maria Oliveira</p></div>
+<div>
+<p class="text-soft-green text-[10px] uppercase font-bold tracking-widest">E-mail</p>
+<p class="text-premium-gray text-sm">maria.oliveira@estetica.com</p>
+</div>
+<div>
+<p class="text-soft-green text-[10px] uppercase font-bold tracking-widest">Telefone</p>
+<p class="text-premium-gray text-sm">(11) 98765-4321</p>
+</div>
+</div>
+</div>
+<!-- My Procedures -->
+<a class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gold/10 group" href="#">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h3 class="text-primary font-playfair text-lg font-bold leading-tight">Meus Procedimentos</h3>
+<p class="text-soft-green text-xs">Histórico e galeria de fotos</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gold group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+<!-- Payment Methods -->
+<a class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gold/10 group" href="#">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary"><span class="material-symbols-outlined">reviews</span></div>
+<div><h3 class="text-primary font-playfair text-lg font-bold leading-tight">Histórico de Avaliações</h3><p class="text-soft-green text-xs">Minhas notas e comentários</p></div>
+</div>
+<span class="material-symbols-outlined text-gold group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+<!-- Settings & Support Group -->
+<div class="bg-white rounded-xl shadow-sm border border-gold/10 overflow-hidden">
+<a class="flex items-center justify-between p-5 group" href="#">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">help_outline</span>
+</div>
+<h3 class="text-primary font-playfair text-lg font-bold leading-tight">Ajuda &amp; Suporte</h3>
+</div>
+<span class="material-symbols-outlined text-gold group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+</div>
+<!-- Logout -->
+<div class="pt-6 pb-12 text-center">
+<button class="text-soft-green font-medium text-sm flex items-center justify-center gap-2 mx-auto hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">logout</span>
+                    Sair da conta
+                </button>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50">
+<div class="flex gap-2 border-t border-gold/10 bg-white/90 backdrop-blur-md px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-soft-green" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-semibold uppercase tracking-widest">Início</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-soft-green" href="#">
+<span class="material-symbols-outlined">domain</span>
+<p class="text-[10px] font-semibold uppercase tracking-widest">Clínica</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-soft-green" href="#">
+<div class="bg-primary p-3 rounded-full -mt-10 shadow-lg text-white">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<p class="text-[10px] font-semibold uppercase tracking-widest mt-1">Agendar</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-soft-green" href="#">
+<span class="material-symbols-outlined">spa</span>
+<p class="text-[10px] font-semibold uppercase tracking-widest">Serviços</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Perfil</p>
+<div class="h-1 w-1 bg-primary rounded-full mt-0.5"></div>
+</a>
+</div>
+</div>
+</div>
+</body></html>

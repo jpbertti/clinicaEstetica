@@ -1,0 +1,940 @@
+﻿Running Gradle task 'assembleRelease'...                        
+flutter : lib/features/profissional/presentation/pages/ag
+enda/profissional_agenda_page.dart:694:5: Error: 
+Expected a class member, but got 'return'.
+No linha:1 caractere:1
++ flutter build apk > build_output.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (lib/feature 
+   s/pr...t got 'return'.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    return Container(
+    ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:695:14: Error: Non-optional 
+parameters can't have a default value.
+Try removing the default value or making the parameter 
+optional.
+      padding: const EdgeInsets.symmetric(horizontal: 
+20, vertical: 10),
+             ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:696:12: Error: Non-optional 
+parameters can't have a default value.
+Try removing the default value or making the parameter 
+optional.
+      child: Column(
+           ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1837:1: Error: Expected a 
+declaration, but got '}'.
+}
+^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:22:7: Error: The non-abstract 
+class '_ProfissionalAgendaPageState' is missing 
+implementations for these members:
+ - _ProfissionalAgendaPageState.Container
+Try to either
+ - provide an implementation,
+ - inherit an implementation from a superclass or mixin,
+ - mark the class as abstract, or
+ - provide a 'noSuchMethod' implementation.
+class _ProfissionalAgendaPageState extends 
+State<ProfissionalAgendaPage> {
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:694:12: Context: 
+'_ProfissionalAgendaPageState.Container' is defined here.
+    return Container(
+           ^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:690:38: Error: Can't access 
+'this' in a field initializer to read '_selectedDate'.
+    final firstDayOfMonth = DateTime(_selectedDate.year, 
+_selectedDate.month, 1);
+                                     ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:690:58: Error: Can't access 
+'this' in a field initializer to read '_selectedDate'.
+    final firstDayOfMonth = DateTime(_selectedDate.year, 
+_selectedDate.month, 1);
+                                                         
+^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:691:34: Error: Can't access 
+'this' in a field initializer to read '_selectedDate'.
+    final daysInMonth = DateTime(_selectedDate.year, 
+_selectedDate.month + 1, 0).day;
+                                 ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:691:54: Error: Can't access 
+'this' in a field initializer to read '_selectedDate'.
+    final daysInMonth = DateTime(_selectedDate.year, 
+_selectedDate.month + 1, 0).day;
+                                                     
+^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:692:25: Error: Can't access 
+'this' in a field initializer to read 'firstDayOfMonth'.
+    final startOffset = firstDayOfMonth.weekday % 7;
+                        ^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:700:23: Error: Constant 
+expression expected.
+Try inserting 'const'.
+            children: ['DOM', 'SEG', 'TER', 'QUA', 
+'QUI', 'SEX', 'S├üB']
+                      ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:704:27: Error: Not a constant 
+expression.
+                          d,
+                          ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:705:46: Error: Method 
+invocation is not a constant expression.
+                          style: GoogleFonts.manrope(
+                                             ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:703:32: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                        child: Text(
+                               ^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:702:30: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                      child: Center(
+                             ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:701:29: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                .map((d) => Expanded(
+                            ^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:701:22: Error: Not a constant 
+expression.
+                .map((d) => Expanded(
+                     ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:701:18: Error: Method 
+invocation is not a constant expression.
+                .map((d) => Expanded(
+                 ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:713:18: Error: Method 
+invocation is not a constant expression.
+                .toList(),
+                 ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:698:11: Error: Constant 
+expression expected.
+Try inserting 'const'.
+          Row(
+          ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:724:38: Error: Not a constant 
+expression.
+            itemCount: daysInMonth + startOffset,
+                                     ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:724:24: Error: Not a constant 
+expression.
+            itemCount: daysInMonth + startOffset,
+                       ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:726:27: Error: Not a constant 
+expression.
+              if (index < startOffset) return const 
+SizedBox();
+                          ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:726:19: Error: Not a constant 
+expression.
+              if (index < startOffset) return const 
+SizedBox();
+                  ^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:727:38: Error: Undefined name 
+'startOffset'.
+              final dayNum = index - startOffset + 1;
+                                     ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:728:36: Error: Undefined name 
+'_selectedDate'.
+              final day = DateTime(_selectedDate.year, 
+_selectedDate.month, dayNum);
+                                   ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:728:56: Error: Undefined name 
+'_selectedDate'.
+              final day = DateTime(_selectedDate.year, 
+_selectedDate.month, dayNum);
+                                                       
+^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:729:34: Error: Undefined name 
+'_selectedDate'.
+              final isSelected = _selectedDate.day == 
+dayNum;
+                                 ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:732:33: Error: Undefined name 
+'_clinicAvailableDays'.
+              final isClosed = 
+!_clinicAvailableDays.contains(dayOfWeek);
+                                ^^^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:733:33: Error: Undefined name 
+'_blockedDays'.
+              final isBlocked = _blockedDays.any((d) => 
+                                ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:740:37: Error: Not a constant 
+expression.
+                    _selectedDate = day; 
+                                    ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:740:35: Error: Not a constant 
+expression.
+                    _selectedDate = day; 
+                                  ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:741:41: Error: Not a constant 
+expression.
+                    _isCalendarExpanded = false; 
+                                        ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:739:28: Error: Not a constant 
+expression.
+                  setState(() { 
+                           ^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:739:19: Error: Method not 
+found: 'setState'.
+                  setState(() { 
+                  ^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:743:19: Error: Not a constant 
+expression.
+                  _loadAppointments();
+                  ^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:744:71: Error: Not a constant 
+expression.
+                  
+WidgetsBinding.instance.addPostFrameCallback((_) => 
+_scrollToSelectedDay());
+                                                         
+             ^^^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:744:64: Error: Not a constant 
+expression.
+                  
+WidgetsBinding.instance.addPostFrameCallback((_) => 
+_scrollToSelectedDay());
+                                                         
+      ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:744:43: Error: Method 
+invocation is not a constant expression.
+                  
+WidgetsBinding.instance.addPostFrameCallback((_) => 
+_scrollToSelectedDay());
+                                          
+^^^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:738:24: Error: Not a constant 
+expression.
+                onTap: () {
+                       ^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:748:28: Error: Not a constant 
+expression.
+                    color: isSelected 
+                           ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:749:27: Error: Not a constant 
+expression.
+                        ? primaryGreen 
+                          ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:750:28: Error: Not a constant 
+expression.
+                        : (isUnavailable ? 
+Colors.red.withOpacity(0.05) : Colors.transparent), 
+                           ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:750:55: Error: Method 
+invocation is not a constant expression.
+                        : (isUnavailable ? 
+Colors.red.withOpacity(0.05) : Colors.transparent), 
+                                                      
+^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:753:30: Error: Not a constant 
+expression.
+                      color: isSelected 
+                             ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:755:30: Error: Not a constant 
+expression.
+                          : (isUnavailable ? 
+Colors.red.withOpacity(0.2) : 
+primaryGreen.withOpacity(0.05)),
+                             ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:755:57: Error: Method 
+invocation is not a constant expression.
+                          : (isUnavailable ? 
+Colors.red.withOpacity(0.2) : 
+primaryGreen.withOpacity(0.05)),
+                                                        
+^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:755:76: Error: Not a constant 
+expression.
+                          : (isUnavailable ? 
+Colors.red.withOpacity(0.2) : 
+primaryGreen.withOpacity(0.05)),
+                                                         
+                  ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:755:89: Error: Method 
+invocation is not a constant expression.
+                          : (isUnavailable ? 
+Colors.red.withOpacity(0.2) : 
+primaryGreen.withOpacity(0.05)),
+                                                         
+                               ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:752:36: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                    border: Border.all(
+                                   ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:752:36: Error: Cannot invoke a 
+non-'const' factory where a const expression is expected.
+Try using a constructor or factory that is 'const'.
+                    border: Border.all(
+                                   ^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:747:31: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                  decoration: BoxDecoration(
+                              ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:763:27: Error: Not a constant 
+expression.
+                          dayNum.toString(), 
+                          ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:763:34: Error: Method 
+invocation is not a constant expression.
+                          dayNum.toString(), 
+                                 ^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:766:41: Error: Not a constant 
+expression.
+                            fontWeight: isSelected ? 
+FontWeight.bold : FontWeight.normal,
+                                        ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:767:36: Error: Not a constant 
+expression.
+                            color: isSelected 
+                                   ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:769:36: Error: Not a constant 
+expression.
+                                : (isUnavailable ? 
+Colors.red.withOpacity(0.5) : Colors.black87),
+                                   ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:769:63: Error: Method 
+invocation is not a constant expression.
+                                : (isUnavailable ? 
+Colors.red.withOpacity(0.5) : Colors.black87),
+                                                         
+     ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:764:46: Error: Method 
+invocation is not a constant expression.
+                          style: GoogleFonts.manrope(
+                                             ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:762:25: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                        Text(
+                        ^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:772:29: Error: Not a constant 
+expression.
+                        if (isUnavailable && !isSelected)
+                            ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:772:47: Error: Not a constant 
+expression.
+                        if (isUnavailable && !isSelected)
+                                              ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:773:77: Error: Method 
+invocation is not a constant expression.
+                          Icon(Icons.lock_clock, size: 
+8, color: Colors.red.withOpacity(0.5)),
+                                                         
+                   ^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:773:27: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                          Icon(Icons.lock_clock, size: 
+8, color: Colors.red.withOpacity(0.5)),
+                          ^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:761:33: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                      children: [
+                                ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:759:28: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                    child: Column(
+                           ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:758:26: Error: Constant 
+expression expected.
+Try inserting 'const'.
+                  child: Center(
+                         ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:746:24: Error: Not a constant 
+expression.
+                child: Container(
+                       ^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:737:22: Error: Constant 
+expression expected.
+Try inserting 'const'.
+              return GestureDetector(
+                     ^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:737:22: Error: Cannot invoke a 
+non-'const' constructor where a const expression is 
+expected.
+Try using a constructor or factory that is 'const'.
+              return GestureDetector(
+                     ^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:725:26: Error: Not a constant 
+expression.
+            itemBuilder: (context, index) {
+                         ^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:716:20: Error: Constant 
+expression expected.
+Try inserting 'const'.
+          GridView.builder(
+                   ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:716:20: Error: Cannot invoke a 
+non-'const' constructor where a const expression is 
+expected.
+Try using a constructor or factory that is 'const'.
+          GridView.builder(
+                   ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:697:19: Error: Constant 
+expression expected.
+Try inserting 'const'.
+        children: [
+                  ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:696:14: Error: Constant 
+expression expected.
+Try inserting 'const'.
+      child: Column(
+             ^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:553:42: Error: The method 
+'_buildFullCalendar' isn't defined for the type 
+'_ProfissionalAgendaPageState'.
+ - '_ProfissionalAgendaPageState' is from 'package:app_cl
+inica_estetica/features/profissional/presentation/pages/a
+genda/profissional_agenda_page.dart' ('lib/features/profi
+ssional/presentation/pages/agenda/profissional_agenda_pag
+e.dart').
+Try correcting the name to the name of an existing 
+method, or defining a method named '_buildFullCalendar'.
+                if (_isCalendarExpanded) 
+_buildFullCalendar() else _buildDaySelector(),
+                                         
+^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:525:20: Error: Too few 
+positional arguments: 2 required, 0 given.
+          Container(
+                   ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:587:32: Error: Too few 
+positional arguments: 2 required, 0 given.
+                      Container(width: 1, height: 20, 
+color: primaryGreen.withOpacity(0.1)),
+                               ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:574:26: Error: Too few 
+positional arguments: 2 required, 0 given.
+                Container(
+                         ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:619:43: Error: Too few 
+positional arguments: 2 required, 0 given.
+                          child: Container(
+                                          ^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:797:19: Error: Undefined name 
+'primaryGreen'.
+                ? primaryGreen 
+                  ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:802:21: Error: Undefined name 
+'accentGold'.
+                  ? accentGold 
+                    ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:803:68: Error: Undefined name 
+'primaryGreen'.
+                  : (isUnavailable ? 
+Colors.red.withOpacity(0.3) : 
+primaryGreen.withOpacity(0.1)),
+                                                         
+          ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:808:24: Error: Undefined name 
+'accentGold'.
+                color: accentGold.withOpacity(0.3),
+                       ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:848:22: Error: Undefined name 
+'accentGold'.
+              color: accentGold,
+                     ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:861:29: Error: Undefined name 
+'primaryGreen'.
+        color: isSelected ? 
+primaryGreen.withOpacity(0.1) : Colors.transparent,
+                            ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:862:57: Error: Undefined name 
+'primaryGreen'.
+        child: Icon(icon, size: 20, color: isSelected ? 
+primaryGreen : Colors.black26),
+                                                        
+^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:891:28: Error: Undefined name 
+'primaryGreen'.
+                    color: primaryGreen,
+                           ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:913:40: Error: Undefined name 
+'primaryGreen'.
+                                color: 
+primaryGreen.withOpacity(0.05),
+                                       ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:923:25: Error: Undefined name 
+'_lunchTime'.
+                    if (_lunchTime != null) 
+_buildLunchBlock(hourHeight, startHour, 
+constraints.maxWidth),
+                        ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:941:20: Error: Undefined name 
+'_lunchTime'.
+    final inicio = _lunchTime!['inicio'] as TimeOfDay;
+                   ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:942:17: Error: Undefined name 
+'_lunchTime'.
+    final fim = _lunchTime!['fim'] as TimeOfDay;
+                ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:984:12: Error: Undefined name 
+'_agendaBlocks'.
+    return _agendaBlocks.map((block) {
+           ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1050:9: Error: Undefined name 
+'_appointments'.
+    if (_appointments.isEmpty) return [];
+        ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1052:62: Error: Undefined name 
+'_appointments'.
+    final List<Map<String, dynamic>> sortedAppts = 
+List.from(_appointments);
+                                                         
+    ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1171:9: Error: Undefined name 
+'_appointments'.
+    if (_appointments.isEmpty) return 170.0;
+        ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1175:24: Error: Undefined name 
+'_appointments'.
+    for (final appt in _appointments) {
+                       ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1216:25: Error: Undefined name 
+'accentGold'.
+    Color statusColor = accentGold;
+                        ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1217:72: Error: Undefined name 
+'primaryGreen'.
+    if (status == 'concluido' || status == 'confirmado') 
+statusColor = primaryGreen;
+                                                         
+              ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1237:45: Error: Undefined name 
+'primaryGreen'.
+        border: compact ? Border.all(color: 
+primaryGreen.withValues(alpha: 0.1)) : null,
+                                            ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1293:34: Error: Undefined name 
+'primaryGreen'.
+                          color: primaryGreen,
+                                 ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1316:34: Error: Undefined name 
+'primaryGreen'.
+                          color: 
+primaryGreen.withValues(alpha: 0.8),
+                                 ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1331:23: Error: Undefined name 
+'context'.
+                      
+context.push('/admin/clientes/$clientId', extra: 
+clientNameLocal);
+                      ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1335:23: Error: Method not 
+found: '_marcarComoNaoPago'.
+                      _marcarComoNaoPago(appt);
+                      ^^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1337:23: Error: Method not 
+found: '_updateStatus'.
+                      _updateStatus(appt, value);
+                      ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1341:96: Error: Undefined name 
+'_activeCaixaId'.
+                    final isEditable = appt['pago'] == 
+true && appt['caixa_id']?.toString() == _activeCaixaId;
+                                                         
+                                 ^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1355:73: Error: Undefined name 
+'primaryGreen'.
+                              Icon(Icons.attach_money, 
+size: 18, color: primaryGreen),
+                                                         
+               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1366:74: Error: Undefined name 
+'accentGold'.
+                              Icon(Icons.edit_outlined, 
+size: 18, color: accentGold),
+                                                         
+                ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1387:73: Error: Undefined name 
+'primaryGreen'.
+                              Icon(Icons.attach_money, 
+size: 18, color: primaryGreen),
+                                                         
+               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1397:74: Error: Undefined name 
+'accentGold'.
+                              Icon(Icons.edit_outlined, 
+size: 18, color: accentGold),
+                                                         
+                ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1414:79: Error: Undefined name 
+'primaryGreen'.
+                            
+Icon(Icons.check_circle_outline, size: 18, color: 
+primaryGreen),
+                                                         
+                     ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1432:71: Error: Undefined name 
+'primaryGreen'.
+                          Icon(Icons.person_outline, 
+size: 18, color: primaryGreen),
+                                                         
+             ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1454:32: Error: Undefined name 
+'primaryGreen'.
+                        color: primaryGreen,
+                               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1462:32: Error: Undefined name 
+'primaryGreen'.
+                        color: primaryGreen,
+                               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1478:34: Error: Undefined name 
+'primaryGreen'.
+                          color: primaryGreen,
+                                 ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1545:23: Error: Undefined name 
+'context'.
+                      
+context.push('/admin/clientes/$clientId', extra: 
+clientNameLocal);
+                      ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1549:23: Error: Method not 
+found: '_updateStatus'.
+                      _updateStatus(appt, value);
+                      ^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1553:96: Error: Undefined name 
+'_activeCaixaId'.
+                    final isEditable = appt['pago'] == 
+true && appt['caixa_id']?.toString() == _activeCaixaId;
+                                                         
+                                 ^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1567:73: Error: Undefined name 
+'primaryGreen'.
+                              Icon(Icons.attach_money, 
+size: 18, color: primaryGreen),
+                                                         
+               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1578:74: Error: Undefined name 
+'accentGold'.
+                              Icon(Icons.edit_outlined, 
+size: 18, color: accentGold),
+                                                         
+                ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1599:73: Error: Undefined name 
+'primaryGreen'.
+                              Icon(Icons.attach_money, 
+size: 18, color: primaryGreen),
+                                                         
+               ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1609:74: Error: Undefined name 
+'accentGold'.
+                              Icon(Icons.edit_outlined, 
+size: 18, color: accentGold),
+                                                         
+                ^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1626:79: Error: Undefined name 
+'primaryGreen'.
+                            
+Icon(Icons.check_circle_outline, size: 18, color: 
+primaryGreen),
+                                                         
+                     ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1644:71: Error: Undefined name 
+'primaryGreen'.
+                          Icon(Icons.person_outline, 
+size: 18, color: primaryGreen),
+                                                         
+             ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1671:37: Error: Undefined name 
+'primaryGreen'.
+          border: Border.all(color: 
+primaryGreen.withOpacity(0.2)),
+                                    ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1689:24: Error: Undefined name 
+'primaryGreen'.
+                color: primaryGreen,
+                       ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1693:62: Error: Undefined name 
+'primaryGreen'.
+            Icon(Icons.keyboard_arrow_down, size: 16, 
+color: primaryGreen),
+                                                         
+    ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1702:16: Error: Undefined name 
+'context'.
+      context: context,
+               ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1708:11: Error: Method not 
+found: '_loadAppointments'.
+          _loadAppointments();
+          ^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1725:32: Error: Undefined name 
+'context'.
+          ScaffoldMessenger.of(context).showSnackBar(
+                               ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1732:40: Error: Undefined name 
+'_profRepo'.
+      final allProfsForService = await 
+_profRepo.getProfessionalsByService(serviceId);
+                                       ^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1736:13: Error: Undefined name 
+'mounted'.
+        if (mounted) {
+            ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1737:32: Error: Undefined name 
+'context'.
+          ScaffoldMessenger.of(context).showSnackBar(
+                               ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1744:12: Error: Undefined name 
+'mounted'.
+      if (!mounted) return;
+           ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1748:18: Error: Undefined name 
+'context'.
+        context: context,
+                 ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1750:117: Error: Undefined name 
+'primaryGreen'.
+          title: Text('Trocar Profissional', style: 
+GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, 
+color: primaryGreen)),
+                                                         
+                                 ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1760:38: Error: Undefined name 
+'primaryGreen'.
+                    backgroundColor: 
+primaryGreen.withOpacity(0.1),
+                                     ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1761:54: Error: Undefined name 
+'primaryGreen'.
+                    child: Icon(Icons.person, color: 
+primaryGreen),
+                                                     
+^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1779:33: Error: Undefined name 
+'_profRepo'.
+      final isAvailable = await 
+_profRepo.checkProfessionalAvailability(
+                                ^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1786:13: Error: Undefined name 
+'mounted'.
+        if (mounted) {
+            ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1787:32: Error: Undefined name 
+'context'.
+          ScaffoldMessenger.of(context).showSnackBar(
+                               ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1798:12: Error: Undefined name 
+'mounted'.
+      if (!mounted) return;
+           ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1800:18: Error: Undefined name 
+'context'.
+        context: context,
+                 ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1808:64: Error: Undefined name 
+'primaryGreen'.
+              style: 
+ElevatedButton.styleFrom(backgroundColor: primaryGreen),
+                                                         
+      ^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1818:13: Error: Undefined name 
+'_supabase'.
+      await _supabase.from('agendamentos').update({
+            ^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1822:11: Error: Undefined name 
+'mounted'.
+      if (mounted) {
+          ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1823:30: Error: Undefined name 
+'context'.
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1826:9: Error: Method not 
+found: '_loadAppointments'.
+        _loadAppointments();
+        ^^^^^^^^^^^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1830:11: Error: Undefined name 
+'mounted'.
+      if (mounted) {
+          ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:1831:30: Error: Undefined name 
+'context'.
+        ScaffoldMessenger.of(context).showSnackBar(
+                             ^^^^^^^
+lib/features/profissional/presentation/pages/agenda/profi
+ssional_agenda_page.dart:697:19: Error: Non-constant 
+list literal is not a constant expression.
+        children: [
+                  ^
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task 
+':app:compileFlutterBuildRelease'.
+> Process 'command 'C:\src\flutter\bin\flutter.bat'' 
+finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log 
+output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 38s
+Running Gradle task 'assembleRelease'...                           39,2s
+Gradle task assembleRelease failed with exit code 1

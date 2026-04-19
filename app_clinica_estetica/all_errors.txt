@@ -1,0 +1,2 @@
+error - features\profile\presentation\pages\meus_pacotes_page.dart:61:20 - Undefined name 'primaryGreen'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+error - features\services\presentation\pages\pacote_sessao_selecao_page.dart:81:20 - Undefined name 'primaryColor'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier

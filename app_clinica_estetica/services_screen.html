@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clínica de Estética Juliana Vieira</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Montserrat:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2F5E46", // Main Green
+                        "gold": "#C7A36B",    // Elegant Gold
+                        "background-light": "#F6F4EF", // Off White
+                        "background-dark": "#161c19",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "body": ["Montserrat", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-4xl mx-auto w-full">
+<div class="text-primary flex size-10 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined text-2xl" style="">arrow_back</span>
+</div>
+<h1 class="text-primary text-lg font-bold tracking-tight text-center flex-1" style="">Serviços</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="text-primary relative" style=""><span class="material-symbols-outlined text-2xl">search</span></button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-4xl mx-auto w-full pb-24">
+<!-- Hero Section -->
+<section class="p-6">
+<div class="flex flex-col md:flex-row gap-6 md:items-center items-stretch">
+<div class="relative group">
+<div class="h-32 rounded-xl bg-primary/10 overflow-hidden shadow-lg border-2 border-gold/20 w-full h-64 md:h-80">
+<img alt="Luxury Aesthetic Clinic Interior" class="w-full h-full object-cover" data-alt="High-end, modern, and luxury aesthetic clinic interior with premium green and gold accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDghgOrF35ZoCk6Qmyu6t61hMibKufGBsw18qoRqieAWh1wt-LLLI9Pbuplao7S5jeH7XKXSp7H7W3wa-V0iyHX__EdSsfmpkwDWKa8e8P1C5d7mw1B8ffE2JOTtARmPl33BPKyh8hmi2LX3NcyjQPJY8J89E4U82qlyHS07VTJ0OKiFu-hHOxZRFlSBtEnYy44-h6cHM5a1HRS3YFVS9y_h5Gi_wQpQdwkoagRsFmIiy96g4Na6G1y0u6DJVDq8FrAjh3kbC6_wJhq" style=""/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="text-3xl font-bold text-primary leading-tight" style="">Clínica de Estética Juliana Vieira</h2>
+<div class="flex flex-col gap-1 text-slate-600 dark:text-slate-400">
+<p class="flex items-center gap-2 text-sm" style="">
+<span class="material-symbols-outlined text-gold text-lg" style="">location_on</span>
+                            Avenida São Sebastião, 357, São Paulo
+                        </p>
+<p class="flex items-center gap-2 text-sm" style="">
+<span class="material-symbols-outlined text-gold text-lg" style="">star</span>
+<span class="font-semibold text-slate-900 dark:text-white" style="">5,0</span> (889 avaliações)
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tabs Navigation -->
+<nav class="sticky top-[73px] z-40 bg-background-light dark:bg-background-dark border-b border-primary/10 px-4 mb-6">
+<div class="flex gap-8 justify-start overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary py-4 transition-all" href="#sobre" style="">
+<span class="text-xs font-bold uppercase tracking-widest whitespace-nowrap" style="">Sobre Nós</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 py-4 hover:text-primary transition-all" href="#procedimentos" style="">
+<span class="text-xs font-bold uppercase tracking-widest whitespace-nowrap" style="">Procedimentos</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 py-4 hover:text-primary transition-all" href="#contato" style="">
+<span class="text-xs font-bold uppercase tracking-widest whitespace-nowrap" style="">Contato</span>
+</a>
+</div>
+</nav>
+<!-- Sobre Nós Section -->
+<section class="px-6 mb-12" id="sobre">
+<div class="bg-white dark:bg-slate-800/50 p-8 rounded-xl shadow-sm border border-primary/5">
+<h3 class="text-2xl text-primary mb-4" style="">Bem-vinda à Bella Vita</h3>
+<p class="text-slate-600 dark:text-slate-300 leading-relaxed font-light mb-4" style="">
+                    Sob a liderança da Dra. Juliana Vieira, nossa clínica combina ciência avançada e um olhar artístico para realçar sua beleza natural. Com anos de experiência no mercado de estética de luxo, entregamos resultados que renovam não apenas a aparência, mas a autoestima de nossas pacientes.
+                </p>
+<div class="grid grid-cols-2 gap-4 mt-6">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="">verified</span>
+</div>
+<span class="text-xs font-medium uppercase text-slate-500" style="">Premium Tech</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
+<span class="material-symbols-outlined" style="">spa</span>
+</div>
+<span class="text-xs font-medium uppercase text-slate-500" style="">Relaxe Total</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Procedimentos List -->
+<section class="px-6 mb-12" id="procedimentos">
+<div class="flex flex-col gap-1 mb-8">
+<h3 class="text-2xl text-primary tracking-tight" style="">Procedimentos Exclusivos</h3>
+<span class="text-sm font-medium text-gold uppercase tracking-tighter" style="">Menu de Serviços</span>
+</div>
+<div class="grid grid-cols-1 gap-6"><!-- Service Card 1 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Limpeza de Pele" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDghgOrF35ZoCk6Qmyu6t61hMibKufGBsw18qoRqieAWh1wt-LLLI9Pbuplao7S5jeH7XKXSp7H7W3wa-V0iyHX__EdSsfmpkwDWKa8e8P1C5d7mw1B8ffE2JOTtARmPl33BPKyh8hmi2LX3NcyjQPJY8J89E4U82qlyHS07VTJ0OKiFu-hHOxZRFlSBtEnYy44-h6cHM5a1HRS3YFVS9y_h5Gi_wQpQdwkoagRsFmIiy96g4Na6G1y0u6DJVDq8FrAjh3kbC6_wJhq"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Limpeza de Pele Profunda</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Remoção de impurezas e revitalização facial completa.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 120</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div>
+<!-- Service Card 2 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Botox" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFBAEClvy-396J5IrKApNma491Fscgtk-brmAfbrNHKYqoKNE99My-HAF9u0ra1-X9jEgduB63p02rit-ascPKUKTVeswTiDUthqffxp2Q60sWkF88qLLoTXLbh_FYh_1updenljfn3qb6pFDaYo2djJfweDtEuQIiGjhN-6IxTeYauYjYUoEByKk27O4D8Ohe8w-CNe2weKuQ0bIzaVZYwxydBKJpJTXVPAl32WCrqCJuPtCLz-eIOycQBiYKLN5t8RQzV2jzryM1"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Botox (Toxina Botulínica)</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Redução de linhas de expressão e rugas dinâmicas.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 600</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div>
+<!-- Service Card 3 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Preenchimento" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDghgOrF35ZoCk6Qmyu6t61hMibKufGBsw18qoRqieAWh1wt-LLLI9Pbuplao7S5jeH7XKXSp7H7W3wa-V0iyHX__EdSsfmpkwDWKa8e8P1C5d7mw1B8ffE2JOTtARmPl33BPKyh8hmi2LX3NcyjQPJY8J89E4U82qlyHS07VTJ0OKiFu-hHOxZRFlSBtEnYy44-h6cHM5a1HRS3YFVS9y_h5Gi_wQpQdwkoagRsFmIiy96g4Na6G1y0u6DJVDq8FrAjh3kbC6_wJhq"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Preenchimento Facial</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Volume e contorno facial com ácido hialurônico.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 900</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div>
+<!-- Service Card 4 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Harmonização" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFBAEClvy-396J5IrKApNma491Fscgtk-brmAfbrNHKYqoKNE99My-HAF9u0ra1-X9jEgduB63p02rit-ascPKUKTVeswTiDUthqffxp2Q60sWkF88qLLoTXLbh_FYh_1updenljfn3qb6pFDaYo2djJfweDtEuQIiGjhN-6IxTeYauYjYUoEByKk27O4D8Ohe8w-CNe2weKuQ0bIzaVZYwxydBKJpJTXVPAl32WCrqCJuPtCLz-eIOycQBiYKLN5t8RQzV2jzryM1"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Harmonização Facial</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Equilíbrio estético personalizado para seu rosto.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 1.200</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div>
+<!-- Service Card 5 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Microagulhamento" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDghgOrF35ZoCk6Qmyu6t61hMibKufGBsw18qoRqieAWh1wt-LLLI9Pbuplao7S5jeH7XKXSp7H7W3wa-V0iyHX__EdSsfmpkwDWKa8e8P1C5d7mw1B8ffE2JOTtARmPl33BPKyh8hmi2LX3NcyjQPJY8J89E4U82qlyHS07VTJ0OKiFu-hHOxZRFlSBtEnYy44-h6cHM5a1HRS3YFVS9y_h5Gi_wQpQdwkoagRsFmIiy96g4Na6G1y0u6DJVDq8FrAjh3kbC6_wJhq"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Microagulhamento</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Indução de colágeno para textura e cicatrizes.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 250</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div>
+<!-- Service Card 6 -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 flex flex-row p-3 gap-4 shadow-sm hover:shadow-md transition-shadow items-center">
+<div class="w-2/5 min-w-[120px] h-32 rounded-lg overflow-hidden">
+<img alt="Drenagem" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFBAEClvy-396J5IrKApNma491Fscgtk-brmAfbrNHKYqoKNE99My-HAF9u0ra1-X9jEgduB63p02rit-ascPKUKTVeswTiDUthqffxp2Q60sWkF88qLLoTXLbh_FYh_1updenljfn3qb6pFDaYo2djJfweDtEuQIiGjhN-6IxTeYauYjYUoEByKk27O4D8Ohe8w-CNe2weKuQ0bIzaVZYwxydBKJpJTXVPAl32WCrqCJuPtCLz-eIOycQBiYKLN5t8RQzV2jzryM1"/>
+</div>
+<div class="flex-1 flex flex-col justify-between h-full py-1">
+<div>
+<h4 class="font-display text-lg text-primary font-bold">Drenagem Linfática</h4>
+<p class="text-slate-600 dark:text-slate-400 text-xs font-body leading-relaxed mt-1">Redução de inchaço e melhoria da circulação.</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-primary font-bold text-base">R$ 90</span>
+<button class="px-4 py-1.5 bg-gold text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-gold/90 transition-colors shadow-sm">Reservar</button>
+</div>
+</div>
+</div></div>
+</section>
+<!-- Contato Section -->
+<section class="px-6 mb-12" id="contato">
+<h3 class="text-2xl text-primary mb-6" style="">Fale Conosco</h3>
+<div class="flex flex-col gap-4">
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-primary/5 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-gold" style="">chat</span>
+<div>
+<p class="text-xs text-slate-400 uppercase font-bold tracking-tighter" style="">WhatsApp</p>
+<p class="text-slate-900 dark:text-white font-medium" style="">(11) 99876-5432</p>
+</div>
+</div>
+<button class="px-4 py-2 text-xs font-bold text-gold border border-gold rounded-lg uppercase hover:bg-gold hover:text-white transition-all" style="">Copiar</button>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-primary/5 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-gold" style="">call</span>
+<div>
+<p class="text-xs text-slate-400 uppercase font-bold tracking-tighter" style="">Fixo</p>
+<p class="text-slate-900 dark:text-white font-medium" style="">(11) 3456-7890</p>
+</div>
+</div>
+<button class="px-4 py-2 text-xs font-bold text-gold border border-gold rounded-lg uppercase hover:bg-gold hover:text-white transition-all" style="">Copiar</button>
+</div>
+</div>
+<div class="mt-8 h-48 rounded-xl bg-slate-200 dark:bg-slate-700 overflow-hidden relative border border-primary/10">
+<div class="absolute inset-0 bg-cover bg-center opacity-70 grayscale" data-alt="Stylized map showing São Paulo city streets" data-location="São Paulo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDFBAEClvy-396J5IrKApNma491Fscgtk-brmAfbrNHKYqoKNE99My-HAF9u0ra1-X9jEgduB63p02rit-ascPKUKTVeswTiDUthqffxp2Q60sWkF88qLLoTXLbh_FYh_1updenljfn3qb6pFDaYo2djJfweDtEuQIiGjhN-6IxTeYauYjYUoEByKk27O4D8Ohe8w-CNe2weKuQ0bIzaVZYwxydBKJpJTXVPAl32WCrqCJuPtCLz-eIOycQBiYKLN5t8RQzV2jzryM1");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent flex items-end p-4">
+<p class="text-white text-sm font-medium" style="">📍 Avenida São Sebastião, 357, São Paulo</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<footer class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-primary/10 px-4 py-2 z-50">
+<div class="max-w-4xl mx-auto flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#" style="">
+<span class="material-symbols-outlined" style="">home</span>
+<span class="text-[10px] uppercase font-bold tracking-widest" style="">Início</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#" style="">
+<span class="material-symbols-outlined" style="">spa</span>
+<span class="text-[10px] uppercase font-bold tracking-widest" style="">Serviços</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#" style="">
+<span class="material-symbols-outlined" style="">calendar_month</span>
+<span class="text-[10px] uppercase font-bold tracking-widest" style="">Agenda</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#" style="">
+<span class="material-symbols-outlined" style="">person</span>
+<span class="text-[10px] uppercase font-bold tracking-widest" style="">Perfil</span>
+</a>
+</div>
+</footer>
+</body></html>
