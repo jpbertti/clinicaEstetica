@@ -878,7 +878,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: isSelected 
-                        ? primaryGreen 
+                        ? (isUnavailable ? AppColors.error : primaryGreen) 
                         : (isUnavailable ? AppColors.error.withOpacity(0.05) : Colors.transparent), 
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -925,12 +925,12 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
           height: 68,
           decoration: BoxDecoration(
             color: isSelected 
-                ? primaryGreen 
+                ? (isUnavailable ? AppColors.error : primaryGreen) 
                 : (isUnavailable ? AppColors.error.withOpacity(0.05) : AppColors.white),
             borderRadius: BorderRadius.circular(100),
             border: Border.all(
               color: isSelected 
-                  ? accent 
+                  ? (isUnavailable ? AppColors.error : accent) 
                   : (isUnavailable ? AppColors.error.withOpacity(0.3) : primaryGreen.withOpacity(0.1)),
               width: isSelected ? 2 : 1,
             ),
@@ -974,7 +974,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
             width: 24,
             height: 4,
             decoration: BoxDecoration(
-              color: accent,
+              color: isUnavailable ? AppColors.error : accent,
               borderRadius: BorderRadius.circular(2),
             ),
           ),

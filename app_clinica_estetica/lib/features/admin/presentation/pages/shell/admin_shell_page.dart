@@ -207,7 +207,7 @@ class _AdminDrawer extends StatelessWidget {
                       height: 58,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: primaryGreen, width: 1.5),
+                        border: Border.all(color: secondaryGold, width: 1.5),
                         image: AppConfig.logoUrl != null
                             ? DecorationImage(
                                 image: NetworkImage(AppConfig.logoUrl!),
@@ -467,6 +467,7 @@ class _NavItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected ? activeBg : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
+            border: isSelected ? Border.all(color: AppColors.accent, width: 1.5) : null,
             boxShadow: isSelected
                 ? [
                     BoxShadow(
