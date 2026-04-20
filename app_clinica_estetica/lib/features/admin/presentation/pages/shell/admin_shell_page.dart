@@ -72,7 +72,7 @@ class _AdminShellPageState extends State<AdminShellPage> {
       if (path == '/admin/usuarios') return 'Gerenciamento de Usuários';
 
       // Rotas Mais Específicas Primeiro
-      if (path.contains('/vincular-pacotes')) return 'Vincular Projetos';
+      if (path.contains('/vincular-pacotes')) return 'Vincular Pacotes';
       if (path.contains('/vincular')) return 'Vincular Serviços';
       
       if (path == '/admin/servicos/pacotes/novo') return 'Adicionar Pacote';

@@ -6,6 +6,8 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_r
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 // ─── Currency Formatter ────────────────────────────────────────────────────
 class _AddCurrencyFormatter extends TextInputFormatter {
@@ -182,7 +184,7 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text('Nova Categoria', style: TextStyle(fontFamily: 'Playfair Display', fontWeight: FontWeight.bold, color: _primaryColor, fontSize: 20)),
+          title: Text('Nova categoria', style: TextStyle(fontFamily: 'Playfair Display', fontWeight: FontWeight.bold, color: _primaryColor, fontSize: 20)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -290,10 +292,10 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
                   if (ctx.mounted) Navigator.pop(ctx);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: _primaryColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              style: AppButtonStyles.primary(),
               child: saving
                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                  : Text('Salvar', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  : Text(StringUtils.toTitleCase('salvar')),
             ),
           ],
         ),
@@ -510,7 +512,7 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Adicionar Procedimento', style: TextStyle(fontFamily: 'Playfair Display', fontSize: 22, fontWeight: FontWeight.bold, color: _primaryColor)),
+                        Text('Adicionar procedimento', style: TextStyle(fontFamily: 'Playfair Display', fontSize: 22, fontWeight: FontWeight.bold, color: _primaryColor)),
                         Text('Cadastre novos serviços para a clínica', style: TextStyle(fontSize: 12, color: Colors.black54)),
                       ],
                     ),
@@ -548,7 +550,7 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  _imageFile == null ? '+ Adicionar Foto' : 'Foto selecionada ✓',
+                  _imageFile == null ? '+ Adicionar foto' : 'Foto selecionada ✓',
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _imageFile == null ? _accentColor : _primaryColor),
                 ),
               ),
@@ -565,7 +567,7 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      _inputField(label: 'Nome do Procedimento', controller: _nomeController, icon: Icons.edit_document, hint: 'Ex: Protocolo VIP', isValid: _nomeValid),
+                      _inputField(label: 'Nome do procedimento', controller: _nomeController, icon: Icons.edit_document, hint: 'Ex: Protocolo VIP', isValid: _nomeValid),
                       const SizedBox(height: 20),
                       _categoryRow(),
                       const SizedBox(height: 20),
@@ -574,7 +576,7 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
                       _inputField(label: 'Preço (R\$)', controller: _valorController, icon: Icons.attach_money, hint: 'R\$ 0,00', keyboardType: TextInputType.number, inputFormatters: [_AddCurrencyFormatter()], isValid: _valorValid),
                       const SizedBox(height: 20),
                       _inputField(
-                        label: 'Preço Promo. (Opcional)', 
+                        label: 'Preço promocional (opcional)', 
                         controller: _precoPromocionalController, 
                         icon: Icons.discount, 
                         hint: 'R\$ 0,00', 
@@ -670,13 +672,17 @@ class _AdminAddProcedimentoPageState extends State<AdminAddProcedimentoPage> {
                             flex: 2,
                             child: ElevatedButton(
                               onPressed: _isSaving ? null : _saveProcedimento,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _primaryColor, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), elevation: 4, shadowColor: _primaryColor.withOpacity(0.4),
-                              ),
+                              style: AppButtonStyles.primary(),
                               child: _isSaving
                                   ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                                  : Row(mainAxisAlignment: MainAxisAlignment.center, children: [const Icon(Icons.save, size: 18), const SizedBox(width: 8), Text('Salvar Procedimento', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))]),
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.save, size: 18),
+                                        const SizedBox(width: 8),
+                                        Text(StringUtils.toTitleCase('salvar procedimento')),
+                                      ],
+                                    ),
                             ),
                           ),
                         ],

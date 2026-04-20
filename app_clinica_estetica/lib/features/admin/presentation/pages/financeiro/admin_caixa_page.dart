@@ -8,6 +8,8 @@ import 'admin_caixa_history_page.dart';
 import 'package:app_clinica_estetica/core/services/pdf_service.dart';
 import 'package:app_clinica_estetica/core/services/report_app_bar_service.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/theme/app_text_styles.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
@@ -74,7 +76,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         // Configura ações no AppBar da Shell
         if (caixa != null) {
           ReportAppBarService().setActions(
-            title: 'Fluxo de Caixa',
+            title: 'Fluxo de caixa',
             onPdf: _gerarPdfCaixaAtual,
           );
         } else {
@@ -102,18 +104,18 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
     final result = await showDialog<double>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Abrir Caixa', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+        title: Text('Abrir caixa', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Informe o saldo inicial em dinheiro no caixa:'),
+            const Text('Informe o saldo inicial em dinheiro no caixa'),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyInputFormatter()],
               decoration: const InputDecoration(
-                labelText: 'Saldo Inicial (Dinheiro)',
+                labelText: 'Saldo inicial',
                 prefixText: 'R\$ ',
                 border: OutlineInputBorder(),
               ),
@@ -132,11 +134,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               final val = double.tryParse(cleanText) ?? 0;
               Navigator.pop(context, val);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2D5A46),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+            style: AppButtonStyles.primary(),
             child: const Text('Abrir'),
           ),
         ],
@@ -175,18 +173,19 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Fechar Caixa', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+        title: const Text('Fluxo de caixa',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Informe o valor total REAL encontrado no caixa (dinheiro + comprovantes):'),
+            Text('Informe o valor total REAL encontrado no caixa (dinheiro + comprovantes)'),
             const SizedBox(height: 16),
             TextField(
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyInputFormatter()],
               decoration: const InputDecoration(
-                labelText: 'Valor em Caixa',
+                labelText: 'Valor em caixa',
                 prefixText: 'R\$ ',
                 border: OutlineInputBorder(),
               ),
@@ -208,14 +207,14 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
             child: Text('Cancelar', style: TextStyle(color: const Color(0xFFC7A36B), fontWeight: FontWeight.bold)),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+            style: AppButtonStyles.primary(color: Colors.red),
             onPressed: () {
               // Limpa a formatação de moeda antes de converter
               final cleanText = controller.text.replaceAll('.', '').replaceAll(',', '.');
               final val = double.tryParse(cleanText) ?? 0;
               Navigator.pop(context, {'valor': val, 'obs': obsController.text});
             },
-            child: const Text('Confirmar Fechamento'),
+            child: const Text('Confirmar fechamento'),
           ),
         ],
       ),
@@ -332,9 +331,9 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               children: [
                 Icon(Icons.no_accounts_outlined, size: 80, color: primaryColor.withOpacity(0.3)),
                 const SizedBox(height: 24),
-                Text(
+                const Text(
                   'O caixa está fechado',
-                  style: TextStyle(fontFamily: 'Playfair Display', fontSize: 24, fontWeight: FontWeight.bold, color: primaryColor),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -342,34 +341,35 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                   style: TextStyle(color: Colors.black54),
                 ),
                 const SizedBox(height: 32),
-                ElevatedButton.icon(
-                  onPressed: _abrirCaixa,
-                  icon: const Icon(Icons.lock_open_rounded),
-                  label: const Text('Abrir Caixa Hoje'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextButton.icon(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AdminCaixaHistoryPage()),
-                  ),
-                  icon: Icon(Icons.history, color: AppColors.accent),
-                  label: Text(
-                    'Acessar Caixas Anteriores',
-                    style: TextStyle(color: AppColors.accent,
-                      fontWeight: FontWeight.bold,
+                SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _abrirCaixa,
+                        icon: const Icon(Icons.lock_open),
+                        label: const Text('Abrir caixa hoje'),
+                        style: AppButtonStyles.primary(),
+                      ),
                     ),
-                  ),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  ),
-                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const AdminCaixaHistoryPage()),
+                          );
+                        },
+                        icon: const Icon(Icons.history),
+                        label: const Text('Acessar caixas anteriores'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                    ),
               ],
             ),
           ),
@@ -413,7 +413,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Caixa Aberto', style: TextStyle(color: accentColor, fontWeight: FontWeight.w800, fontSize: 12, letterSpacing: 1.2)),
+                          Text('Caixa aberto', style: TextStyle(color: accentColor, fontWeight: FontWeight.w800, fontSize: 12, letterSpacing: 1.2)),
                           const SizedBox(height: 4),
                           Text(
                             'Iniciado em ${DateFormat('dd/MM HH:mm').format(_activeCaixa!.abertoEm.toLocal())}',
@@ -425,7 +425,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  Text('Saldo em Caixa', style: TextStyle(color: Colors.white60, fontSize: 14)),
+                  Text('Saldo em caixa', style: TextStyle(color: Colors.white60, fontSize: 14)),
                   const SizedBox(height: 8),
                   Text(
                     _currencyFormat.format(expectedBalance),
@@ -439,7 +439,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
             
             Row(
               children: [
-                Expanded(child: _buildSmallMetricCard('Saldo Inicial (Dinheiro)', _currencyFormat.format(_activeCaixa?.saldoInicial ?? 0), Icons.login, Colors.blue)),
+                Expanded(child: _buildSmallMetricCard('Saldo inicial', _currencyFormat.format(_activeCaixa?.saldoInicial ?? 0), Icons.login, Colors.blue)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: InkWell(
@@ -466,17 +466,17 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                       
                       // Ordenar por data (mais recente primeiro)
                       allTrans.sort((a, b) {
-                        final dateAStr = a['data_hora'] ?? a['data_pagamento'] ?? a['created_at'];
-                        final dateBStr = b['data_hora'] ?? b['data_pagamento'] ?? b['created_at'];
+                        final dateAStr = a['data_hora'] ?? a['data_pagamento'] ?? a['criado_em'] ?? a['created_at'];
+                        final dateBStr = b['data_hora'] ?? b['data_pagamento'] ?? b['criado_em'] ?? b['created_at'];
                         final dateA = dateAStr != null ? DateTime.parse(dateAStr) : DateTime.fromMillisecondsSinceEpoch(0);
                         final dateB = dateBStr != null ? DateTime.parse(dateBStr) : DateTime.fromMillisecondsSinceEpoch(0);
                         return dateB.compareTo(dateA);
                       });
                       
-                      _showTransactionDetailsDialog('Todas as Entradas', allTrans);
+                      _showTransactionDetailsDialog('Todas as entradas', allTrans);
                     },
                     borderRadius: BorderRadius.circular(16),
-                    child: _buildSmallMetricCard('Entradas (Hoje)', _currencyFormat.format(entradas), Icons.trending_up, Colors.green),
+                    child: _buildSmallMetricCard('Entradas', _currencyFormat.format(entradas), Icons.trending_up, Colors.green),
                   ),
                 ),
               ],
@@ -488,7 +488,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                   child: InkWell(
                     onTap: () => _showExpenseDetailsDialog(_detailedStats?['saidas_detalhes'] ?? []),
                     borderRadius: BorderRadius.circular(16),
-                    child: _buildSmallMetricCard('Saídas (Hoje)', _currencyFormat.format(saidas - ( (_detailedStats?['total_sangrias'] as num?)?.toDouble() ?? 0 )), Icons.trending_down, Colors.red),
+                    child: _buildSmallMetricCard('Saídas', _currencyFormat.format(saidas - ( (_detailedStats?['total_sangrias'] as num?)?.toDouble() ?? 0 )), Icons.trending_down, Colors.red),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -496,7 +496,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                   child: InkWell(
                     onTap: () => _showSangriaDetailsDialog(_detailedStats?['sangrias_detalhes'] ?? []),
                     borderRadius: BorderRadius.circular(16),
-                    child: _buildSmallMetricCard('Retiradas (Sangria)', _currencyFormat.format((_detailedStats?['total_sangrias'] as num?)?.toDouble() ?? 0), Icons.outbox, Colors.orange),
+                    child: _buildSmallMetricCard('Retiradas', _currencyFormat.format((_detailedStats?['total_sangrias'] as num?)?.toDouble() ?? 0), Icons.outbox, Colors.orange),
                   ),
                 ),
               ],
@@ -514,7 +514,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
             
             if (_detailedStats != null) ...[
               Text(
-                'Entradas por Meio de Pagamento',
+                'Entradas por meio de pagamento',
                 style: TextStyle(fontFamily: 'Playfair Display', fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor),
               ),
               const SizedBox(height: 16),
@@ -533,34 +533,18 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               child: ElevatedButton.icon(
                 onPressed: _showSangriaDialog,
                 icon: const Icon(Icons.outbox),
-                label: const Text(
-                  'Registrar Retirada (Sangria)',
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: accentColor,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+                label: const Text('Registrar retirada (sangria)'),
+                style: AppButtonStyles.primary(color: accentColor),
               ),
             ),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton.icon(
+              child: ElevatedButton.icon(
                 onPressed: _fecharCaixa,
-                icon: const Icon(Icons.lock_outline),
-                label: const Text(
-                  'Realizar Fechamento do Caixa',
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red.shade800,
-                  side: BorderSide(color: Colors.red.shade200),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+                icon: const Icon(Icons.lock),
+                label: const Text('Realizar fechamento do caixa'),
+                style: AppButtonStyles.primary(color: Colors.red),
               ),
             ),
 
@@ -608,9 +592,11 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         switch(e.key) {
           case 'dinheiro': label = 'Dinheiro'; break;
           case 'pix': label = 'PIX'; break;
-          case 'cartao_credito': label = 'Cartão de Crédito'; break;
-          case 'cartao_debito': label = 'Cartão de Débito'; break;
+          case 'cartao_credito': label = 'Cartão de crédito'; break;
+          case 'cartao_debito': label = 'Cartão de débito'; break;
+          case 'transferencia': label = 'Transferência'; break;
           case 'convenio': label = 'Convênio'; break;
+          case 'outro': label = 'Outro'; break;
         }
 
         return Container(
@@ -672,7 +658,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                   final isConta = t.containsKey('titulo');
                   final servico = isConta ? t['titulo'] : (t['servicos']?['nome'] ?? 'Serviço');
                   final subTitle = isConta ? t['descricao'] : 'Cli: ${t['cliente']?['nome_completo'] ?? 'N/A'}';
-                  final detailInfo = isConta ? 'Venda de Produto' : 'Prof: ${t['profissional']?['nome_completo'] ?? 'N/A'}';
+                  final detailInfo = isConta ? 'Venda de produto' : 'Prof: ${t['profissional']?['nome_completo'] ?? 'N/A'}';
                   
                   final dataStr = isConta ? (t['data_pagamento'] ?? t['created_at']) : t['data_hora'];
                   final data = dataStr != null ? DateTime.parse(dataStr).toLocal() : DateTime.now();
@@ -766,11 +752,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
+            style: AppButtonStyles.primary(),
             child: const Text('Fechar'),
           ),
         ],
@@ -793,7 +775,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text('Editar Pagamento', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('Editar pagamento', style: TextStyle(fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -802,20 +784,20 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [CurrencyInputFormatter()],
                 decoration: const InputDecoration(
-                  labelText: 'Valor Total',
+                  labelText: 'Valor total',
                   prefixText: 'R\$ ',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: selectedMeio,
-                decoration: const InputDecoration(labelText: 'Forma de Pagamento', border: OutlineInputBorder()),
+                value: selectedMeio,
+                decoration: const InputDecoration(labelText: 'Forma de pagamento', border: OutlineInputBorder()),
                 items: const [
                   DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
                   DropdownMenuItem(value: 'pix', child: Text('PIX')),
-                  DropdownMenuItem(value: 'cartao_credito', child: Text('Cartão de Crédito')),
-                  DropdownMenuItem(value: 'cartao_debito', child: Text('Cartão de Débito')),
+                  DropdownMenuItem(value: 'cartao_credito', child: Text('Cartão de crédito')),
+                  DropdownMenuItem(value: 'cartao_debito', child: Text('Cartão de débito')),
                   DropdownMenuItem(value: 'convenio', child: Text('Convênio')),
                 ],
                 onChanged: (v) {
@@ -825,7 +807,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               if (selectedMeio == 'cartao_credito') ...[
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
-                  initialValue: selectedParcelas,
+                  value: selectedParcelas,
                   decoration: const InputDecoration(labelText: 'Parcelas', border: OutlineInputBorder()),
                   items: List.generate(18, (i) => i + 1).map((p) => DropdownMenuItem(value: p, child: Text('$p x'))).toList(),
                   onChanged: (v) {
@@ -842,7 +824,8 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Salvar Alterações'),
+              style: AppButtonStyles.primary(),
+              child: const Text('Salvar alterações'),
             ),
           ],
         ),
@@ -880,7 +863,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Saídas (Despesas)', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+        title: Text('Saídas (despesas)', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
         content: SizedBox(
           width: double.maxFinite,
           child: details.isEmpty
@@ -910,11 +893,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2D5A46),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+            style: AppButtonStyles.primary(),
             child: const Text('Fechar'),
           ),
         ],
@@ -926,7 +905,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Retiradas (Sangrias)', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+        title: Text('Retiradas (sangrias)', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
         content: SizedBox(
           width: double.maxFinite,
           child: details.isEmpty
@@ -956,11 +935,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+            style: AppButtonStyles.primary(),
             child: const Text('Fechar'),
           ),
         ],
@@ -979,7 +954,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text('Registrar Retirada', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+          title: Text('Registrar retirada', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -988,18 +963,18 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [CurrencyInputFormatter()],
                 decoration: const InputDecoration(
-                  labelText: 'Valor da Retirada',
+                  labelText: 'Valor da retirada',
                   prefixText: 'R\$ ',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: selectedMeio,
-                decoration: const InputDecoration(labelText: 'Meio de Retirada', border: OutlineInputBorder()),
+                value: selectedMeio,
+                decoration: const InputDecoration(labelText: 'Meio de retirada', border: OutlineInputBorder()),
                 items: const [
                   DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                  DropdownMenuItem(value: 'pix', child: Text('PIX Transferência')),
+                  DropdownMenuItem(value: 'pix', child: Text('PIX transferência')),
                 ],
                 onChanged: (v) {
                   if (v != null) setDialogState(() => selectedMeio = v);
@@ -1009,7 +984,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               TextField(
                 controller: motivoController,
                 decoration: const InputDecoration(
-                  labelText: 'Motivo/Descrição',
+                  labelText: 'Motivo/descrição',
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 2,
@@ -1022,9 +997,9 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               child: Text('Cancelar', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+              style: AppButtonStyles.primary(color: AppColors.primary),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Confirmar Retirada'),
+              child: const Text('Confirmar retirada'),
             ),
           ],
         ),
@@ -1066,21 +1041,51 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: color),
+          Row(
+            children: [
+              Icon(icon, size: 16, color: color),
+              const SizedBox(width: 8),
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    label.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black38,
+                      letterSpacing: 0.5,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 12),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.black38, letterSpacing: 0.5)),
-          ),
-          const SizedBox(height: 4),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color)),
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: color,
+                fontFamily: 'Inter',
+              ),
+            ),
           ),
         ],
       ),

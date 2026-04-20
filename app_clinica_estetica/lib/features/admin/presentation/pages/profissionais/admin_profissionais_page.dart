@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 class AdminProfissionaisPage extends StatefulWidget {
   const AdminProfissionaisPage({super.key});
@@ -67,7 +69,7 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Equipe da Clínica',
+                  'Equipe da clínica',
                   style: TextStyle(fontFamily: 'Playfair Display', 
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -75,7 +77,7 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
                   ),
                 ),
                 Text(
-                  'Gerencie os Profissionais',
+                  'Gerencie os profissionais',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -147,13 +149,8 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
                         selectedStatus = 'Todos';
                       });
                     },
-                    child: Text(
-                      'Limpar',
-                      style: TextStyle(fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
+                    style: AppButtonStyles.small(foregroundColor: Colors.red),
+                    child: Text(StringUtils.toTitleCase('limpar filtros')),
                   ),
                 ],
               ],
@@ -351,13 +348,13 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
                                 Icon(Icons.link, size: 18),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text(
-                                    'Vincular Serviços',
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
+                                    child: Text(
+                                      'Vincular serviços',
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -369,13 +366,13 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
                                 Icon(Icons.inventory_2_outlined, size: 18),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text(
-                                    'Vincular Projetos',
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
+                                    child: Text(
+                                      'Vincular pacotes',
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -391,7 +388,7 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
         ),
       ],
     ),
-    floatingActionButton: FloatingActionButton(
+    floatingActionButton: FloatingActionButton.extended(
       onPressed: () async {
         final result = await context.push('/admin/profissionais/novo');
         if (result == true) {
@@ -399,7 +396,8 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
         }
       },
       backgroundColor: accentColor,
-      child: const Icon(Icons.add, color: Colors.white),
+      icon: const Icon(Icons.add, color: Colors.white),
+      label: const Text('Novo profissional', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     ),
   );
   }

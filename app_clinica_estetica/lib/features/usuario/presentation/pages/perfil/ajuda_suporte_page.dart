@@ -205,6 +205,7 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
                       style: TextStyle(fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
+                        fontFamily: 'Playfair Display',
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -235,6 +236,7 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
                   'Versão 2.4.0 - Aesthetic Clinic Premium',
                   style: TextStyle(fontSize: 12,
                     color: AppColors.textSecondary.withOpacity(0.6),
+                    fontFamily: 'Playfair Display',
                   ),
                 ),
               ),
@@ -336,6 +338,7 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
                               style: const TextStyle(fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
+                                fontFamily: 'Playfair Display',
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -344,6 +347,7 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
                               style: const TextStyle(fontSize: 13,
                                 color: AppColors.textSecondary,
                                 height: 1.5,
+                                fontFamily: 'Playfair Display',
                               ),
                             ),
                           ],
@@ -386,7 +390,9 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12,
+              style: TextStyle(
+                  fontFamily: 'Playfair Display',
+                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: primary,
                 ),
@@ -402,8 +408,9 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
     String title,
     String subtitle,
     IconData icon,
-    VoidCallback onTap,
-  ) {
+    VoidCallback onTap, {
+    Color? iconColor,
+  }) {
     const container = AppColors.softGreen;
     const primary = AppColors.primary;
     const secondary = AppColors.textSecondary;
@@ -425,10 +432,10 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: container,
+                  color: iconColor?.withOpacity(0.1) ?? container,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: primary, size: 20),
+                child: Icon(icon, color: iconColor ?? primary, size: 20),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -437,14 +444,16 @@ class _AjudaSuportePageState extends State<AjudaSuportePage> {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontSize: 14,
+                      style: TextStyle(
+                        fontFamily: 'Playfair Display',
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: primary,
                       ),
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(fontSize: 12, color: secondary),
+                      style: TextStyle(fontSize: 12, color: secondary, fontFamily: 'Playfair Display'),
                     ),
                   ],
                 ),

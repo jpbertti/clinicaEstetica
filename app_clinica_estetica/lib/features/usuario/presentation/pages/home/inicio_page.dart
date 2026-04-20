@@ -525,7 +525,7 @@ class _InicioPageState extends State<InicioPage> {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                'OFERTA',
+                                'Oferta',
                                 style: TextStyle(fontSize: 8,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -651,7 +651,7 @@ class _InicioPageState extends State<InicioPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        'OFERTA LIMITADA',
+                        'Oferta limitada',
                         style: TextStyle(color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -992,7 +992,7 @@ class _InicioPageState extends State<InicioPage> {
                       ),
                     ),
                     child: Text(
-                      'NOVO AGENDAMENTO',
+                      'Novo Agendamento',
                       style: TextStyle(fontSize: 12,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
@@ -1051,17 +1051,17 @@ class _InicioPageState extends State<InicioPage> {
     if (status.toLowerCase() == 'confirmado') {
       statusColor = AppColors.primary;
       statusBg = AppColors.primary.withOpacity(0.1);
-      statusLabel = 'CONFIRMADO';
+      statusLabel = 'Confirmado';
       statusIcon = Icons.check_circle_rounded;
     } else if (status.toLowerCase() == 'pendente') {
       statusColor = AppColors.accent;
       statusBg = AppColors.accent.withOpacity(0.1);
-      statusLabel = 'AGUARDANDO';
+      statusLabel = 'Aguardando';
       statusIcon = Icons.schedule_rounded;
     } else {
       statusColor = AppColors.primary;
       statusBg = AppColors.primary.withOpacity(0.1);
-      statusLabel = status.toUpperCase();
+      statusLabel = status.isNotEmpty ? '${status[0].toUpperCase()}${status.substring(1).toLowerCase()}' : status;
       statusIcon = Icons.info_rounded;
     }
 
@@ -1118,7 +1118,7 @@ class _InicioPageState extends State<InicioPage> {
                     ),
                     // Date Badge
                     Text(
-                      date.toUpperCase(),
+                      date,
                       style: GoogleFonts.manrope(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
@@ -1358,7 +1358,7 @@ class _RecommendedCard extends StatelessWidget {
     final title = servico?.nome ?? pacote?.titulo ?? '';
     final isPromocao = (servico?.isPromocao ?? pacote?.isPromocao) ?? false;
     final mostrarBadge = isPromocao || isVinculadoPromocao;
-    final badgeLabel = mostrarBadge ? 'OFERTA' : promoTag;
+    final badgeLabel = mostrarBadge ? 'Oferta' : promoTag;
     
     final price = servico?.formattedPrice ?? pacote?.formattedPrice ?? '';
     final promoPrice = servico?.formattedPromotionalPrice ?? pacote?.formattedPromotionalPrice ?? '';
@@ -1422,7 +1422,7 @@ class _RecommendedCard extends StatelessWidget {
                                   ),
                                 ),
                                 child: Text(
-                                  badgeLabel.toUpperCase(),
+                                  badgeLabel ?? '',
                                   style: TextStyle(color: Colors.white,
                                     fontSize: 9,
                                     fontWeight: FontWeight.bold,
@@ -1445,9 +1445,9 @@ class _RecommendedCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(fontSize: 14,
+                      fontFamily: 'Playfair Display',
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
-
                       height: 1.2,
                     ),
                     maxLines: 2,
@@ -1515,7 +1515,7 @@ class _RecommendedCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            servico != null ? 'AGENDAR' : 'DETALHES',
+                            servico != null ? 'Agendar' : 'Detalhes',
                             style: TextStyle(fontSize: 12,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 0.5,

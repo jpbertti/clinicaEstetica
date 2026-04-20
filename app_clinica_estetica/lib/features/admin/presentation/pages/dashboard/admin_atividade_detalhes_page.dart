@@ -53,7 +53,8 @@ class AdminAtividadeDetalhesPage extends StatelessWidget {
           ),
           Text(
             'Detalhes da Atividade',
-            style: TextStyle(fontSize: 13,
+            style: TextStyle(fontSize: 16,
+              fontFamily: 'Playfair Display',
               fontWeight: FontWeight.bold,
               color: primaryColor,
               letterSpacing: 1.2,

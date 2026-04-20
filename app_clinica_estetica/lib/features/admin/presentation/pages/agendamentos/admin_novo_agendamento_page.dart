@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 import 'package:app_clinica_estetica/core/data/models/service_model.dart';
 import 'package:app_clinica_estetica/core/data/models/pacote_template_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_service_repository.dart';
@@ -48,7 +49,7 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
 
   void _updateTitle() {
     _reportAppBarService.setTitleOnly(
-      _currentStep == 0 ? 'Selecionar o Procedimento' : 'Selecionar o Cliente',
+      _currentStep == 0 ? 'Selecionar o procedimento' : 'Selecionar o cliente',
       hideLeading: _currentStep == 1,
     );
   }
@@ -159,7 +160,7 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                     Expanded(
                       flex: 1,
                       child: SizedBox(
-                        height: 55,
+                        height: 45,
                         child: TextButton(
                           onPressed: () {
                             setState(() {
@@ -182,18 +183,25 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                   ],
                   Expanded(
                     flex: 2,
-                    child: SizedBox(
-                      height: 55,
-                      child: ElevatedButton(
-                        onPressed: _nextStep,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        ),
-                        child: Text(
-                          _currentStep == 0 ? 'Próximo: Selecionar Cliente' : 'Próximo: Escolher Data e Profissional',
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 0.5),
-                        ),
+                    child: ElevatedButton(
+                      onPressed: _nextStep,
+                      style: AppButtonStyles.primary(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            _currentStep == 0 ? Icons.person : Icons.calendar_month_outlined,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _currentStep == 0 ? 'Próximo: selecionar cliente' : 'Próximo: escolher data e profissional',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -214,16 +222,27 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            onChanged: (val) => setState(() => _procedureSearch = val),
-            decoration: InputDecoration(
-              hintText: 'Buscar serviço ou pacote...',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: TextField(
+              onChanged: (val) => setState(() => _procedureSearch = val),
+              style: const TextStyle(color: Color(0xFF305F47), fontFamily: 'Inter'),
+              decoration: const InputDecoration(
+                hintText: 'Buscar serviço ou pacote...',
+                hintStyle: TextStyle(color: Color(0xFF305F47), fontFamily: 'Playfair Display', fontSize: 13),
+                prefixIcon: Icon(Icons.search, color: Color(0xFF305F47)),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 15),
               ),
             ),
           ),
@@ -237,7 +256,7 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                     if (filteredServices.isNotEmpty) ...[
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text('SERVIÇOS', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent)),
+                        child: Text('Serviços', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent)),
                       ),
                       ...filteredServices.map((s) => _buildSelectionCard(
                         title: s.nome,
@@ -253,7 +272,7 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                     if (filteredPackages.isNotEmpty) ...[
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text('PACOTES', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent)),
+                        child: Text('Pacotes', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent)),
                       ),
                       ...filteredPackages.map((p) => _buildSelectionCard(
                         title: p.titulo,
@@ -278,19 +297,30 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            onChanged: (val) {
-              _clientSearch = val;
-              _loadClients();
-            },
-            decoration: InputDecoration(
-              hintText: 'Buscar cliente por nome...',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide.none,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: TextField(
+              onChanged: (val) {
+                _clientSearch = val;
+                _loadClients();
+              },
+              style: const TextStyle(color: Color(0xFF305F47), fontFamily: 'Inter'),
+              decoration: const InputDecoration(
+                hintText: 'Buscar cliente por nome...',
+                hintStyle: TextStyle(color: Color(0xFF305F47), fontFamily: 'Playfair Display', fontSize: 13),
+                prefixIcon: Icon(Icons.search, color: Color(0xFF305F47)),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 15),
               ),
             ),
           ),
@@ -304,13 +334,13 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                   itemBuilder: (context, index) {
                     final client = _clients[index];
                     final isSelected = _selectedClient?['id'] == client['id'];
-                    final phone = client['telefone'] ?? 'Sem telefone';
                     return _buildSelectionCard(
                       title: client['nome_completo'] ?? 'Sem nome',
-                      subtitle: '${client['email'] ?? 'N/A'} • ${phone}',
+                      subtitle: '${client['email'] ?? 'N/A'}\n${client['telefone'] ?? 'Sem telefone'}',
                       isSelected: isSelected,
                       onTap: () => setState(() => _selectedClient = client),
                       avatarUrl: client['avatar_url'],
+                      isClient: true,
                     );
                   },
                 ),
@@ -326,45 +356,85 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
     required VoidCallback onTap,
     String? avatarUrl,
     String? imageUrl,
+    bool isClient = false,
   }) {
+    final Color selectedBorderColor = const Color(0xFFC7A46B); // Always Gold for selected items per user request
+    final Color selectedBgColor = selectedBorderColor.withOpacity(0.05);
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary.withValues(alpha: 0.08) : Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        color: isSelected ? selectedBgColor : Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.1),
+          color: isSelected ? selectedBorderColor : Colors.transparent,
           width: 1.5,
         ),
       ),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         onTap: onTap,
-        leading: avatarUrl != null
-            ? CircleAvatar(backgroundImage: NetworkImage(avatarUrl))
-            : imageUrl != null
-                ? Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: NetworkImage(imageUrl),
-                        fit: BoxFit.cover,
+        leading: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: avatarUrl != null
+                ? Image.network(avatarUrl, fit: BoxFit.cover)
+                : imageUrl != null
+                    ? Image.network(imageUrl, fit: BoxFit.cover)
+                    : Container(
+                        color: (isClient ? const Color(0xFF305F47) : AppColors.primary).withOpacity(0.1),
+                        child: Icon(
+                          isClient ? Icons.person : Icons.spa_rounded,
+                          color: isClient ? const Color(0xFF305F47) : AppColors.primary,
+                        ),
                       ),
-                    ),
-                  )
-                : CircleAvatar(
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                    child: Icon(
-                      _currentStep == 0 ? Icons.spa_rounded : Icons.person,
-                      color: AppColors.primary,
-                    ),
-                  ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
+          ),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Playfair Display',
+            color: isClient ? const Color(0xFF305F47) : AppColors.primary,
+            fontSize: 17,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 12,
+              height: 1.4,
+              fontFamily: 'Inter',
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.visible,
+          ),
+        ),
         trailing: isSelected
-            ? const Icon(Icons.check_circle, color: AppColors.primary)
-            : const Icon(Icons.circle_outlined, color: Colors.grey),
+            ? const Icon(Icons.check_circle, color: Color(0xFF305F47), size: 28)
+            : Icon(Icons.radio_button_off, color: Colors.grey[300], size: 28),
       ),
     );
   }

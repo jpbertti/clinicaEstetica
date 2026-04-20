@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 import '../../../../auth/data/auth_service.dart';
 
 class AdminAddProfissionalPage extends StatefulWidget {
@@ -190,8 +191,8 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Adicionar Profissional',
+                        const Text(
+                          'Adicionar profissional',
                           style: TextStyle(
                             fontFamily: 'Playfair Display', 
                             fontSize: 24,
@@ -264,7 +265,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        _imageBytes == null ? '+ Adicionar Foto' : 'Alterar Foto',
+                        _imageBytes == null ? '+ Adicionar foto' : 'Alterar foto',
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 14,
@@ -299,7 +300,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                     child: Column(
                       children: [
                         _buildInputField(
-                          label: 'Nome Completo',
+                          label: 'Nome completo',
                           controller: _nomeController,
                           icon: Icons.badge,
                           hint: 'Nome do profissional',
@@ -307,7 +308,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'E-mail Corporativo',
+                          label: 'E-mail corporativo',
                           controller: _emailController,
                           icon: Icons.mail,
                           hint: 'email@clinica.com',
@@ -316,7 +317,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Senha de Acesso',
+                          label: 'Senha de acesso',
                           controller: _senhaController,
                           icon: Icons.lock,
                           hint: 'Mínimo 6 caracteres',
@@ -345,7 +346,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildDropdownField(
-                          label: 'Nível de Permissão',
+                          label: 'Nível de permissão',
                           value: _selectedPermission,
                           icon: Icons.admin_panel_settings,
                           items: const [
@@ -355,32 +356,24 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                           onChanged: (val) => setState(() => _selectedPermission = val!),
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildInputField(
-                                label: 'Comissão Agenda (%)',
-                                controller: _comissaoAgendamentosController,
-                                icon: Icons.calendar_today,
-                                keyboardType: TextInputType.number,
-                                isValid: _comissaoAgendamentosValid,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: _buildInputField(
-                                label: 'Comissão Produtos (%)',
-                                controller: _comissaoProdutosController,
-                                icon: Icons.shopping_bag,
-                                keyboardType: TextInputType.number,
-                                isValid: _comissaoProdutosValid,
-                              ),
-                            ),
-                          ],
+                        _buildInputField(
+                          label: 'Comissão agenda (%)',
+                          controller: _comissaoAgendamentosController,
+                          icon: Icons.calendar_today,
+                          keyboardType: TextInputType.number,
+                          isValid: _comissaoAgendamentosValid,
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Observações Internas (Opcional)',
+                          label: 'Comissão produtos (%)',
+                          controller: _comissaoProdutosController,
+                          icon: Icons.shopping_bag,
+                          keyboardType: TextInputType.number,
+                          isValid: _comissaoProdutosValid,
+                        ),
+                        const SizedBox(height: 20),
+                        _buildInputField(
+                          label: 'Observações internas (opcional)',
                           controller: _obsController,
                           icon: Icons.notes,
                           hint: 'Notas, restrições ou detalhes...',
@@ -390,7 +383,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                         const SizedBox(height: 20),
                         // Status Toggle
                         _buildToggleField(
-                          label: 'Status do Profissional',
+                          label: 'Status do profissional',
                           value: _isActive,
                           onChanged: (val) => setState(() => _isActive = val),
                         ),
@@ -400,19 +393,8 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                             Expanded(
                               child: TextButton(
                                 onPressed: () => context.pop(),
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                                child: const Text(
-                                  'Cancelar',
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.accent,
-                                  ),
-                                ),
+                                style: AppButtonStyles.cancelButtonStyle(),
+                                child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -420,14 +402,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                               flex: 2,
                               child: ElevatedButton(
                                 onPressed: _isSaving ? null : _save,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.accent,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  elevation: 4,
-                                  shadowColor: AppColors.accent.withOpacity(0.4),
-                                ),
+                                style: AppButtonStyles.primary(),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -444,12 +419,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                                       const Icon(Icons.person_add, size: 18),
                                     const SizedBox(width: 8),
                                     Text(
-                                      _isSaving ? 'Cadastrando...' : 'Cadastrar Profissional',
-                                      style: const TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      _isSaving ? 'Cadastrando...' : 'Cadastrar profissional',
                                     ),
                                   ],
                                 ),
@@ -671,29 +641,67 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
             color: AppColors.accent,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.03),
-            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.black.withOpacity(0.05)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                value ? 'Disponível / Ativo' : 'Indisponível / Inativo',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: value ? AppColors.primary : Colors.grey,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Status disponibilidade',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary.withOpacity(0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    value ? 'Profissional ativo' : 'Profissional inativo',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ],
               ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeColor: AppColors.primary,
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Transform.scale(
+                    scale: 0.8,
+                    alignment: Alignment.centerRight,
+                    child: Switch(
+                      value: value,
+                      onChanged: onChanged,
+                      activeThumbColor: Colors.white,
+                      activeTrackColor: AppColors.success,
+                      inactiveThumbColor: Colors.grey[400],
+                      inactiveTrackColor: Colors.grey[200],
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                  Text(
+                    value ? 'Ativo' : 'Inativo',
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                      color: value ? AppColors.success : Colors.grey,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

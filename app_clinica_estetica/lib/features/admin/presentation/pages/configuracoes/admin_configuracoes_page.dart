@@ -6,6 +6,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:app_clinica_estetica/core/app_config.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/dashboard_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminConfiguracoesPage extends StatefulWidget {
   const AdminConfiguracoesPage({super.key});
@@ -315,7 +316,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              'Dados da Clínica',
+                              'Dados da clínica',
                               style: TextStyle(fontSize: 18,
                                 fontFamily: 'Playfair Display',
                                 fontWeight: FontWeight.bold,
@@ -326,13 +327,13 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                         ),
                         const SizedBox(height: 24),
                         _buildListItem(
-                          label: 'Nome Comercial',
+                          label: 'Nome comercial',
                           value: _nomeComercial,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
                           goldColor: goldColor,
                           onEdit: () => _showEditDialog(
-                            'Nome Comercial',
+                            'nome comercial',
                             'nome_comercial',
                             _nomeComercial,
                             primaryColor,
@@ -340,7 +341,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           ),
                         ),
                         _buildListItem(
-                          label: 'ENDEREÇO',
+                          label: 'Endereço',
                           value: _endereco,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
@@ -354,13 +355,13 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           ),
                         ),
                         _buildListItem(
-                          label: 'Telefone Fixo',
+                          label: 'Telefone fixo',
                           value: _telefoneFixo,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
                           goldColor: goldColor,
                           onEdit: () => _showEditDialog(
-                            'Telefone Fixo',
+                            'telefone fixo',
                             'telefone_fixo',
                             _telefoneFixo,
                             primaryColor,
@@ -379,7 +380,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Mostrar Telefone Fixo ao Cliente',
+                                      'Mostrar telefone fixo ao cliente',
                                       style: TextStyle(fontSize: 10,
                                         fontWeight: FontWeight.bold,
                                         color: softGreen,
@@ -424,7 +425,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           softGreen: softGreen,
                           goldColor: goldColor,
                           onEdit: () => _showEditDialog(
-                            'Whatsapp',
+                            'WhatsApp',
                             'whatsapp',
                             _whatsapp,
                             primaryColor,
@@ -433,13 +434,13 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           ),
                         ),
                         _buildListItem(
-                          label: 'E-MAIL DE CONTATO',
+                          label: 'E-mail de contato',
                           value: _emailContato.isEmpty ? 'Nenhum e-mail informado' : _emailContato,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
                           goldColor: goldColor,
                           onEdit: () => _showEditDialog(
-                            'E-mail de Contato',
+                            'e-mail de contato',
                             'email_contato',
                             _emailContato,
                             primaryColor,
@@ -449,7 +450,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           isLast: false,
                         ),
                         _buildListItem(
-                          label: 'DESCRIÇÃO',
+                          label: 'Descrição',
                           value: _descricao.isEmpty ? 'Nenhuma descrição informada' : _descricao,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
@@ -466,13 +467,13 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                           isLast: false,
                         ),
                         _buildListItem(
-                          label: 'LINK DO MAPA (URL DA IMAGEM)',
+                          label: 'Link do mapa (URL da imagem)',
                           value: _mapaIframe.isEmpty ? 'Nenhuma URL informada' : _mapaIframe,
                           premiumGray: premiumGray,
                           softGreen: softGreen,
                           goldColor: goldColor,
                           onEdit: () => _showEditDialog(
-                            'Link do Mapa',
+                            'link do mapa',
                             'mapa_iframe',
                             _mapaIframe,
                             primaryColor,
@@ -486,12 +487,12 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                     ),
 
                     const SizedBox(height: 48),
-                    _buildSectionHeader('CONFIGURAÇÕES GLOBAIS', primaryColor),
+                    _buildSectionHeader('Configurações globais', primaryColor),
                     const SizedBox(height: 8),
                     _buildActionItem(
                       onTap: () => context.push('/admin/horarios'),
                       icon: Icons.access_time_rounded,
-                      title: 'Dias de Funcionamento',
+                      title: 'Dias de funcionamento',
                       subtitle: 'Horários e bloqueio de agenda',
                       pColor: primaryColor,
                       gColor: goldColor,
@@ -501,7 +502,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                     _buildActionItem(
                       onTap: () => context.push('/admin/promocoes'),
                       icon: Icons.campaign_rounded,
-                      title: 'Gerenciar Promoções',
+                      title: 'Gerenciar promoções',
                       subtitle: 'Banners e cards da tela inicial',
                       pColor: primaryColor,
                       gColor: goldColor,
@@ -510,7 +511,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                     const SizedBox(height: 24),
                     _buildActionItem(
                       icon: Icons.credit_card_rounded,
-                      title: 'Taxas dos Cartões',
+                      title: 'Taxas dos cartões',
                       subtitle: 'Débito, Crédito, Parcelado e PIX',
                       pColor: primaryColor,
                       gColor: goldColor,
@@ -519,12 +520,12 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                     ),
 
                     const SizedBox(height: 48),
-                    _buildSectionHeader('SEGURANÇA', primaryColor),
+                    _buildSectionHeader('Segurança', primaryColor),
                     const SizedBox(height: 8),
                     _buildActionItem(
                       onTap: () => context.push('/alterar-senha'),
                       icon: Icons.lock_outline,
-                      title: 'Alterar Senha',
+                      title: 'Alterar senha',
                       subtitle: 'Mantenha sua conta segura',
                       pColor: primaryColor,
                       gColor: goldColor,
@@ -579,7 +580,7 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Editar $title',
+          'Editar ${title.toLowerCase()}',
           style: TextStyle(fontWeight: FontWeight.bold,
             color: primaryColor,
           ),
@@ -644,11 +645,10 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
               Expanded(
                 child: TextButton(
                   onPressed: () => Navigator.pop(context),
+                  style: AppButtonStyles.cancelButtonStyle(),
                   child: Text(
                     'Cancelar',
-                    style: TextStyle(color: goldColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppButtonStyles.cancelTextStyle(),
                   ),
                 ),
               ),
@@ -666,21 +666,9 @@ class _AdminConfiguracoesPageState extends State<AdminConfiguracoesPage> {
                     _salvarConfiguracao(title, dbField, newValue);
                     Navigator.pop(context);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Text(
+                  style: AppButtonStyles.primary(),
+                  child: const Text(
                     'Salvar',
-                    style: TextStyle(fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
                   ),
                 ),
               ),

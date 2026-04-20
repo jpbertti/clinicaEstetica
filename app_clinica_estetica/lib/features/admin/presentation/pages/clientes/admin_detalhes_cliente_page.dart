@@ -150,7 +150,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                           ),
                         ),
                         Text(
-                          'Informações do Perfil',
+                          'Informações do perfil',
                           style: TextStyle(
                             fontSize: 12,
                             color: goldColor,
@@ -222,13 +222,13 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          _buildInfoItem('Nome Completo', _clientData!['nome_completo'], showCopy: true),
+          _buildInfoItem('Nome completo', _clientData!['nome_completo'], showCopy: true),
           _buildInfoItem('E-mail', _clientData!['email'], showCopy: true),
           _buildInfoItem('Telefone', _clientData!['telefone'] ?? 'Não informado', showCopy: true),
           _buildInfoItem('Desde', DateFormat('dd/MM/yyyy').format(DateTime.parse(_clientData!['criado_em']).toLocal())),
           const SizedBox(height: 16),
           Text(
-            'Observações Internas',
+            'Observações internas',
             style: TextStyle(fontSize: 14,
               fontWeight: FontWeight.bold,
               color: primaryGreen,
@@ -343,7 +343,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                       style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen),
                     ),
                     Text(
-                      'Prof: ${appt['perfis']?['nome_completo'] ?? '-'}',
+                      'Prof.: ${appt['perfis']?['nome_completo'] ?? '-'}',
                       style: TextStyle(fontSize: 12, color: Colors.black54),
                     ),
                     const SizedBox(height: 4),
@@ -370,8 +370,8 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                           const SizedBox(width: 4),
                           Text(
                             appt['pago'] == true && status != 'ausente'
-                                ? 'PAGO - ${status.toUpperCase()}'
-                                : status.toUpperCase(),
+                                ? 'Pago - ${status}'
+                                : status,
                             style: TextStyle(fontSize: 9,
                               fontWeight: FontWeight.bold,
                               color: statusColor,
@@ -559,7 +559,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              status == 'ativo' ? 'EM ANDAMENTO' : status.toUpperCase(),
+                              status == 'ativo' ? 'Em andamento' : status,
                               style: TextStyle(fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: statusColor,
@@ -573,7 +573,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Progresso das Sessões',
+                            'Progresso das sessões',
                             style: TextStyle(fontSize: 13,
                               color: Colors.black54,
                             ),
@@ -616,7 +616,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               child: Text(
-                                'Ver Detalhes',
+                                'Ver detalhes',
                                 style: TextStyle(fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                   color: goldColor,

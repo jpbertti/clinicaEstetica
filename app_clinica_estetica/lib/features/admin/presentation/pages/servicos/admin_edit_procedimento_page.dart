@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 import 'package:intl/intl.dart';
 
 // ─── Currency Formatter ────────────────────────────────────────────────────
@@ -382,7 +384,7 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Editar Procedimento',
+                          'Editar procedimento',
                           style: TextStyle(fontFamily: 'Playfair Display', 
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -456,7 +458,7 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
               Center(
                 child: Text(
                   _imageFile == null
-                      ? 'Alterar Foto'
+                      ? 'Alterar foto'
                       : 'Foto selecionada ✓',
                   style: TextStyle(fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -487,7 +489,7 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
                   child: Column(
                     children: [
                       _inputField(
-                        label: 'Nome do Procedimento',
+                        label: 'Nome do procedimento',
                         controller: _nomeController,
                         icon: Icons.edit_document,
                         hint: 'Ex: Protocolo VIP',
@@ -523,7 +525,7 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
 
                       // Preço Promocional
                       _inputField(
-                        label: 'Preço Promo. (Opcional)',
+                        label: 'Preço promocional (opcional)',
                         controller: _precoPromocionalController,
                         icon: Icons.discount,
                         hint: 'R\$ 0,00',
@@ -614,57 +616,32 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
                                     borderRadius:
                                         BorderRadius.circular(12)),
                               ),
-                              child: Text(
-                                'Cancelar',
-                                style: TextStyle(fontWeight: FontWeight.bold,
-                                  color: _accentColor,
+                                child: Text(
+                                  StringUtils.toTitleCase('cancelar'),
+                                  style: AppButtonStyles.cancelTextStyle(),
                                 ),
-                              ),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             flex: 2,
                             child: ElevatedButton(
-                              onPressed:
-                                  _isSaving ? null : _save,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _primaryColor,
-                                foregroundColor: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(12)),
-                                elevation: 4,
-                                shadowColor: _primaryColor
-                                    .withAlpha(102),
-                              ),
+                              onPressed: _isSaving ? null : _save,
+                              style: AppButtonStyles.primary(),
                               child: _isSaving
                                   ? const SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child:
-                                          CircularProgressIndicator(
+                                      child: CircularProgressIndicator(
                                         strokeWidth: 2,
                                         color: Colors.white,
                                       ))
                                   : const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.save,
-                                            size: 18),
+                                        Icon(Icons.save, size: 18),
                                         SizedBox(width: 8),
-                                        Text(
-                                          'Salvar Alterações',
-                                          style:
-                                              TextStyle(fontSize: 14,
-                                            fontWeight:
-                                                FontWeight.bold,
-                                          ),
-                                        ),
+                                        Text(StringUtils.toTitleCase('salvar alterações')),
                                       ],
                                     ),
                             ),

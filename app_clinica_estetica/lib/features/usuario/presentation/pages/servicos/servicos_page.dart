@@ -270,7 +270,7 @@ class _ServicosPageState extends State<ServicosPage> {
                       ),
                     ),
                     child: Text(
-                      'APLICAR FILTROS',
+                      'Aplicar filtros',
                       style: TextStyle(fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -663,20 +663,20 @@ class _ServicosPageState extends State<ServicosPage> {
                           children: [
                             if (_showProcedimentos)
                               _construirItemAba(
-                                'PROCEDIMENTOS',
+                                'Procedimentos',
                                 _getVisibleTabIndex(0) == _activeTabIndex,
                                 AppColors.primary,
                                 () => _scrollToSection(_procedimentosKey, _getVisibleTabIndex(0)),
                               ),
                             if (_showPacotes)
                               _construirItemAba(
-                                'PACOTES',
+                                'Pacotes',
                                 _getVisibleTabIndex(1) == _activeTabIndex,
                                 AppColors.primary,
                                 () => _scrollToSection(_pacotesKey, _getVisibleTabIndex(1)),
                               ),
                             _construirItemAba(
-                              'CONTATO',
+                              'Contato',
                               _getVisibleTabIndex(2) == _activeTabIndex,
                               AppColors.primary,
                               () => _scrollToSection(_contatoKey, _getVisibleTabIndex(2)),
@@ -1458,7 +1458,7 @@ class _CardServico extends StatelessWidget {
                     ],
                   ),
                   child: Text(
-                    (service.categoriaNome ?? 'GERAL').toUpperCase(),
+                    service.categoriaNome ?? 'Geral',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       fontSize: 7,
                       fontWeight: FontWeight.bold,
@@ -1481,7 +1481,7 @@ class _CardServico extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'OFERTA',
+                      'Oferta',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         fontSize: 7,
                         fontWeight: FontWeight.bold,
@@ -1533,7 +1533,7 @@ class _CardServico extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: AppColors.accent,
                         ),
                       ),
                       if (service.dataFimPromocao != null) ...[
@@ -1558,7 +1558,7 @@ class _CardServico extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: AppColors.accent,
                         ),
                       ),
                   ],
@@ -1595,7 +1595,7 @@ class _CardServico extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: Text(
-                      'RESERVAR AGORA',
+                      'Reservar agora',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -1688,7 +1688,7 @@ class _CardPacote extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        'OFERTA',
+                        'Oferta',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           fontSize: 6,
                           fontWeight: FontWeight.bold,
@@ -1748,7 +1748,7 @@ class _CardPacote extends StatelessWidget {
                                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                                    color: AppColors.accent,
                                   ),
                                 ),
                                 if (pacote.dataFimPromocao != null) ...[
@@ -1773,7 +1773,7 @@ class _CardPacote extends StatelessWidget {
                                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                                    color: AppColors.accent,
                                   ),
                                 ),
                             ],
@@ -1820,7 +1820,7 @@ class _CardPacote extends StatelessWidget {
                                 elevation: 0,
                               ),
                               child: Text(
-                                'RESERVAR AGORA',
+                                'Reservar agora',
                                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,

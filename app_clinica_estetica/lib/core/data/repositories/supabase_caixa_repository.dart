@@ -39,77 +39,89 @@ class SupabaseCaixaRepository {
 
   Future<Map<String, dynamic>> getDetailedStats(String caixaId) async {
     try {
-      // Entradas: Agendamentos vinculados a este caixa
+      // 1. Buscar Agendamentos (Usados para o histórico detalhado e metadata de serviços)
       final entriesRes = await _supabase
           .from('agendamentos')
           .select('*, servicos(nome), cliente:cliente_id(nome_completo), profissional:profissional_id(nome_completo)')
-          .eq('caixa_id', caixaId);
+          .eq('caixa_id', caixaId)
+          .eq('pago', true);
       
-      final Map<String, Map<String, dynamic>> porMeio = {
-        'dinheiro': {'valor_total': 0.0, 'transacoes': []},
-        'pix': {'valor_total': 0.0, 'transacoes': []},
-        'cartao_credito': {'valor_total': 0.0, 'transacoes': []},
-        'cartao_debito': {'valor_total': 0.0, 'transacoes': []},
-        'convenio': {'valor_total': 0.0, 'transacoes': []},
-      };
-      
-      double totalEntradas = 0;
-      int numMovimentacoes = 0;
-
-      for (var row in entriesRes as List) {
-        final valor = (row['valor_total'] as num?)?.toDouble() ?? 0;
-        final meio = row['forma_pagamento'] as String?;
-        totalEntradas += valor;
-        numMovimentacoes++;
-        if (meio != null && porMeio.containsKey(meio)) {
-          porMeio[meio]!['valor_total'] = (porMeio[meio]!['valor_total'] as double) + valor;
-          (porMeio[meio]!['transacoes'] as List).add(row);
-        }
-      }
-
-      // Saídas e outras entradas: Contas pagas vinculadas a este caixa
-      // Incluímos joins com perfis para cliente e profissional (vendedor) para vendas de produtos
+      // 2. Buscar Contas (Centraliza tudo o que é financeiro: Vendas de Produtos, Despesas, Agendamentos duplicados via trigger)
       final expensesRes = await _supabase
           .from('contas')
           .select('*, criado_por(nome_completo), cliente:cliente_id(nome_completo), profissional:profissional_id(nome_completo)')
           .eq('caixa_id', caixaId)
           .eq('status_pagamento', 'pago');
 
+      Map<String, Map<String, dynamic>> porMeio = {
+        'dinheiro': {'valor_total': 0.0, 'transacoes': []},
+        'pix': {'valor_total': 0.0, 'transacoes': []},
+        'cartao_credito': {'valor_total': 0.0, 'transacoes': []},
+        'cartao_debito': {'valor_total': 0.0, 'transacoes': []},
+        'transferencia': {'valor_total': 0.0, 'transacoes': []},
+        'convenio': {'valor_total': 0.0, 'transacoes': []},
+        'outro': {'valor_total': 0.0, 'transacoes': []},
+      };
+
+      double totalEntradas = 0;
       double totalSaidas = 0;
       double totalSangrias = 0;
+      int numMovimentacoes = 0;
+      
       List transactionExits = [];
       List transactionOtherEntries = [];
       List sangrias = [];
 
-      for (var row in expensesRes as List) {
-        final valor = (row['valor'] as num?)?.toDouble() ?? 0;
-        final categoria = row['categoria'] as String?;
-        final tipo = row['tipo_conta'] as String?;
-        final meio = row['forma_pagamento'] as String?;
+      // Processar Agendamentos primeiro (para ter o label 'Agenda' no UI)
+      final entriesData = entriesRes as List? ?? [];
+      for (var row in entriesData) {
+        final valor = (row['valor_total'] as num?)?.toDouble() ?? 0.0;
+        final meio = (row['forma_pagamento']?.toString() ?? 'outro').toLowerCase();
         
+        totalEntradas += valor;
+        numMovimentacoes++;
+        
+        final key = porMeio.containsKey(meio) ? meio : 'outro';
+        porMeio[key]!['valor_total'] = (porMeio[key]!['valor_total'] as double) + valor;
+        (porMeio[key]!['transacoes'] as List).add(row);
+      }
+
+      // Processar Contas
+      final expensesData = expensesRes as List? ?? [];
+      for (var row in expensesData) {
+        final valor = (row['valor'] as num?)?.toDouble() ?? 0.0;
+        final categoria = (row['categoria']?.toString() ?? '').toLowerCase();
+        final tipo = (row['tipo_conta']?.toString() ?? '').toLowerCase();
+        final meio = (row['forma_pagamento']?.toString() ?? 'outro').toLowerCase();
+
+        // EVITAR DUPLICIDADE: Se a categoria for 'procedimento', ela já veio do loop de agendamentos acima
+        if (categoria == 'procedimento') {
+          continue;
+        }
+
         if (tipo == 'receber') {
-          // Vendas de produtos ou outras receitas diretas
           totalEntradas += valor;
+          numMovimentacoes++;
           transactionOtherEntries.add(row);
           
-          // Adicionar ao breakdown por meio de pagamento
-          if (meio != null && porMeio.containsKey(meio)) {
-            porMeio[meio]!['valor_total'] = (porMeio[meio]!['valor_total'] as double) + valor;
-            (porMeio[meio]!['transacoes'] as List).add(row);
-          }
+          final key = porMeio.containsKey(meio) ? meio : 'outro';
+          porMeio[key]!['valor_total'] = (porMeio[key]!['valor_total'] as double) + valor;
+          (porMeio[key]!['transacoes'] as List).add(row);
         } else if (categoria == 'sangria' || categoria == 'retirada') {
           totalSangrias += valor;
+          numMovimentacoes++;
           sangrias.add(row);
         } else {
+          // Despesas normais
           totalSaidas += valor;
+          numMovimentacoes++;
           transactionExits.add(row);
         }
-        numMovimentacoes++;
       }
 
       return {
         'total_entradas': totalEntradas,
-        'total_saidas': totalSaidas + totalSangrias, // Total geral de saídas
+        'total_saidas': totalSaidas + totalSangrias,
         'total_apenas_saidas': totalSaidas,
         'total_sangrias': totalSangrias,
         'por_meio_pagamento': porMeio,

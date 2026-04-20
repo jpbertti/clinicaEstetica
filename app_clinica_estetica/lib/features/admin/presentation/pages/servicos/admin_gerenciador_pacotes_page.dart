@@ -105,10 +105,17 @@ class _AdminGerenciadorPacotesPageState extends State<AdminGerenciadorPacotesPag
         title: Text('Excluir Pacote', style: TextStyle(fontFamily: 'Playfair Display', color: AppColors.primary)),
         content: Text('Tem certeza que deseja excluir o pacote "${pacote.titulo}"?', style: const TextStyle()),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.small,
+            child: const Text('Cancelar'),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+            style: AppButtonStyles.small.copyWith(
+              foregroundColor: WidgetStateProperty.all(Colors.red),
+            ),
+            child: const Text('Excluir'),
           ),
         ],
       ),
@@ -186,11 +193,8 @@ class _AdminGerenciadorPacotesPageState extends State<AdminGerenciadorPacotesPag
                       if (v == true) _loadData();
                     }),
                     icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Novo', style: TextStyle(fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryGreen,
-                      foregroundColor: Colors.white,
-                    ),
+                    label: const Text('Novo pacote'),
+                    style: AppButtonStyles.primary,
                   ),
                 ],
               ),

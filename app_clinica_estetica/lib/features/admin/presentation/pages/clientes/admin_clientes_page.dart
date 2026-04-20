@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminClientesPage extends StatefulWidget {
   const AdminClientesPage({super.key});
@@ -323,7 +324,7 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
         ),
       ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final result = await context.push('/admin/clientes/novo');
           if (result == true) {
@@ -331,7 +332,8 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
           }
         },
         backgroundColor: goldColor,
-        child: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Novo cliente'),
+        icon: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -453,7 +455,7 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
                               ],
                             ),
                             child: Text(
-                              'NOVO',
+                              'Novo',
                               style: TextStyle(fontSize: 9,
                                 fontWeight: FontWeight.w900,
                                 color: goldColor,
@@ -484,7 +486,7 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
                   child: Row(
                     children: [
                       Text(
-                        'Ver Detalhes',
+                        'Ver detalhes',
                         style: TextStyle(fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: goldColor,

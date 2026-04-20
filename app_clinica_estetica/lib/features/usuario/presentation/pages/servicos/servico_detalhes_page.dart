@@ -242,7 +242,7 @@ class ServicoDetalhesPage extends StatelessWidget {
             ),
             elevation: 0,
           ),
-          child: Text(
+          child: const Text(
             'Reservar Agora',
             style: TextStyle(fontSize: 16,
               fontWeight: FontWeight.bold,

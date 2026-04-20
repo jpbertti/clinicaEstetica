@@ -12,6 +12,8 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_caixa_repos
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 class AdminAgendamentosPage extends StatefulWidget {
   const AdminAgendamentosPage({super.key});
@@ -181,7 +183,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
           children: [
             Icon(Icons.lock_outline, color: accent, size: 22),
             const SizedBox(width: 10),
-            Text('Caixa Fechado', style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen)),
+            Text('Caixa fechado', style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen)),
           ],
         ),
         content: Text(
@@ -191,13 +193,8 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryGreen,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: Text('Fechar', style: TextStyle(fontWeight: FontWeight.bold)),
+            style: AppButtonStyles.primary(),
+            child: Text(StringUtils.toTitleCase('fechar')),
           ),
         ],
       ),
@@ -360,7 +357,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
       
       await _loadAppointments();
       if (mounted) {
-        final feedback = newStatus == 'pagar' ? 'Pagamento registrado com sucesso' : 'Status atualizado para ${newStatus.toUpperCase()}';
+        final feedback = newStatus == 'pagar' ? 'Pagamento registrado com sucesso' : 'Status atualizado para ${newStatus}';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(feedback),
@@ -479,7 +476,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                           size: 18,
                         ),
                         label: Text(
-                          _isMonthlyView ? 'Visualização Diária' : 'Visualização Mensal',
+                          _isMonthlyView ? 'Visualização diária' : 'Visualização mensal',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: primaryGreen,
@@ -499,7 +496,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             TextButton.icon(
                               onPressed: () => setState(() => _isCalendarExpanded = !_isCalendarExpanded),
                               icon: Icon(_isCalendarExpanded ? Icons.keyboard_arrow_up : Icons.calendar_month, color: primaryGreen),
-                              label: Text(_isCalendarExpanded ? 'Fechar Calendário' : 'Abrir Calendário', style: TextStyle(color: primaryGreen)),
+                              label: Text(_isCalendarExpanded ? 'Fechar calendário' : 'Abrir calendário', style: TextStyle(color: primaryGreen)),
                             ),
                             if (_isCalendarExpanded) ...[
                               const SizedBox(height: 10),
@@ -672,7 +669,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                                   Icon(Icons.calendar_month, color: accent, size: 20),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'VISUALIZAÇÃO MENSAL',
+                                    'Visualização mensal',
                                     style: TextStyle(fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: primaryGreen,
@@ -2020,35 +2017,27 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              style: TextButton.styleFrom(
-                splashFactory: NoSplash.splashFactory,
-              ),
               child: Text(
-                'CANCELAR', 
+                'Cancelar', 
                 style: TextStyle(color: accent, 
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 0.8,
                 )
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                final double finalValor = double.tryParse(valorController.text.replaceAll(',', '.')) ?? valor;
-                Navigator.pop(context, {
-                  'valor_total': finalValor,
-                  'forma_pagamento': formaPagamento,
-                  'parcelas': parcelas,
-                  'convenio_nome': formaPagamento == 'convenio' ? convenioController.text : null,
-                  'observacoes': observacoesController.text,
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryGreen,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ElevatedButton(
+                onPressed: () {
+                  final double finalValor = double.tryParse(valorController.text.replaceAll(',', '.')) ?? valor;
+                  Navigator.pop(context, {
+                    'valor_total': finalValor,
+                    'forma_pagamento': formaPagamento,
+                    'parcelas': parcelas,
+                    'convenio_nome': formaPagamento == 'convenio' ? convenioController.text : null,
+                    'observacoes': observacoesController.text,
+                  });
+                },
+                style: AppButtonStyles.primary(),
+                child: Text(StringUtils.toTitleCase('confirmar e finalizar')),
               ),
-              child: const Text('Confirmar e Finalizar'),
-            ),
           ],
         ),
       ),
@@ -2064,14 +2053,10 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            style: TextButton.styleFrom(
-              splashFactory: NoSplash.splashFactory,
-            ),
             child: Text(
-              'CANCELAR', 
+              'Cancelar', 
               style: TextStyle(color: accent, 
                 fontWeight: FontWeight.bold,
-                letterSpacing: 0.8,
               )
             ),
           ),
@@ -2225,8 +2210,8 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Não')),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              style: ElevatedButton.styleFrom(backgroundColor: primaryGreen),
-              child: const Text('Sim, trocar', style: TextStyle(color: Colors.white)),
+              style: AppButtonStyles.primary(),
+              child: Text(StringUtils.toTitleCase('sim, trocar')),
             ),
           ],
         ),

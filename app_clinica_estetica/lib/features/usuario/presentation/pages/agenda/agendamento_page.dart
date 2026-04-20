@@ -230,8 +230,24 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
       final profData = await _profRepo.getProfessionalBlocksAndLunch(_selectedProfessional!.id, _selectedDate);
       
       final work = profData['work'] as Map<String, dynamic>?;
-      final lunch = profData['lunch'] as Map<String, TimeOfDay>?;
+      final lunchData = profData['lunch'] as Map<String, dynamic>?;
       final blocks = (profData['blocks'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+
+      // Converte horários de almoço de String para TimeOfDay
+      TimeOfDay? lunchStart;
+      TimeOfDay? lunchEnd;
+      if (lunchData != null) {
+        final startStr = lunchData['hora_inicio'] as String?;
+        final endStr = lunchData['hora_fim'] as String?;
+        if (startStr != null) {
+          final parts = startStr.split(':');
+          lunchStart = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+        }
+        if (endStr != null) {
+          final parts = endStr.split(':');
+          lunchEnd = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+        }
+      }
 
       // 2. Determina a janela de atendimento base (Profissional ou Clínica)
       String? baseStartTime;
@@ -304,7 +320,13 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
       }
 
       // 6. Prepara lista de ocupação (Agendamentos + Bloqueios Parciais + Almoço)
-      final allOccupied = await _profRepo.getOccupiedTimes(_selectedProfessional!.id, _selectedDate);
+      // Passamos o clientId para evitar que o mesmo cliente agende horários conflitantes com outros profissionais
+      final effectiveClientId = widget.clientId ?? _supabase.auth.currentUser?.id;
+      final allOccupied = await _profRepo.getOccupiedTimes(
+        profId: _selectedProfessional!.id, 
+        date: _selectedDate,
+        clientId: effectiveClientId,
+      );
       
       // Bloqueios parciais do profissional/clínica
       for (var block in blocks) {
@@ -325,14 +347,14 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
       }
 
       // Almoço configurado para o profissional
-      if (lunch != null) {
-        final lunchStart = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, lunch['inicio']!.hour, lunch['inicio']!.minute);
-        final lunchEnd = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, lunch['fim']!.hour, lunch['fim']!.minute);
+      if (lunchStart != null && lunchEnd != null) {
+        final lunchDTStart = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, lunchStart.hour, lunchStart.minute);
+        final lunchDTEnd = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, lunchEnd.hour, lunchEnd.minute);
         
-        if (lunchEnd.isAfter(lunchStart)) {
+        if (lunchDTEnd.isAfter(lunchDTStart)) {
           allOccupied.add(<String, dynamic>{
-            'dateTime': lunchStart,
-            'duration': lunchEnd.difference(lunchStart).inMinutes,
+            'dateTime': lunchDTStart,
+            'duration': lunchDTEnd.difference(lunchDTStart).inMinutes,
             'type': 'lunch',
           });
         }
@@ -576,18 +598,27 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
                         style: ElevatedButton.styleFrom(
                           backgroundColor: (_selectedProfessional != null && _selectedTime != null) ? AppColors.primary : Colors.grey.shade300,
                           foregroundColor: (_selectedProfessional != null && _selectedTime != null) ? AppColors.white : Colors.grey.shade600,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          elevation: (_selectedProfessional != null && _selectedTime != null) ? 4 : 0,
+                          shadowColor: AppColors.primary.withOpacity(0.4),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                        ),
-                        child: Text(
-                          'Seguir para Confirmação',
-                          style: GoogleFonts.manrope(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            letterSpacing: 0.5,
                           ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.calendar_today, size: 18),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Seguir para confirmação',
+                            ),
+                          ],
                         ),
                       ),
                     ),

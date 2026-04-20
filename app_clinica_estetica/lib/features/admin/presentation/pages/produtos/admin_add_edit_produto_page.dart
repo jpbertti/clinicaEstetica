@@ -8,6 +8,8 @@ import '../../../../../core/widgets/currency_formatter.dart';
 import 'package:intl/intl.dart';
 import '../../../../../core/theme/app_colors.dart';
 
+import '../../../../../core/theme/app_button_styles.dart';
+
 class AdminAddEditProdutoPage extends StatefulWidget {
   final ProductModel? product;
   const AdminAddEditProdutoPage({super.key, this.product});
@@ -39,7 +41,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
   DateTime? _dataVencimento;
   bool _ativo = true;
   String? _selectedCategoria;
-  final List<String> _categorias = ['Cabelo', 'Corpo', 'Rosto', 'Maquiagem', '+ Adicionar Nova...'];
+  final List<String> _categorias = ['Cabelo', 'Corpo', 'Rosto', 'Maquiagem', '+ Adicionar nova...'];
 
   Uint8List? _imageBytes;
   String? _currentImageUrl;
@@ -113,7 +115,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
       _precoError.value = true;
       hasError = true;
     }
-    if (_selectedCategoria == null || _selectedCategoria == '+ Adicionar Nova...') {
+    if (_selectedCategoria == null || _selectedCategoria == '+ Adicionar nova...') {
       _categoriaError.value = true;
       hasError = true;
     }
@@ -217,7 +219,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                 Navigator.pop(context);
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+            style: AppButtonStyles.primary(),
             child: const Text('Adicionar'),
           ),
         ],
@@ -332,8 +334,8 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                       const SizedBox(height: 12),
                       Text(
                         (_imageBytes == null && (_currentImageUrl == null || _currentImageUrl!.isEmpty))
-                            ? '+ Adicionar Foto'
-                            : 'Alterar Foto',
+                            ? '+ Adicionar foto'
+                            : 'Alterar foto',
                         style: TextStyle(fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: accentColor,
@@ -398,7 +400,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                       value: _selectedCategoria,
                       items: _categorias,
                       onChanged: (v) {
-                        if (v == '+ Adicionar Nova...') {
+                        if (v == '+ Adicionar nova...') {
                           _showAddCategoryDialog();
                         } else {
                           setState(() {
@@ -414,7 +416,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                     ),
                     const SizedBox(height: 20),
                     _buildInputField(
-                      label: 'Preço de Custo (Opcional)',
+                      label: 'Preço de custo (opcional)',
                       controller: _precoCustoController,
                       icon: Icons.payments_outlined,
                       keyboardType: TextInputType.number,
@@ -433,7 +435,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                     ),
                     const SizedBox(height: 20),
                     _buildInputField(
-                      label: 'Estoque Mínimo (Alerta)',
+                      label: 'Estoque mínimo (alerta)',
                       controller: _estoqueMinimoController,
                       icon: Icons.notifications_active_outlined,
                       keyboardType: TextInputType.number,
@@ -451,7 +453,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                     ),
                     const SizedBox(height: 24),
                     _buildDateField(
-                      label: 'Data de Vencimento',
+                      label: 'Data de vencimento',
                       value: _dataVencimento,
                       icon: Icons.event_available_outlined,
                       onTap: () async {
@@ -493,9 +495,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                             onPressed: () => context.pop(),
                             child: Text(
                               'Cancelar',
-                              style: TextStyle(color: accentColor,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppButtonStyles.cancelTextStyle(),
                             ),
                           ),
                         ),
@@ -504,16 +504,10 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                           flex: 2,
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _saveProduct,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                              elevation: 0,
-                            ),
+                            style: AppButtonStyles.primary(),
                             child: _isLoading
                                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                : Text('Salvar Produto', style: TextStyle(fontWeight: FontWeight.bold)),
+                                : const Text('Salvar produto'),
                           ),
                         ),
                       ],
@@ -560,7 +554,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                 Icon(icon, color: primaryColor, size: 20),
                 const SizedBox(width: 12),
                 Text(
-                  value != null ? DateFormat('dd/MM/yyyy').format(value) : 'Selecionar Data',
+                  value != null ? DateFormat('dd/MM/yyyy').format(value) : 'Selecionar data',
                   style: TextStyle(fontSize: 14,
                     color: value != null ? primaryColor : Colors.black26,
                   ),

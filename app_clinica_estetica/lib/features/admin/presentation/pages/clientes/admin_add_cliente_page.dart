@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../../auth/data/auth_service.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminAddClientePage extends StatefulWidget {
   const AdminAddClientePage({super.key});
@@ -165,7 +166,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Novo Cliente',
+                          'Novo cliente',
                           style: TextStyle(fontFamily: 'Playfair Display', 
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -235,7 +236,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        _imageBytes == null ? '+ Adicionar Foto' : 'Alterar Foto',
+                        _imageBytes == null ? '+ Adicionar foto' : 'Alterar foto',
                         style: TextStyle(fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: accentColor,
@@ -268,7 +269,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                     child: Column(
                       children: [
                         _buildInputField(
-                          label: 'Nome Completo',
+                          label: 'Nome completo',
                           controller: _nomeController,
                           icon: Icons.person,
                           hint: 'Nome do cliente',
@@ -301,7 +302,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Senha Padrão',
+                          label: 'Senha padrão',
                           controller: TextEditingController(text: _defaultPassword),
                           icon: Icons.lock_outline,
                           enabled: false,
@@ -310,7 +311,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Observações (Opcional)',
+                          label: 'Observações (opcional)',
                           controller: _obsController,
                           icon: Icons.notes,
                           hint: 'Notas sobre o cliente...',
@@ -333,10 +334,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                                 ),
                                 child: Text(
                                   'Cancelar',
-                                  style: TextStyle(fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: accentColor,
-                                  ),
+                                  style: AppButtonStyles.primaryTextStyle(color: accentColor),
                                 ),
                               ),
                             ),
@@ -345,14 +343,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                               flex: 2,
                               child: ElevatedButton(
                                 onPressed: _isSaving ? null : _save,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primaryColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  elevation: 4,
-                                  shadowColor: primaryColor.withOpacity(0.4),
-                                ),
+                                style: AppButtonStyles.primary(),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -369,10 +360,7 @@ class _AdminAddClientePageState extends State<AdminAddClientePage> {
                                       const Icon(Icons.person_add, size: 18),
                                     const SizedBox(width: 8),
                                     Text(
-                                      _isSaving ? 'Salvando...' : 'Cadastrar Cliente',
-                                      style: TextStyle(fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      _isSaving ? 'Salvando...' : 'Cadastrar cliente',
                                     ),
                                   ],
                                 ),

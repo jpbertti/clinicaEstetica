@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/dashboard_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminHorariosPage extends StatefulWidget {
   const AdminHorariosPage({super.key});
@@ -185,19 +186,19 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
         bool partial = false;
         return StatefulBuilder(builder: (context, setDialogState) {
           return AlertDialog(
-            title: Text('Tipo de Bloqueio', style: TextStyle(fontWeight: FontWeight.bold, color: const Color(0xFF2F5E46))),
+            title: Text('Tipo de bloqueio', style: TextStyle(fontWeight: FontWeight.bold, color: const Color(0xFF2F5E46))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 RadioListTile<bool>(
-                  title: Text('Dia Inteiro', style: TextStyle(fontSize: 14)),
+                  title: Text('Dia inteiro', style: TextStyle(fontSize: 14)),
                   value: false,
                   groupValue: partial,
                   onChanged: (v) => setDialogState(() => partial = v!),
                   activeColor: const Color(0xFF2F5E46),
                 ),
                 RadioListTile<bool>(
-                  title: Text('Horário Parcial', style: TextStyle(fontSize: 14)),
+                  title: Text('Horário parcial', style: TextStyle(fontSize: 14)),
                   value: true,
                   groupValue: partial,
                   onChanged: (v) => setDialogState(() => partial = v!),
@@ -232,14 +233,15 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
               ],
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: Text('Cancelar', style: TextStyle(color: Colors.grey))),
+              TextButton(onPressed: () => Navigator.pop(context, false), child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle())),
               TextButton(
                 onPressed: () {
                   if (partial && (start == null || end == null)) return;
                   isFullDay = !partial;
                   Navigator.pop(context, true);
                 },
-                child: Text('Confirmar', style: TextStyle(fontWeight: FontWeight.bold, color: const Color(0xFF2F5E46))),
+                style: AppButtonStyles.small(foregroundColor: const Color(0xFF2F5E46)),
+                child: const Text('Confirmar'),
               ),
             ],
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -282,7 +284,7 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
             context: context,
             builder: (context) => AlertDialog(
               backgroundColor: const Color(0xFFF6F4EF),
-              title: Text('Bloqueio Indisponível', style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text('Bloqueio indisponível', style: TextStyle(fontWeight: FontWeight.bold)),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -410,17 +412,13 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancelar', style: TextStyle(color: goldColor, fontWeight: FontWeight.bold)),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            child: Text('Excluir', style: TextStyle(fontWeight: FontWeight.bold)),
+            style: AppButtonStyles.primary(),
+            child: const Text('Excluir'),
           ),
         ],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -457,14 +455,14 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 32),
-                _buildSectionHeader('Horários Semanais', primaryColor),
+                _buildSectionHeader('Horários semanais', primaryColor),
                 const SizedBox(height: 8),
                 _buildWorkingHoursCard(primaryColor, goldColor, softGreen),
                 const SizedBox(height: 32),
-                _buildSectionHeader('Bloqueios da Clínica', primaryColor),
+                _buildSectionHeader('Bloqueios da clínica', primaryColor),
                 _buildClinicBlockingCard(clinicBlocks, primaryColor, goldColor, softGreen),
                 const SizedBox(height: 32),
-                _buildSectionHeader('Bloqueios pelo Profissional', primaryColor),
+                _buildSectionHeader('Bloqueios pelo profissional', primaryColor),
                 if (profBlocks.isEmpty)
                   _buildEmptyState('Nenhum bloqueio de profissional ativo.')
                 else
@@ -660,14 +658,8 @@ class _AdminHorariosPageState extends State<AdminHorariosPage> {
             child: ElevatedButton.icon(
               onPressed: _bloquearDia,
               icon: const Icon(Icons.add_circle_outline),
-              label: const Text('Adicionar Bloqueio'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: goldColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 0,
-              ),
+              label: const Text('Adicionar bloqueio'),
+              style: AppButtonStyles.primary(),
             ),
           ),
           if (blocks.isNotEmpty) ...[

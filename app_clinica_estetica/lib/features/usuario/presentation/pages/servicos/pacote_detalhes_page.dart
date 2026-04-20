@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/core/data/models/pacote_template_model.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
@@ -228,8 +228,8 @@ class PacoteDetalhesPage extends StatelessWidget {
             ),
             elevation: 0,
           ),
-          child: Text(
-            'ESCOLHER ESTE PACOTE',
+          child: const Text(
+            'Escolher este pacote',
             style: TextStyle(fontSize: 16,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.5,

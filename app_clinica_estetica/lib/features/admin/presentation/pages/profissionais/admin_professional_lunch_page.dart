@@ -115,7 +115,7 @@ class _AdminProfessionalLunchPageState extends State<AdminProfessionalLunchPage>
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'HORÁRIO DE ALMOÇO',
+          'Horário de almoço',
           style: TextStyle(fontFamily: 'Playfair Display', 
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -193,7 +193,7 @@ class _AdminProfessionalLunchPageState extends State<AdminProfessionalLunchPage>
                                 flex: 3,
                                 child: Center(
                                   child: Text(
-                                    'Sem Intervalo',
+                                    'Sem intervalo',
                                     style: TextStyle(fontSize: 11,
                                       fontWeight: FontWeight.w800,
                                       color: Colors.grey.withOpacity(0.5),

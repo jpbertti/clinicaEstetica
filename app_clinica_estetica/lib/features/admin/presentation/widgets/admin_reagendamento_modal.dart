@@ -486,17 +486,8 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
             onPressed: (_selectedStartTime != null) 
                 ? () => setState(() => _isConfirming = true) 
                 : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryGreen,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              disabledBackgroundColor: Colors.grey[200],
-            ),
-            child: Text(
-              'REVISAR ALTERAÇÃO',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            style: AppButtonStyles.primary,
+            child: const Text('Revisar alteração'),
           ),
         ],
       ),
@@ -566,12 +557,7 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
               Expanded(
                 child: TextButton(
                   onPressed: () => setState(() => _isConfirming = false),
-                  child: Text(
-                    'Voltar',
-                    style: TextStyle(fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  child: Text('Voltar', style: AppButtonStyles.small(color: Colors.grey)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -579,18 +565,10 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: _isUpdating ? null : _handleConfirm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryGreen,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  ),
+                  style: AppButtonStyles.primary,
                   child: _isUpdating
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : Text(
-                          'Confirmar Troca',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                      : const Text('Confirmar troca'),
                 ),
               ),
             ],

@@ -10,6 +10,7 @@ import 'package:app_clinica_estetica/core/data/models/service_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_package_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminServicosPage extends StatefulWidget {
   const AdminServicosPage({super.key});
@@ -208,7 +209,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                style: AppButtonStyles.cancelButtonStyle(),
+                child: Text('OK', style: AppButtonStyles.cancelTextStyle()),
               ),
             ],
           ),
@@ -221,13 +223,18 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Excluir Procedimento'),
+        title: const Text('Excluir procedimento'),
         content: const Text('Tem certeza que deseja excluir permanentemente este procedimento?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            style: AppButtonStyles.small(backgroundColor: Colors.red),
+            child: const Text('Excluir', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -237,9 +244,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
       try {
         await _supabase.from('servicos').delete().eq('id', id);
 
-        // Log da ação
         await SupabaseAdminLogRepository().logAction(
-          acao: 'Excluir Procedimento',
+          acao: 'Excluir procedimento',
           tabelaAfetada: 'servicos',
           itemId: id,
         );
@@ -297,7 +303,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
           backgroundColor: AppColors.background,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            isEditing ? 'Editar Categoria' : 'Nova Categoria',
+            isEditing ? 'Editar categoria' : 'Nova categoria',
             style: TextStyle(
               fontFamily: 'Playfair Display',
               fontWeight: FontWeight.bold,
@@ -308,7 +314,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Preview
                 Container(
                   width: 80,
                   height: 80,
@@ -345,7 +350,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                 ),
                 const SizedBox(height: 16),
                 
-                // Icon Grid
                 SizedBox(
                   height: 120,
                   width: double.maxFinite,
@@ -358,7 +362,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                     itemCount: _iconOptions.length + 1,
                     itemBuilder: (context, index) {
                       if (index == 0) {
-                        // Image Picker Button
                         return GestureDetector(
                           onTap: () async {
                             final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -413,10 +416,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancelar',
-                style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold),
-              ),
+              style: AppButtonStyles.cancelButtonStyle(),
+              child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -429,15 +430,14 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                         if (uploadUrl != null) {
                           iconValue = uploadUrl;
                         } else if (isEditing) {
-                          iconValue = category['icone_url']; // keep existing
+                          iconValue = category['icone_url'];
                         }
                       } else if (isEditing) {
-                        iconValue = category['icone_url']; // keep existing
+                        iconValue = category['icone_url'];
                       }
                     }
                     
                     if (isEditing) {
-                      final oldName = category['nome'];
                       final newName = categoryController.text;
 
                       await _supabase.from('categorias').update({
@@ -445,9 +445,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                         'icone_url': iconValue,
                       }).eq('id', category['id']);
 
-                      // Log da ação
                       await SupabaseAdminLogRepository().logAction(
-                        acao: 'Editar Categoria',
+                        acao: 'Editar categoria',
                         detalhes: 'Categoria: $newName',
                         tabelaAfetada: 'categorias',
                         itemId: category['id'],
@@ -460,16 +459,14 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                         'ordem': _categories.length + 1,
                       });
 
-                      // Log da ação
                       await SupabaseAdminLogRepository().logAction(
-                        acao: 'Cadastrar Categoria',
+                        acao: 'Cadastrar categoria',
                         detalhes: 'Categoria: $name',
                         tabelaAfetada: 'categorias',
                       );
                     }
                     
                     if (mounted) {
-                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       _loadData();
                     }
@@ -478,12 +475,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                   }
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              child: Text(isEditing ? 'Atualizar' : 'Salvar', style: const TextStyle(fontWeight: FontWeight.bold)),
+              style: AppButtonStyles.primary(),
+              child: const Text('Salvar'),
             ),
           ],
         ),
@@ -500,7 +493,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Exclusão Bloqueada'),
+            title: const Text('Exclusão bloqueada'),
             content: Text(
               'Esta categoria não pode ser excluída pois possui $count procedimento(s) vinculado(s). '
               'Tente renomeá-la ou mover os procedimentos para outra categoria primeiro.'
@@ -508,7 +501,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                style: AppButtonStyles.cancelButtonStyle(),
+                child: Text('OK', style: AppButtonStyles.cancelTextStyle()),
               ),
             ],
           ),
@@ -520,13 +514,18 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Excluir Categoria'),
+        title: const Text('Excluir categoria'),
         content: const Text('Tem certeza que deseja excluir esta categoria?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
           TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
+          ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+            style: AppButtonStyles.primary(backgroundColor: Colors.red),
+            child: const Text('Excluir'),
           ),
         ],
       ),
@@ -536,9 +535,8 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
       try {
         await _supabase.from('categorias').delete().eq('id', id);
 
-        // Log da ação
         await SupabaseAdminLogRepository().logAction(
-          acao: 'Excluir Categoria',
+          acao: 'Excluir categoria',
           detalhes: 'Categoria: ${category['nome']}',
           tabelaAfetada: 'categorias',
           itemId: id,
@@ -562,24 +560,82 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
     final premiumGray = AppColors.textPrimary;
     final bgColor = AppColors.background;
 
-    return Container(
-      color: bgColor,
-      child: RefreshIndicator(
+    return Scaffold(
+      backgroundColor: bgColor,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) => Container(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'O que deseja criar?',
+                    style: TextStyle(
+                      fontFamily: 'Playfair Display',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: primary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    leading: const Icon(Icons.category_outlined, color: AppColors.primary),
+                    title: const Text('Nova categoria'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _showAddCategoryDialog();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.spa_outlined, color: AppColors.primary),
+                    title: const Text('Novo procedimento'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/admin/servicos/novo').then((value) {
+                        if (value == true) _loadData();
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.inventory_2_outlined, color: AppColors.primary),
+                    title: const Text('Novo pacote'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/admin/servicos/pacotes/novo').then((value) {
+                        if (value == true) _loadData();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        backgroundColor: accent,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Novo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+      body: RefreshIndicator(
         onRefresh: _loadData,
         color: accent,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 40),
+          padding: const EdgeInsets.only(bottom: 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Gestão de Procedimentos',
+                      'Gestão de procedimentos',
                       style: TextStyle(fontFamily: 'Playfair Display', 
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -602,7 +658,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
 
               const SizedBox(height: 32),
 
-              // Categories List Section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -641,23 +696,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                       hint: 'Pesquise por categorias...',
                       primary: primary,
                     ),
-                    const SizedBox(height: 12),
-                    TextButton.icon(
-                      onPressed: _showAddCategoryDialog,
-                      icon: const Icon(Icons.add, size: 18, color: AppColors.accent),
-                      label: Text(
-                        'Nova Categoria',
-                        style: TextStyle(fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: AppColors.accent,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -682,7 +720,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
 
               const SizedBox(height: 32),
 
-              // All Procedures Section
               Padding(
                 key: _proceduresSectionKey,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -770,25 +807,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                       hint: 'Pesquise por procedimentos...',
                       primary: primary,
                     ),
-                    const SizedBox(height: 12),
-                    TextButton.icon(
-                      onPressed: () => context.push('/admin/servicos/novo').then((value) {
-                        if (value == true) _loadData();
-                      }),
-                      icon: const Icon(Icons.add, size: 18, color: AppColors.accent),
-                      label: Text(
-                        'Novo Procedimento',
-                        style: TextStyle(fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: AppColors.accent,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -821,7 +839,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
 
               const SizedBox(height: 32),
 
-              // Packages Section
               Padding(
                 key: _packagesSectionKey,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -831,7 +848,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                     Row(
                       children: [
                         Text(
-                          'Pacotes de Serviços',
+                          'Pacotes de serviços',
                           style: TextStyle(fontFamily: 'Playfair Display', 
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -862,26 +879,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                       hint: 'Pesquise por pacotes...',
                       primary: primary,
                     ),
-                    const SizedBox(height: 12),
-                    TextButton.icon(
-                      onPressed: () => context.push('/admin/servicos/pacotes/novo').then((value) {
-                        if (value == true) _loadData();
-                      }),
-                      icon: const Icon(Icons.add, size: 18, color: AppColors.accent),
-                      label: Text(
-                        'Novo Pacote',
-                        style: TextStyle(fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: AppColors.accent,
-  
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -904,7 +901,6 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: _filteredPacotes.map((pack) {
-                      // Find category name
                       final catName = _categories.firstWhere(
                         (c) => c['id'] == pack.categoriaId,
                         orElse: () => {'nome': 'Geral'}
@@ -1226,11 +1222,19 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Excluir Pacote', style: TextStyle(fontFamily: 'Playfair Display', color: AppColors.primary)),
+        title: Text('Excluir pacote', style: TextStyle(fontFamily: 'Playfair Display', color: AppColors.primary)),
         content: Text('Tem certeza que deseja excluir o pacote "${package.titulo}"?', style: const TextStyle()),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Excluir', style: TextStyle(color: Colors.red))),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: AppButtonStyles.small(backgroundColor: Colors.red),
+            child: const Text('Excluir', style: TextStyle(color: Colors.white)),
+          ),
         ],
       ),
     );
@@ -1348,7 +1352,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
                   children: [
                     Icon(Icons.visibility_outlined, size: 18),
                     SizedBox(width: 12),
-                    Text('Ver Procedimentos'),
+                    Text('Ver procedimentos'),
                   ],
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/data/repositories/dashboard_repository.dart';
 import 'package:app_clinica_estetica/core/app_config.dart';
 import 'package:go_router/go_router.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 // ─── Taxa Input Formatter (Eating Zeros) ───────────────────────────────────
 class _TaxaInputFormatter extends TextInputFormatter {
@@ -203,24 +204,24 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
             ),
             const SizedBox(height: 32),
             _buildSection(
-              title: 'CARTÕES E PIX',
+              title: 'Cartões e PIX',
               primaryColor: primaryColor,
               goldColor: goldColor,
               children: [
                 _buildTaxInput(
-                  label: 'Taxa Débito',
+                  label: 'Taxa débito',
                   controller: _debitoController,
                   icon: Icons.credit_card_rounded,
                   goldColor: goldColor,
                 ),
                 _buildTaxInput(
-                  label: 'Taxa Crédito (à vista)',
+                  label: 'Taxa crédito (à vista)',
                   controller: _creditoController,
                   icon: Icons.credit_card_rounded,
                   goldColor: goldColor,
                 ),
                 _buildTaxInput(
-                  label: 'Taxa Crédito Parcelado',
+                  label: 'Taxa crédito parcelado',
                   controller: _parceladoController,
                   icon: Icons.credit_score_rounded,
                   goldColor: goldColor,
@@ -239,16 +240,10 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
                 Expanded(
                   child: TextButton(
                     onPressed: _isSaving ? null : () => context.pop(),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
+                    style: AppButtonStyles.cancelButtonStyle(),
                     child: Text(
                       'Cancelar',
-                      style: TextStyle(fontWeight: FontWeight.bold,
-                        color: goldColor,
-                        letterSpacing: 1.2,
-                      ),
+                      style: AppButtonStyles.cancelTextStyle(),
                     ),
                   ),
                 ),
@@ -257,14 +252,7 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
                   flex: 2,
                   child: ElevatedButton(
                     onPressed: _isSaving ? null : _salvar,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      elevation: 4,
-                      shadowColor: primaryColor.withOpacity(0.4),
-                    ),
+                    style: AppButtonStyles.primary(),
                     child: _isSaving
                         ? const SizedBox(
                             height: 20,
@@ -277,7 +265,7 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
                               const Icon(Icons.save_rounded, size: 18),
                               const SizedBox(width: 8),
                               Text(
-                                'Salvar Taxas',
+                                'Salvar taxas',
                                 style: TextStyle(fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                   letterSpacing: 1.2,
@@ -343,7 +331,7 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label.toUpperCase(),
+            label,
             style: TextStyle(fontSize: 11,
               fontWeight: FontWeight.w800,
               color: const Color(0xFF2F5E46), // Green

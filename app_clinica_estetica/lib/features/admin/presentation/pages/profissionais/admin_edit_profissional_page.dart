@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 
 class AdminEditProfissionalPage extends StatefulWidget {
@@ -212,7 +213,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Editar Profissional',
+                            'Editar profissional',
                             style: TextStyle(
                               fontFamily: 'Playfair Display',
                               fontSize: 24,
@@ -287,7 +288,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Alterar Foto',
+                          'Alterar foto',
                           style: TextStyle(fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: accentColor,
@@ -318,7 +319,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                     child: Column(
                       children: [
                         _buildInputField(
-                          label: 'Nome Completo',
+                          label: 'Nome completo',
                           controller: _nomeController,
                           icon: Icons.badge,
                           primaryColor: primaryColor,
@@ -326,7 +327,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'E-mail Corporativo',
+                          label: 'E-mail corporativo',
                           controller: _emailController,
                           icon: Icons.mail,
                           enabled: false,
@@ -354,7 +355,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildDropdownField(
-                          label: 'Nível de Permissão',
+                          label: 'Nível de permissão',
                           value: _selectedPermission,
                           icon: Icons.admin_panel_settings,
                           items: const [
@@ -367,7 +368,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Comissão Agendamentos (%)',
+                          label: 'Comissão agendamentos (%)',
                           controller: _comissaoAgendamentosController,
                           icon: Icons.calendar_today,
                           keyboardType: const TextInputType.numberWithOptions(
@@ -377,7 +378,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Comissão Produtos (%)',
+                          label: 'Comissão produtos (%)',
                           controller: _comissaoProdutosController,
                           icon: Icons.shopping_bag,
                           keyboardType: const TextInputType.numberWithOptions(
@@ -387,7 +388,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         ),
                         const SizedBox(height: 20),
                         _buildInputField(
-                          label: 'Observações Internas (Opcional)',
+                          label: 'Observações internas (opcional)',
                           controller: _obsController,
                           icon: Icons.notes,
                           maxLines: 3,
@@ -397,7 +398,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         const SizedBox(height: 20),
                         // Status Toggle
                         _buildToggleField(
-                          label: 'Status do Profissional',
+                          label: 'Status do profissional',
                           value: _isActive,
                           onChanged: (val) => setState(() => _isActive = val),
                           primaryColor: primaryColor,
@@ -407,57 +408,28 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                         Row(
                           children: [
                             Expanded(
-                              child: TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                child: TextButton(
+                                  onPressed: () => context.pop(),
+                                  style: AppButtonStyles.cancelButtonStyle(),
+                                  child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
                                 ),
-                                child: Text(
-                                  'Cancelar',
-                                  style: TextStyle(fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: accentColor,
-                                  ),
-                                ),
-                              ),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
                               flex: 2,
                               child: ElevatedButton(
-                                onPressed: _isSaving ? null : _save,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primaryColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  elevation: 4,
-                                  shadowColor: primaryColor.withOpacity(0.4),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (_isSaving)
-                                      const SizedBox(
-                                        width: 18,
-                                        height: 18,
+                                  onPressed: _isSaving ? null : _save,
+                                  style: AppButtonStyles.primary(),
+                                child: _isSaving
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
                                         child: CircularProgressIndicator(
                                           color: Colors.white,
                                           strokeWidth: 2,
                                         ),
                                       )
-                                    else
-                                      const Icon(Icons.save, size: 18),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      _isSaving ? 'Salvando...' : 'Salvar Alterações',
-                                      style: TextStyle(fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    : const Text('Salvar alterações'),
                               ),
                             ),
                           ],
@@ -485,7 +457,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                           Icon(Icons.link, color: primaryColor, size: 20),
                           const SizedBox(width: 8),
                           Text(
-                            'Vincular Serviços',
+                            'Vincular serviços',
                             style: TextStyle(fontSize: 18,
                               fontFamily: 'Playfair Display',
                               fontWeight: FontWeight.bold,
@@ -503,22 +475,10 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          context.push(
-                            '/admin/profissionais/vincular',
-                            extra: widget.professional,
-                          );
-                        },
-                        icon: const Icon(Icons.content_paste_search, size: 18),
-                        label: const Text('Vincular Serviços'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: primaryColor,
-                          elevation: 0,
-                          side: BorderSide(color: primaryColor),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                        onPressed: () => context.push('/admin/profissionais/vincular-servicos', extra: widget.professional),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('Vincular serviços'),
+                        style: AppButtonStyles.small(),
                       ),
                     ],
                   ),
@@ -543,7 +503,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                               color: accentColor, size: 20),
                           const SizedBox(width: 8),
                           Text(
-                            'Pacotes Vinculados',
+                            'Pacotes vinculados',
                             style: TextStyle(fontSize: 18,
                               fontFamily: 'Playfair Display',
                               fontWeight: FontWeight.bold,
@@ -561,24 +521,10 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          context.push(
-                            '/admin/profissionais/vincular-pacotes/${widget.professional['id']}',
-                            extra: widget.professional,
-                          );
-                        },
-                        icon: const Icon(Icons.add_link, size: 18),
-                        label: const Text('Vincular Projetos'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: accentColor,
-                          elevation: 0,
-                          side: BorderSide(color: accentColor),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
+                        onPressed: () => context.push('/admin/profissionais/vincular-pacotes', extra: widget.professional),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('Vincular pacotes'),
+                        style: AppButtonStyles.small(),
                       ),
                     ],
                   ),
@@ -787,48 +733,80 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Status',
-          style: TextStyle(
+          label,
+          style: const TextStyle(
             fontFamily: 'Inter',
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            color: accentColor,
-            letterSpacing: 1.2,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: AppColors.accent,
           ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          'Defina a disponibilidade do profissional.',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 12,
-            color: Colors.black54,
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.black.withOpacity(0.05)),
           ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Switch(
-              value: value,
-              onChanged: onChanged,
-              activeThumbColor: Colors.white,
-              activeTrackColor: primaryColor,
-              inactiveThumbColor: Colors.white,
-              inactiveTrackColor: Colors.grey[300],
-            ),
-            const SizedBox(width: 8),
-            Text(
-              value ? 'Ativo' : 'Inativo',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: value ? primaryColor : Colors.red,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Status disponibilidade',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary.withOpacity(0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    value ? 'Profissional ativo' : 'Profissional inativo',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Transform.scale(
+                    scale: 0.8,
+                    alignment: Alignment.centerRight,
+                    child: Switch(
+                      value: value,
+                      onChanged: onChanged,
+                      activeThumbColor: Colors.white,
+                      activeTrackColor: AppColors.success,
+                      inactiveThumbColor: Colors.grey[400],
+                      inactiveTrackColor: Colors.grey[200],
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                  Text(
+                    value ? 'Ativo' : 'Inativo',
+                    style: TextStyle(fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                      color: value ? AppColors.success : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
+
 }

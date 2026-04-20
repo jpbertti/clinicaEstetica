@@ -23,8 +23,26 @@ class _CadastroPageState extends State<CadastroPage> {
   final _telefoneFormatter = MaskTextInputFormatter(
     mask: '(##) #####-####',
     filter: {"#": RegExp(r'[0-9]')},
-    type: MaskAutoCompletionType.lazy,
   );
+
+  final _nomeFocusNode = FocusNode();
+  final _telefoneFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  bool _isNomeFocused = false;
+  bool _isTelefoneFocused = false;
+  bool _isEmailFocused = false;
+  bool _isPasswordFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeFocusNode.addListener(() => setState(() => _isNomeFocused = _nomeFocusNode.hasFocus));
+    _telefoneFocusNode.addListener(() => setState(() => _isTelefoneFocused = _telefoneFocusNode.hasFocus));
+    _emailFocusNode.addListener(() => setState(() => _isEmailFocused = _emailFocusNode.hasFocus));
+    _passwordFocusNode.addListener(() => setState(() => _isPasswordFocused = _passwordFocusNode.hasFocus));
+  }
 
   @override
   void dispose() {
@@ -32,6 +50,10 @@ class _CadastroPageState extends State<CadastroPage> {
     _telefoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _nomeFocusNode.dispose();
+    _telefoneFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -130,6 +152,8 @@ class _CadastroPageState extends State<CadastroPage> {
               _construirCampoTexto(
                 _nomeController,
                 'Como gostaria de ser chamada(o)?',
+                focusNode: _nomeFocusNode,
+                isFocused: _isNomeFocused,
                 icon: Icons.person_outline,
               ),
 
@@ -138,6 +162,8 @@ class _CadastroPageState extends State<CadastroPage> {
               _construirCampoTexto(
                 _telefoneController,
                 '(00) 00000-0000',
+                focusNode: _telefoneFocusNode,
+                isFocused: _isTelefoneFocused,
                 keyboardType: TextInputType.phone,
                 icon: Icons.phone_outlined,
                 inputFormatters: [_telefoneFormatter],
@@ -148,6 +174,8 @@ class _CadastroPageState extends State<CadastroPage> {
               _construirCampoTexto(
                 _emailController,
                 'seuemail@exemplo.com',
+                focusNode: _emailFocusNode,
+                isFocused: _isEmailFocused,
                 keyboardType: TextInputType.emailAddress,
                 icon: Icons.email_outlined,
               ),
@@ -242,22 +270,39 @@ class _CadastroPageState extends State<CadastroPage> {
     TextInputType? keyboardType,
     List<dynamic>? inputFormatters,
     IconData? icon,
+    FocusNode? focusNode,
+    bool isFocused = false,
   }) {
-    return Container(
+    const accentColor = Color(0xFFC7A46B);
+    const primaryColor = Color(0xFF305F47);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0xFF305F47).withOpacity(0.1),
+          color: isFocused ? accentColor : primaryColor.withOpacity(0.1),
+          width: isFocused ? 2 : 1,
         ),
+        boxShadow: [
+          if (isFocused)
+            BoxShadow(
+              color: accentColor.withValues(alpha: 0.2),
+              blurRadius: 15,
+              spreadRadius: 2,
+              offset: const Offset(0, 4),
+            ),
+        ],
       ),
       child: TextField(
         controller: controller,
+        focusNode: focusNode,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters != null ? List<TextInputFormatter>.from(inputFormatters) : null,
         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
-          prefixIcon: icon != null ? Icon(icon, color: const Color(0xFF305F47), size: 20) : null,
+          prefixIcon: icon != null ? Icon(icon, color: primaryColor, size: 20) : null,
           hintText: hint,
           hintStyle: TextStyle(color: const Color(0xFF6E8F7B).withOpacity(0.4),
             fontSize: 14,
@@ -273,20 +318,35 @@ class _CadastroPageState extends State<CadastroPage> {
   }
 
   Widget _construirCampoSenha() {
-    return Container(
+    const accentColor = Color(0xFFC7A46B);
+    const primaryColor = Color(0xFF305F47);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0xFF305F47).withOpacity(0.1),
+          color: _isPasswordFocused ? accentColor : primaryColor.withOpacity(0.1),
+          width: _isPasswordFocused ? 2 : 1,
         ),
+        boxShadow: [
+          if (_isPasswordFocused)
+            BoxShadow(
+              color: accentColor.withValues(alpha: 0.2),
+              blurRadius: 15,
+              spreadRadius: 2,
+              offset: const Offset(0, 4),
+            ),
+        ],
       ),
         child: TextField(
           controller: _passwordController,
+          focusNode: _passwordFocusNode,
           obscureText: !_isPasswordVisible,
           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF305F47), size: 20),
+            prefixIcon: const Icon(Icons.lock_outline, color: primaryColor, size: 20),
             hintText: 'Crie a sua senha',
             hintStyle: TextStyle(color: const Color(0xFF6E8F7B).withOpacity(0.4),
               fontSize: 14,
@@ -301,7 +361,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 _isPasswordVisible
                     ? Icons.visibility_outlined
                     : Icons.visibility_off_outlined,
-                color: const Color(0xFF305F47), // Green
+                color: primaryColor,
               ),
               onPressed: () =>
                   setState(() => _isPasswordVisible = !_isPasswordVisible),

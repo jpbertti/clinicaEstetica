@@ -8,6 +8,8 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_r
 import 'package:app_clinica_estetica/core/widgets/currency_formatter.dart';
 import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 class AdminAddEditPacotePage extends StatefulWidget {
   final PacoteTemplateModel? pacoteToEdit;
@@ -572,12 +574,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                         }
                       }
                     },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2D5A46),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              style: AppButtonStyles.primary(),
               child: saving
                   ? const SizedBox(
                       width: 16,
@@ -587,12 +584,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                         color: Colors.white,
                       ),
                     )
-                  : Text(
-                      'Salvar',
-                      style: TextStyle(fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                  : const Text('Salvar'),
             ),
           ],
         ),
@@ -745,10 +737,10 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSectionHeader('Dados Básicos', goldColor),
+                            _buildSectionHeader('Dados básicos', goldColor),
                             const SizedBox(height: 16),
                             _buildTextField(
-                              label: 'Título do Pacote',
+                              label: 'Título do pacote',
                               controller: _tituloController,
                               hint: 'Ex: Combo Verão VIP',
                               icon: Icons.title_rounded,
@@ -757,7 +749,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                             ),
                             const SizedBox(height: 24),
                             _buildTextField(
-                              label: 'Descrição Completa',
+                              label: 'Descrição completa',
                               controller: _descricaoController,
                               hint:
                                   'Descreva os benefícios e o que está incluso...',
@@ -767,7 +759,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
 
                             const SizedBox(height: 32),
                             _buildSectionHeader(
-                              'Status do Pacote',
+                              'Status do pacote',
                               goldColor,
                             ),
                             const SizedBox(height: 16),
@@ -821,12 +813,12 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
 
                             const SizedBox(height: 32),
                             _buildSectionHeader(
-                              'Valores e Sessões',
+                              'Valores e sessões',
                               goldColor,
                             ),
                             const SizedBox(height: 16),
                             _buildTextField(
-                              label: 'Valor Total do Pacote',
+                              label: 'Valor total do pacote',
                               controller: _valorController,
                               hint: r'R$ 0,00',
                               icon: Icons.payments_outlined,
@@ -839,7 +831,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                             ),
                             const SizedBox(height: 24),
                             _buildTextField(
-                              label: 'Valor Promocional (Opcional)',
+                              label: 'Valor promocional (opcional)',
                               controller: _valorPromocionalController,
                               hint: r'R$ 0,00',
                               icon: Icons.local_offer_outlined,
@@ -870,7 +862,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                             ],
                             const SizedBox(height: 24),
                             _buildTextField(
-                              label: 'Comissão do Profissional (%)',
+                              label: 'Comissão do profissional (%)',
                               controller: _comissaoController,
                               hint: 'Ex: 30',
                               icon: Icons.percent_rounded,
@@ -945,7 +937,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
 
                             const SizedBox(height: 32),
                             _buildSectionHeader(
-                              'Procedimentos Inclusos',
+                              'Procedimentos inclusos',
                               goldColor,
                             ),
                             const SizedBox(height: 12),
@@ -1130,12 +1122,8 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                               ),
                             ),
                             child: Text(
-                              'Cancelar',
-                              style: TextStyle(fontWeight: FontWeight.bold,
-                                color: goldColor,
-                                fontSize: 13,
-                                letterSpacing: 1.1,
-                              ),
+                              StringUtils.toTitleCase('cancelar'),
+                              style: AppButtonStyles.cancelTextStyle(),
                             ),
                           ),
                         ),
@@ -1144,16 +1132,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                           flex: 2,
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _savePacote,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryGreen,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                              shadowColor: primaryGreen.withOpacity(0.4),
-                            ),
+                            style: AppButtonStyles.primary(),
                             child: _isLoading
                                 ? const SizedBox(
                                     width: 20,
@@ -1169,12 +1148,9 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
                                       const Icon(Icons.save, size: 18),
                                       const SizedBox(width: 8),
                                       Text(
-                                        widget.pacoteToEdit == null
-                                            ? 'Cadastrar'
-                                            : 'Salvar',
-                                        style: TextStyle(fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        StringUtils.toTitleCase(widget.pacoteToEdit == null
+                                            ? 'cadastrar'
+                                            : 'salvar'),
                                       ),
                                     ],
                                   ),
@@ -1262,7 +1238,7 @@ class _AdminAddEditPacotePageState extends State<AdminAddEditPacotePage> {
               Icon(Icons.calendar_month, size: 16, color: accentColor),
               const SizedBox(width: 8),
               Text(
-                'Programar Período (Opcional)',
+                'Programar período (opcional)',
                 style: TextStyle(fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: accentColor,

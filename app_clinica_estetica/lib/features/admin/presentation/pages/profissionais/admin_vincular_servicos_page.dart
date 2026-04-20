@@ -1,9 +1,11 @@
-﻿import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_repository.dart';
+import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/core/data/models/service_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_service_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 class AdminVincularServicoPage extends StatefulWidget {
   final Map<String, dynamic> professional;
@@ -255,15 +257,7 @@ class _AdminVincularServicoPageState extends State<AdminVincularServicoPage> {
         child: SafeArea(
           child: ElevatedButton(
             onPressed: _isSaving ? null : _saveLinks,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            style: AppButtonStyles.primary(),
             child: _isSaving
                 ? const SizedBox(
                     height: 20,
@@ -273,13 +267,7 @@ class _AdminVincularServicoPageState extends State<AdminVincularServicoPage> {
                       strokeWidth: 2,
                     ),
                   )
-                : Text(
-                    'SALVAR VÍNCULOS',
-                    style: TextStyle(fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
-                  ),
+                : Text(StringUtils.toTitleCase('salvar vínculos')),
           ),
         ),
       ),

@@ -17,11 +17,28 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   bool _isPasswordVisible = false;
 
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  bool _isEmailFocused = false;
+  bool _isPasswordFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocusNode.addListener(() {
+      setState(() => _isEmailFocused = _emailFocusNode.hasFocus);
+    });
+    _passwordFocusNode.addListener(() {
+      setState(() => _isPasswordFocused = _passwordFocusNode.hasFocus);
+    });
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -57,8 +74,6 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-
-  // _handleGoogleLogin removido.
 
   @override
   Widget build(BuildContext context) {
@@ -149,20 +164,27 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: _isEmailFocused ? accentColor : Colors.transparent,
+                          width: 2,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
+                            color: _isEmailFocused ? accentColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 15,
+                            spreadRadius: _isEmailFocused ? 2 : 0,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: TextField(
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
                         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.email_outlined, color: primaryColor, size: 20),
@@ -193,20 +215,27 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: _isPasswordFocused ? accentColor : Colors.transparent,
+                          width: 2,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
+                            color: _isPasswordFocused ? accentColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 15,
+                            spreadRadius: _isPasswordFocused ? 2 : 0,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: TextField(
                         controller: _passwordController,
+                        focusNode: _passwordFocusNode,
                         obscureText: !_isPasswordVisible,
                         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
                         decoration: InputDecoration(

@@ -626,7 +626,7 @@ class _ConfirmacaoAgendamentoPageState
                     strokeWidth: 2,
                   ),
                 )
-              : Text(
+              : const Text(
                   'Confirmar Agendamento',
                   style: TextStyle(fontSize: 16,
                     fontWeight: FontWeight.bold,

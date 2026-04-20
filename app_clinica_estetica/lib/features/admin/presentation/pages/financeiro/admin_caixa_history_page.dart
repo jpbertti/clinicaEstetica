@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_caixa_repository.dart';
 import 'package:app_clinica_estetica/core/services/pdf_service.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
@@ -96,7 +97,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Editar Registro de Caixa', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Editar registro de caixa', style: TextStyle(fontWeight: FontWeight.bold)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -105,7 +106,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyInputFormatter()],
               decoration: const InputDecoration(
-                labelText: 'Saldo Final Real',
+                labelText: 'Saldo final real',
                 prefixText: 'R\$ ',
                 border: OutlineInputBorder(),
               ),
@@ -122,9 +123,14 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
+            style: AppButtonStyles.primary(),
             child: const Text('Salvar'),
           ),
         ],
@@ -170,12 +176,17 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reabrir Caixa'),
+        title: const Text('Reabrir caixa'),
         content: const Text('Deseja realmente reabrir este caixa? Isso permitirá editar pagamentos vinculados a ele.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
+            style: AppButtonStyles.cancelButtonStyle(),
             child: const Text('Reabrir', style: TextStyle(color: Colors.red)),
           ),
         ],
@@ -276,7 +287,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Relatório Detalhado', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('Relatório detalhado', style: TextStyle(fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   IconButton(
@@ -308,12 +319,12 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                     ),
                     child: Column(
                       children: [
-                        _buildSummaryItem('Saldo Inicial', _currencyFormat.format(saldoInicial)),
-                        _buildSummaryItem('Total Entradas (+)', _currencyFormat.format(entradas), color: Colors.green),
-                        _buildSummaryItem('Total Saídas (-)', _currencyFormat.format(saidas + sangrias), color: Colors.red),
+                        _buildSummaryItem('Saldo inicial', _currencyFormat.format(saldoInicial)),
+                        _buildSummaryItem('Total entradas (+)', _currencyFormat.format(entradas), color: Colors.green),
+                        _buildSummaryItem('Total saídas (-)', _currencyFormat.format(saidas + sangrias), color: Colors.red),
                         const Divider(),
-                        _buildSummaryItem('Saldo Final (Sistemo)', _currencyFormat.format(saldoFinalSistemo), isBold: true),
-                        _buildSummaryItem('Saldo Final (Real)', _currencyFormat.format(saldoFinalReal), isBold: true, color: Colors.blue),
+                        _buildSummaryItem('Saldo final (Sistemo)', _currencyFormat.format(saldoFinalSistemo), isBold: true),
+                        _buildSummaryItem('Saldo final (Real)', _currencyFormat.format(saldoFinalReal), isBold: true, color: Colors.blue),
                       ],
                     ),
                   ),
@@ -408,7 +419,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Histórico de Caixas',
+          'Histórico de caixas',
           style: TextStyle(fontWeight: FontWeight.bold,
             color: primaryColor,
           ),
@@ -418,7 +429,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
             IconButton(
               icon: const Icon(Icons.close, color: Colors.red),
               onPressed: () => setState(() => _selectedDate = null),
-              tooltip: 'Limpar Filtro',
+              tooltip: 'Limpar filtro',
             ),
           IconButton(
             icon: Icon(Icons.calendar_month, color: primaryColor),
@@ -500,11 +511,11 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                               children: [
                                 _buildDetailRow('Status', caixa['status'].toUpperCase()),
                                 _buildDetailRow('Operador', (caixa['usuario_id'] ?? 'N/A').toString().substring(0, 8)),
-                                _buildDetailRow('Saldo Inicial', _currencyFormat.format(caixa['saldo_inicial'] ?? 0)),
-                                _buildDetailRow('Total Entradas', _currencyFormat.format(caixa['total_entradas'] ?? 0)),
-                                _buildDetailRow('Total Saídas', _currencyFormat.format(caixa['total_saidas'] ?? 0)),
-                                _buildDetailRow('Saldo Final (Sistemo)', _currencyFormat.format( (caixa['saldo_inicial'] ?? 0) + (caixa['total_entradas'] ?? 0) - (caixa['total_saidas'] ?? 0) )),
-                                _buildDetailRow('Saldo Final (Físico)', _currencyFormat.format(caixa['saldo_final_real'] ?? 0), isBold: true),
+                                _buildDetailRow('Saldo inicial', _currencyFormat.format(caixa['saldo_inicial'] ?? 0)),
+                                _buildDetailRow('Total entradas', _currencyFormat.format(caixa['total_entradas'] ?? 0)),
+                                _buildDetailRow('Total saídas', _currencyFormat.format(caixa['total_saidas'] ?? 0)),
+                                _buildDetailRow('Saldo final (sistemo)', _currencyFormat.format( (caixa['saldo_inicial'] ?? 0) + (caixa['total_entradas'] ?? 0) - (caixa['total_saidas'] ?? 0) )),
+                                _buildDetailRow('Saldo final (físico)', _currencyFormat.format(caixa['saldo_final_real'] ?? 0), isBold: true),
                                 if (caixa['observacoes'] != null && caixa['observacoes'].toString().isNotEmpty)
                                   _buildDetailRow('Observações', caixa['observacoes']),
                                 const SizedBox(height: 16),
@@ -512,11 +523,8 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                                   child: TextButton.icon(
                                     onPressed: () => _showCaixaDetails(caixa),
                                     icon: const Icon(Icons.analytics_outlined),
-                                    label: const Text('Ver Detalhes do Caixa'),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: primaryColor,
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
-                                    ),
+                                    label: const Text('Ver detalhes do caixa'),
+                                    style: AppButtonStyles.cancelButtonStyle(),
                                   ),
                                 ),
                                 if (!isAberto) ...[
@@ -528,11 +536,12 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                                       child: OutlinedButton.icon(
                                         onPressed: () => _reopenCaixa(caixa),
                                         icon: const Icon(Icons.lock_open, size: 18),
-                                        label: const Text('Reabrir Caixa'),
+                                        label: const Text('Reabrir caixa'),
                                         style: OutlinedButton.styleFrom(
                                           foregroundColor: Colors.red,
                                           side: const BorderSide(color: Colors.red),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                          padding: const EdgeInsets.symmetric(vertical: 16),
                                         ),
                                       ),
                                     ),

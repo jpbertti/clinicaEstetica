@@ -116,7 +116,7 @@ class SupabaseProfessionalRepository {
           .lte('data', DateFormat('yyyy-MM-dd').format(end));
           
       if (profId != null) {
-        query = query.eq('profissional_id', profId);
+        query = query.or('profissional_id.eq.$profId,profissional_id.is.null');
       }
       
       final response = await query;
@@ -412,7 +412,11 @@ class SupabaseProfessionalRepository {
         }
       }
 
-      final occupied = await getOccupiedTimes(profId, startDateTime, excludeId: excludeAppointmentId);
+      final occupied = await getOccupiedTimes(
+        profId: profId,
+        date: startDateTime,
+        excludeId: excludeAppointmentId,
+      );
       for (var occ in occupied) {
         final occStart = occ['dateTime'] as DateTime;
         final occEnd = occStart.add(Duration(minutes: occ['duration'] as int));
@@ -426,28 +430,62 @@ class SupabaseProfessionalRepository {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getOccupiedTimes(String profId, DateTime date, {String? excludeId}) async {
+  Future<List<Map<String, dynamic>>> getOccupiedTimes({
+    required String profId,
+    required DateTime date,
+    String? excludeId,
+    String? clientId,
+  }) async {
     try {
-      final start = DateTime(date.year, date.month, date.day);
-      final end = start.add(const Duration(days: 1));
-      
-      var query = _supabase
+      final start = DateTime(date.year, date.month, date.day, 0, 0, 0);
+      final end = DateTime(date.year, date.month, date.day, 23, 59, 59);
+
+      var profQuery = _supabase
           .from('agendamentos')
           .select('data_hora, servicos(duracao_minutos)')
           .eq('profissional_id', profId)
-          .gte('data_hora', start.toIso8601String())
-          .lt('data_hora', end.toIso8601String())
+          .gte('data_hora', start.toUtc().toIso8601String())
+          .lt('data_hora', end.toUtc().toIso8601String())
           .neq('status', 'cancelado');
           
       if (excludeId != null) {
-        query = query.neq('id', excludeId);
+        profQuery = profQuery.neq('id', excludeId);
       }
       
-      final response = await query;
-      return (response as List).map((occ) => {
+      final profResponse = await profQuery;
+      final List<Map<String, dynamic>> results = (profResponse as List).map((occ) => {
         'dateTime': DateTime.parse(occ['data_hora']).toLocal(),
         'duration': occ['servicos']?['duracao_minutos'] ?? 60,
       }).toList();
+
+      // 2. Ocupação do Cliente (se fornecido) para evitar conflitos de horário do mesmo cliente
+      if (clientId != null) {
+        var clientQuery = _supabase
+            .from('agendamentos')
+            .select('data_hora, servicos(duracao_minutos)')
+            .eq('cliente_id', clientId)
+            .gte('data_hora', start.toUtc().toIso8601String())
+            .lt('data_hora', end.toUtc().toIso8601String())
+            .neq('status', 'cancelado');
+
+        if (excludeId != null) {
+          clientQuery = clientQuery.neq('id', excludeId);
+        }
+
+        final clientResponse = await clientQuery;
+        for (var occ in (clientResponse as List)) {
+          final dt = DateTime.parse(occ['data_hora']).toLocal();
+          // Evita duplicidade se o cliente estiver agendado com o MESMO profissional (já pego acima)
+          if (!results.any((r) => r['dateTime'] == dt)) {
+            results.add({
+              'dateTime': dt,
+              'duration': occ['servicos']?['duracao_minutos'] ?? 60,
+            });
+          }
+        }
+      }
+      
+      return results;
     } catch (e) {
       debugPrint('Erro ao carregar horários ocupados: $e');
       return [];
@@ -457,7 +495,9 @@ class SupabaseProfessionalRepository {
   Future<List<Map<String, dynamic>>> getAgendaBlocks({String? profId, DateTime? date}) async {
     try {
       var query = _supabase.from('bloqueios_agenda').select();
-      if (profId != null) query = query.eq('profissional_id', profId);
+      if (profId != null) {
+        query = query.or('profissional_id.eq.$profId,profissional_id.is.null');
+      }
       if (date != null) {
         final dateStr = DateFormat('yyyy-MM-dd').format(date);
         query = query.eq('data', dateStr);

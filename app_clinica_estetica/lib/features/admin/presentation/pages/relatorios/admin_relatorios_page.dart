@@ -16,7 +16,7 @@ class AdminRelatoriosPage extends StatefulWidget {
 }
 
 class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
-  String _selectedPeriod = 'Mês Atual';
+  String _selectedPeriod = 'Mês atual';
   String _selectedComparison = 'Nenhum';
 
   void _onPeriodSelected(String period) {
@@ -173,12 +173,12 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                             options: [
                               'Hoje',
                               'Ontem',
-                              'Semana Atual',
-                              'Última Semana',
-                              'Mês Atual',
-                              'Mês Passado',
-                              'Ano Atual',
-                              'Todas as Opções',
+                              'Semana atual',
+                              'Última semana',
+                              'Mês atual',
+                              'Mês passado',
+                              'Ano atual',
+                              'Todas as opções',
                             ],
                             onSelected: _onPeriodSelected,
                             primaryColor: primaryGreen,
@@ -190,8 +190,8 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                             currentValue: _selectedComparison,
                             options: [
                               'Nenhum',
-                              'Período Anterior',
-                              'Ano Anterior',
+                              'Período anterior',
+                              'Ano anterior',
                             ],
                             onSelected: _onComparisonSelected,
                             primaryColor: primaryGreen,
@@ -222,7 +222,7 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                           ),
                           const SizedBox(width: 12),
                           _buildSummaryCard(
-                            title: 'Quant. Agendamentos',
+                            title: 'Quant. agendamentos',
                             value: '${_operational?.totalAgendamentos ?? 0}',
                             icon: Icons.calendar_month_outlined,
                             trendLabel: 'atendimentos',
@@ -233,7 +233,7 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                           ),
                           const SizedBox(width: 12),
                           _buildSummaryCard(
-                            title: 'Ticket Médio',
+                            title: 'Ticket médio',
                             value: currencyFormat.format(_financial?.averageTicket ?? 0),
                             icon: Icons.confirmation_number_outlined,
                             trendLabel: 'por cliente',
@@ -244,7 +244,7 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                           ),
                           const SizedBox(width: 12),
                           _buildSummaryCard(
-                            title: 'Lucro Bruto',
+                            title: 'Lucro bruto',
                             value: currencyFormat.format(_statement?.netProfit ?? 0),
                             icon: Icons.account_balance_outlined,
                             trendLabel: 'margem: ${_statement?.profitMargin.toStringAsFixed(1)}%',
@@ -265,7 +265,7 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Relatórios Detalhados',
+                          'Relatórios detalhados',
                           style: TextStyle(fontFamily: 'Playfair Display', 
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -309,7 +309,7 @@ class _AdminRelatoriosPageState extends State<AdminRelatoriosPage> {
                         ),
                         
                         const SizedBox(height: 32),
-                        _buildSectionHeader('Operacional & Pacientes', AppColors.accent),
+                        _buildSectionHeader('Operacional & pacientes', AppColors.accent),
                         const SizedBox(height: 12),
                         _buildReportCard(
                           title: 'Gestão de Pacientes',

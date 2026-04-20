@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/core/data/models/pacote_template_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_package_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AdminVincularPacotesPage extends StatefulWidget {
@@ -65,7 +67,7 @@ class _AdminVincularPacotesPageState extends State<AdminVincularPacotesPage> {
 
       // Log da ação
       await SupabaseAdminLogRepository().logAction(
-        acao: 'Vincular Projetos',
+        acao: 'Vincular Pacotes',
         detalhes: 'Profissional: ${widget.professional['nome_completo']}, Projetos: ${_linkedPackageIds.length} vinculados',
         tabelaAfetada: ' profissional_pacotes',
         itemId: widget.professional['id'],
@@ -257,15 +259,7 @@ class _AdminVincularPacotesPageState extends State<AdminVincularPacotesPage> {
         child: SafeArea(
           child: ElevatedButton(
             onPressed: _isSaving ? null : _saveLinks,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            style: AppButtonStyles.primary(),
             child: _isSaving
                 ? const SizedBox(
                     height: 20,
@@ -275,13 +269,7 @@ class _AdminVincularPacotesPageState extends State<AdminVincularPacotesPage> {
                       strokeWidth: 2,
                     ),
                   )
-                : Text(
-                    'SALVAR VÍNCULOS',
-                    style: TextStyle(fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
-                  ),
+                : Text(StringUtils.toTitleCase('salvar vínculos')),
           ),
         ),
       ),

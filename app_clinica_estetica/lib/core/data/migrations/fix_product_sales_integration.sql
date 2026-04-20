@@ -13,6 +13,7 @@ DROP TRIGGER IF EXISTS trg_venda_produto_financeiro ON public.vendas_produtos;
 
 DROP FUNCTION IF EXISTS public.handle_venda_produto_processamento();
 DROP FUNCTION IF EXISTS public.handle_venda_produto_financeiro();
+DROP FUNCTION IF EXISTS public.fn_processar_venda_produto();
 
 -- 2. CREATE THE CONSOLIDATED PROCESSING FUNCTION
 -- This function handles:
@@ -31,8 +32,7 @@ BEGIN
     -- A. ATUALIZAR ESTOQUE (DECREMENTAR)
     -- Decrementa exatamente a quantidade vendida.
     UPDATE public.produtos 
-    SET estoque_atual = COALESCE(estoque_atual, 0) - NEW.quantidade,
-        atualizado_em = now()
+    SET estoque_atual = COALESCE(estoque_atual, 0) - NEW.quantidade
     WHERE id = NEW.produto_id;
 
     -- B. CRIAR REGISTRO NO FINANCEIRO (Tabela 'contas')
@@ -51,7 +51,7 @@ BEGIN
         data_vencimento,
         data_pagamento,
         descricao,
-        created_at
+        criado_em
     ) VALUES (
         'Venda de Produto: ' || COALESCE(v_produto_nome, 'Indefinido'),
         NEW.valor_total,

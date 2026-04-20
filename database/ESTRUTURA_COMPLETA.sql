@@ -765,8 +765,21 @@ DROP POLICY IF EXISTS "Vendedores podem ver caixas abertos" ON public.caixas;
 CREATE POLICY "Vendedores podem ver caixas abertos" ON public.caixas 
     FOR SELECT TO authenticated USING (status = 'aberto');
 
--- Políticas de CONTAS (Refinado)
-DROP POLICY IF EXISTS "Admins gerenciam contas" ON public.contas; -- Cleanup duplicate
+-- Políticas de CONTAS
+ALTER TABLE public.contas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Usuários autenticados veem contas" ON public.contas;
+CREATE POLICY "Usuários autenticados veem contas" ON public.contas FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "Usuários autenticados inserem contas" ON public.contas;
+CREATE POLICY "Usuários autenticados inserem contas" ON public.contas FOR INSERT TO authenticated WITH CHECK (true);
+DROP POLICY IF EXISTS "Admins gerenciam contas" ON public.contas;
+CREATE POLICY "Admins gerenciam contas" ON public.contas FOR ALL TO authenticated USING (public.is_admin());
+
+-- Políticas de DASHBOARD_ATIVIDADES (Permitir logs automáticos)
+ALTER TABLE public.dashboard_atividades ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Autenticados veem atividades" ON public.dashboard_atividades;
+CREATE POLICY "Autenticados veem atividades" ON public.dashboard_atividades FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "Autenticados inserem atividades" ON public.dashboard_atividades;
+CREATE POLICY "Autenticados inserem atividades" ON public.dashboard_atividades FOR INSERT TO authenticated WITH CHECK (true);
 
 -- Políticas de PRODUTOS
 DROP POLICY IF EXISTS "Produtos visíveis para todos" ON public.produtos;
@@ -1125,6 +1138,46 @@ BEGIN
         ON CONFLICT (profissional_id, dia_semana, hora_inicio) DO NOTHING;
     END LOOP;
 END $$;
+
+-- --------------------------------------------------------
+-- SEED: HORÁRIOS DA CLÍNICA E TRABALHO (NOVO SISTEMA)
+-- --------------------------------------------------------
+
+-- Seed Horários da Clínica (Padrão)
+INSERT INTO public.horarios_clinica (dia_semana, hora_inicio, hora_fim, fechado)
+SELECT d, '08:00:00', '19:00:00', false
+FROM generate_series(1, 5) d -- Seg a Sex
+ON CONFLICT (dia_semana) DO NOTHING;
+
+INSERT INTO public.horarios_clinica (dia_semana, hora_inicio, hora_fim, fechado)
+VALUES (6, '08:00:00', '13:00:00', false) -- Sábado
+ON CONFLICT (dia_semana) DO NOTHING;
+
+-- Seed Horários de Trabalho dos Profissionais
+DO $$
+DECLARE
+    prof RECORD;
+BEGIN
+    FOR prof IN SELECT id FROM public.perfis WHERE tipo = 'profissional' LOOP
+        -- Seg a Sex
+        INSERT INTO public.horarios_trabalho_profissional (profissional_id, dia_semana, hora_inicio, hora_fim, fechado)
+        SELECT prof.id, d, '08:00:00', '19:00:00', false
+        FROM generate_series(1, 5) d
+        ON CONFLICT (profissional_id, dia_semana) DO NOTHING;
+
+        -- Sábado
+        INSERT INTO public.horarios_trabalho_profissional (profissional_id, dia_semana, hora_inicio, hora_fim, fechado)
+        VALUES (prof.id, 6, '08:00:00', '13:00:00', false)
+        ON CONFLICT (profissional_id, dia_semana) DO NOTHING;
+        
+        -- Almoço Padrão (12:00 - 13:00)
+        INSERT INTO public.horarios_almoco_profissional (profissional_id, dia_semana, hora_inicio, hora_fim, ativo)
+        SELECT prof.id, d, '12:00:00', '13:00:00', true
+        FROM generate_series(1, 6) d
+        ON CONFLICT (profissional_id, dia_semana) DO NOTHING;
+    END LOOP;
+END $$;
+
 
 -- Criação Automática de Agenda (Para novos profissionais ou atualizados)
 CREATE OR REPLACE FUNCTION public.trg_criar_disponibilidade_padrao()
@@ -1896,14 +1949,10 @@ CREATE POLICY "Admins veem todas as vendas" ON public.vendas_produtos FOR SELECT
 DROP POLICY IF EXISTS "Permitir inserção de vendas" ON public.vendas_produtos;
 CREATE POLICY "Permitir inserção de vendas" ON public.vendas_produtos FOR INSERT TO authenticated WITH CHECK (true);
 
--- Trigger para processar a venda (baixa estoque e financeiro)
--- REMOVER TRIGGER ANTIGO (SE EXISTIR) PARA EVITAR DESCONTO DUPLO
+-- Gatilhos e Limpeza para Vendas de Produtos
 DROP TRIGGER IF EXISTS trg_venda_produto_processamento ON public.vendas_produtos;
 DROP TRIGGER IF EXISTS trg_vendas_estoque ON public.vendas_produtos;
 DROP TRIGGER IF EXISTS trg_processar_venda_produto ON public.vendas_produtos;
-CREATE TRIGGER trg_processar_venda_produto
-AFTER INSERT ON public.vendas_produtos
-FOR EACH ROW EXECUTE FUNCTION public.fn_processar_venda_produto();
 
 
 -- ========================================================
@@ -1936,72 +1985,54 @@ DECLARE
     v_produto_nome TEXT;
     v_estoque_atual INT;
     v_estoque_minimo INT;
-    v_cliente_nome TEXT;
+    v_comissao_percentual DECIMAL;
+    v_comissao_valor DECIMAL;
+    v_net_valor DECIMAL;
     v_autor_nome TEXT;
-    v_comissao_percentual DECIMAL(5,2) := 0;
-    v_taxa_pagamento DECIMAL(5,2) := 0;
-    v_valor_liquido DECIMAL(10,2);
-    v_valor_comissao_bruta DECIMAL(10,2);
-    v_valor_comissao_liquida DECIMAL(10,2);
 BEGIN
-    -- 1. Obter dados do produto
-    SELECT nome, estoque_atual, estoque_minimo INTO v_produto_nome, v_estoque_atual, v_estoque_minimo
+    -- 1. Obter informações do produto
+    SELECT nome, estoque_atual, estoque_minimo, comissao_percentual 
+    INTO v_produto_nome, v_estoque_atual, v_estoque_minimo, v_comissao_percentual
     FROM public.produtos WHERE id = NEW.produto_id;
 
-    -- 2. Obter comissão do profissional (Prioridade solicitada pelo usuário)
+    -- 2. Calcular comissões (se houver profissional)
     IF NEW.profissional_id IS NOT NULL THEN
-        SELECT COALESCE(comissao_produtos_percentual, 0) INTO v_comissao_percentual
-        FROM public.perfis WHERE id = NEW.profissional_id;
+        v_comissao_valor := (NEW.valor_total * COALESCE(v_comissao_percentual, 0)) / 100;
+        v_net_valor := NEW.valor_total - v_comissao_valor;
+    ELSE
+        v_comissao_valor := 0;
+        v_net_valor := NEW.valor_total;
     END IF;
 
-    -- 3. Obter taxas de pagamento da clínica
-    SELECT 
-        CASE 
-            WHEN NEW.forma_pagamento = 'pix' THEN taxa_pix
-            WHEN NEW.forma_pagamento = 'cartao_debito' THEN taxa_debito
-            WHEN NEW.forma_pagamento = 'cartao_credito' THEN taxa_credito
-            ELSE 0
-        END INTO v_taxa_pagamento
-    FROM public.configuracoes_clinica
-    LIMIT 1;
-
-    -- 4. Calcular Valores de Comissão
-    v_taxa_pagamento := COALESCE(v_taxa_pagamento, 0);
-    v_valor_comissao_bruta := NEW.valor_total * (v_comissao_percentual / 100);
-    
-    v_valor_liquido := NEW.valor_total * (1 - (v_taxa_pagamento / 100));
-    v_valor_comissao_liquida := v_valor_liquido * (v_comissao_percentual / 100);
-
-    -- 5. Atualizar a própria linha com os valores calculados (Persistência)
-    -- Como é um gatilho AFTER INSERT, precisamos de um UPDATE
+    -- 3. Atualizar a própria venda com a comissão calculada
     UPDATE public.vendas_produtos 
-    SET 
-        comissao_aplicada = v_comissao_percentual,
-        valor_comissao_bruta = v_valor_comissao_bruta,
-        valor_comissao_liquida = v_valor_comissao_liquida
+    SET valor_comissao_bruta = v_comissao_valor,
+        valor_comissao_liquida = v_net_valor
     WHERE id = NEW.id;
 
-    -- 6. Decrementar estoque
+    -- 4. DECREMENTAR ESTOQUE
     UPDATE public.produtos 
-    SET estoque_atual = estoque_atual - NEW.quantidade
+    SET estoque_atual = COALESCE(estoque_atual, 0) - NEW.quantidade
     WHERE id = NEW.produto_id;
 
-    -- 7. Registrar no HISTÓRICO DE ESTOQUE
+    -- 5. Inserir no HISTÓRICO DE ESTOQUE
     INSERT INTO public.historico_estoque (
         produto_id,
         tipo_movimentacao,
         quantidade,
         motivo,
-        criado_por
+        criado_por,
+        criado_em
     ) VALUES (
         NEW.produto_id,
         'saida',
         NEW.quantidade,
-        '#' || NEW.id,
-        auth.uid()
+        'Venda direta (Ref: ' || NEW.id || ')',
+        NEW.profissional_id,
+        now()
     );
 
-    -- 8. Inserir na tabela de CONTAS (Financeiro) para refletir no caixa
+    -- 6. CRIAR REGISTRO NO FINANCEIRO (CONTAS)
     INSERT INTO public.contas (
         titulo,
         descricao,
@@ -2015,68 +2046,139 @@ BEGIN
         data_vencimento,
         data_pagamento,
         caixa_id,
-        criado_por
+        criado_em
     ) VALUES (
-        'Venda: ' || v_produto_nome,
-        'Venda de ' || NEW.quantidade || ' unid. do produto ' || v_produto_nome || 
-        ' (Comissão: ' || v_comissao_percentual || '%)',
+        'Venda: ' || COALESCE(v_produto_nome, 'Produto'),
+        'Venda de ' || NEW.quantidade || ' unid. do produto ' || COALESCE(v_produto_nome, '') || 
+        ' (Comissão: ' || COALESCE(v_comissao_percentual, 0) || '%)',
         NEW.valor_total,
         'receber',
         'pago',
-        'Produtos',
+        'venda_produto',
         NEW.forma_pagamento,
         NEW.cliente_id,
         NEW.profissional_id,
         CURRENT_DATE,
-        timezone('utc'::text, now()),
+        now(),
         NEW.caixa_id,
-        auth.uid()
+        now()
     );
 
-    -- 5. Registrar no Dashboard
-    SELECT nome_completo INTO v_cliente_nome FROM public.perfis WHERE id = NEW.cliente_id;
-    
-    -- Obter nome do autor (quem está realizando a ação)
-    SELECT COALESCE(nome_completo, 'Sistema') INTO v_autor_nome 
-    FROM public.perfis 
-    WHERE id = auth.uid();
-    IF v_autor_nome IS NULL THEN v_autor_nome := 'Sistema'; END IF;
-
-    -- 6. Log no Dashboard
-    PERFORM public.registrar_atividade_dashboard(
-        'venda',
-        'Venda',
-        'Produto ' || v_produto_nome || ' vendido por R$ ' || NEW.valor_total,
-        jsonb_build_object('venda_id', NEW.id, 'produto', v_produto_nome)
-    );
-
-    -- 7. Alerta de Estoque Baixo (se aplicável)
-    IF (v_estoque_atual - NEW.quantidade <= v_estoque_minimo) THEN
-        PERFORM public.notificar_admins(
-            'Estoque Baixo!',
-            'O produto ' || v_produto_nome || ' atingiu o estoque crítico (' || (v_estoque_atual - NEW.quantidade) || ' unidades).',
-            'estoque',
-            jsonb_build_object('produto_id', NEW.produto_id, 'estoque', v_estoque_atual - NEW.quantidade)
+    -- 7. Registrar na DASHBOARD_ATIVIDADES
+    BEGIN
+        PERFORM public.registrar_atividade_dashboard(
+            'venda',
+            'Venda',
+            'Produto ' || COALESCE(v_produto_nome, 'Indefinido') || ' vendido por R$ ' || NEW.valor_total,
+            jsonb_build_object('venda_id', NEW.id, 'produto', v_produto_nome)
         );
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END;
+
+    -- 8. Alerta de Estoque Baixo
+    IF (v_estoque_atual - NEW.quantidade <= v_estoque_minimo) THEN
+        BEGIN
+            PERFORM public.notificar_admins(
+                'Estoque Baixo!',
+                'O produto ' || v_produto_nome || ' atingiu o estoque crítico (' || (v_estoque_atual - NEW.quantidade) || ' unidades).',
+                'estoque_baixo'
+            );
+        EXCEPTION WHEN OTHERS THEN NULL;
+        END;
     END IF;
 
-    -- 8. Notificar Venda para Admins
-    PERFORM public.notificar_admins(
-        'Nova Venda de Produto',
-        'Produto: ' || v_produto_nome || E'\nQuantidade: ' || NEW.quantidade || E'\nTotal: R$ ' || NEW.valor_total || E'\nVendedor: ' || v_autor_nome,
-        'financeiro',
-        jsonb_build_object('venda_id', NEW.id)
-    );
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Gatilho para processar venda de produto automaticamente
+DROP TRIGGER IF EXISTS trg_venda_produto_processamento ON public.vendas_produtos;
 CREATE TRIGGER trg_venda_produto_processamento
 AFTER INSERT ON public.vendas_produtos
 FOR EACH ROW
 EXECUTE FUNCTION public.fn_processar_venda_produto();
+
+-- Função para processar pagamento de agendamento no financeiro
+CREATE OR REPLACE FUNCTION public.fn_processar_venda_agendamento()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_cliente_nome TEXT;
+    v_servico_nome TEXT;
+BEGIN
+    -- Verificar se o agendamento foi pago ou concluído agora
+    IF (NEW.pago = true AND (OLD.pago = false OR OLD.pago IS NULL)) OR 
+       (NEW.status = 'concluido' AND (OLD.status != 'concluido' OR OLD.status IS NULL)) THEN
+       
+       -- EVITAR DUPLICIDADE: Verificar se já existe uma conta para este agendamento
+       IF EXISTS (
+           SELECT 1 FROM public.contas 
+           WHERE categoria = 'procedimento' 
+           AND (metadata->>'agendamento_id') = NEW.id::text
+       ) THEN
+           RETURN NEW;
+       END IF;
+
+        -- Buscar nomes para o título
+        SELECT nome_completo INTO v_cliente_nome FROM public.perfis WHERE id = NEW.cliente_id;
+        SELECT nome INTO v_servico_nome FROM public.servicos WHERE id = NEW.servico_id;
+
+        -- Inserir na tabela de contas (o repositório do caixa lê desta tabela)
+        INSERT INTO public.contas (
+            caixa_id,
+            titulo,
+            descricao,
+            valor,
+            tipo_conta,
+            categoria,
+            forma_pagamento,
+            status_pagamento,
+            data_vencimento,
+            data_pagamento,
+            cliente_id,
+            metadata
+        ) VALUES (
+            NEW.caixa_id,
+            'Atendimento: ' || COALESCE(v_servico_nome, 'Serviço'),
+            'Pagamento de agendamento - Cliente: ' || COALESCE(v_cliente_nome, 'N/A'),
+            NEW.valor_total,
+            'receber',
+            'procedimento',
+            COALESCE(NEW.forma_pagamento, 'outro'),
+            'pago',
+            COALESCE(NEW.data_pagamento, CURRENT_TIMESTAMP),
+            COALESCE(NEW.data_pagamento, CURRENT_TIMESTAMP),
+            NEW.cliente_id,
+            jsonb_build_object('agendamento_id', NEW.id, 'origem', 'agendamento_trigger')
+        );
+
+        -- Registrar atividade no dashboard
+        INSERT INTO public.dashboard_atividades (
+            tipo,
+            titulo,
+            descricao,
+            metadata,
+            user_id
+        ) VALUES (
+            'pagamento',
+            'Pagamento Recebido',
+            'Recebido R$ ' || NEW.valor_total || ' de ' || COALESCE(v_cliente_nome, 'Cliente') || ' (' || COALESCE(v_servico_nome, 'Serviço') || ')',
+            jsonb_build_object('agendamento_id', NEW.id, 'valor', NEW.valor_total, 'metodo', NEW.forma_pagamento),
+            NEW.profissional_id
+        );
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Gatilho para processar financeiro de agendamentos
+DROP TRIGGER IF EXISTS trg_venda_agendamento_financeiro ON public.agendamentos;
+CREATE TRIGGER trg_venda_agendamento_financeiro
+AFTER UPDATE ON public.agendamentos
+FOR EACH ROW
+WHEN (NEW.pago = true AND (OLD.pago = false OR OLD.pago IS NULL))
+EXECUTE FUNCTION public.fn_processar_venda_agendamento();
 
 -- 4. TRIGGER PARA CAPTURAR AJUSTES MANUAIS DE ESTOQUE
 CREATE OR REPLACE FUNCTION public.fn_log_ajuste_estoque()
@@ -2544,4 +2646,10 @@ CREATE POLICY "Agendamentos visíveis para dono/admin" ON public.agendamentos
 DROP POLICY IF EXISTS "Pacotes contratados visíveis para dono/admin" ON public.pacotes_contratados;
 CREATE POLICY "Pacotes contratados visíveis para dono/admin" ON public.pacotes_contratados 
     FOR SELECT 
-    USING (auth.uid() = cliente_id OR public.is_admin());
+    USING (auth.uid() = cliente_id OR public.is_admin());-- GARANTIR PERMISSÕES TOTAIS PARA CONTAS E CAIXA
+GRANT ALL ON public.contas TO authenticated, service_role;
+GRANT ALL ON public.caixas TO authenticated, service_role;
+GRANT ALL ON public.dashboard_atividades TO authenticated, service_role;
+GRANT ALL ON public.vendas_produtos TO authenticated, service_role;
+GRANT ALL ON public.historico_estoque TO authenticated, service_role;
+GRANT ALL ON public.produtos TO authenticated, service_role;

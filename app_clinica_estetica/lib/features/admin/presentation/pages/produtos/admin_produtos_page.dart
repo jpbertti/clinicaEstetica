@@ -10,6 +10,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_button_styles.dart';
 
 class AdminProdutosPage extends StatefulWidget {
   const AdminProdutosPage({super.key});
@@ -184,10 +185,13 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/admin/produtos/novo').then((_) => _loadAll()),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/admin/produtos/novo').then((value) {
+          if (value == true) _loadAll();
+        }),
         backgroundColor: secondaryGold,
-        child: const Icon(Icons.add, color: Colors.white),
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Novo produto', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -238,7 +242,7 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
               ),
             ],
           ),
-          Text('Gestão de Estoque e Histórico', 
+          Text('Gestão de estoque e histórico', 
           style: TextStyle(color: gold, fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1.6)),
         ],
       ),
@@ -278,7 +282,7 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
           _buildFilterMenu(
             label: 'Ordenar',
             currentValue: _sortBy,
-            options: ['Nenhum', 'Alfabética', 'Data Criação'],
+            options: ['Nenhum', 'Alfabética', 'Data criação'],
             onSelected: (val) => setState(() => _sortBy = val),
             primaryColor: primaryGreen,
             labelColor: gold,
@@ -597,12 +601,20 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
                             children: [
                               Text(
                                 DateFormat('HH:mm').format(data),
-                                style: TextStyle(fontSize: 11, color: Colors.grey),
+                                style: const TextStyle(fontSize: 10, color: Colors.grey),
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                mov['motivo'] ?? '',
-                                style: TextStyle(fontSize: 10, color: Colors.grey.shade400, fontStyle: FontStyle.italic),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  mov['motivo'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 10, 
+                                    color: Colors.grey.shade400, 
+                                    fontStyle: FontStyle.italic
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -655,24 +667,20 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
         context: context,
         builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text('Caixa Fechado', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontFamily: 'Playfair Display')),
+          title: Text('Caixa fechado', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontFamily: 'Playfair Display')),
           content: Text('Você precisa abrir o caixa antes de realizar uma venda.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancelar', style: TextStyle(color: Colors.grey)),
+              child: Text('Cancelar', style: AppButtonStyles.smallTextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(ctx);
                 context.push('/admin/caixa');
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: Text('Ir para o Caixa', style: TextStyle(fontWeight: FontWeight.bold)),
+              style: AppButtonStyles.primary(),
+              child: const Text('Ir para o caixa'),
             ),
           ],
         ),
@@ -846,35 +854,10 @@ class _ProductCard extends StatelessWidget {
                 ),
               ),
               
-              // Botão de Venda à Direita
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onSell,
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: primaryGreen, 
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: primaryGreen.withOpacity(0.2), 
-                          blurRadius: 8, 
-                          offset: const Offset(0, 2)
-                        )
-                      ]
-                    ),
-                    child: Text(
-                      'Vender', 
-                      style: TextStyle(color: Colors.white, 
-                        fontWeight: FontWeight.w900, 
-                        fontSize: 12,
-                        letterSpacing: 0.5
-                      )
-                    ),
-                  ),
-                ),
+              ElevatedButton(
+                onPressed: onSell,
+                style: AppButtonStyles.small(),
+                child: const Text('Vender'),
               ),
             ],
           ),
@@ -1040,7 +1023,7 @@ class _SellProductModalState extends State<_SellProductModal> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Total a Receber', style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen)),
+                  Text('Total a receber', style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen)),
                   Text(NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.product.precoVenda * _qty), style: TextStyle(fontFamily: 'Playfair Display', fontSize: 20, fontWeight: FontWeight.w800, color: secondaryGold)),
                 ],
               ),
@@ -1048,24 +1031,22 @@ class _SellProductModalState extends State<_SellProductModal> {
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
-              height: 56,
               child: ElevatedButton(
                 onPressed: _isSaving ? null : _confirmSale,
-                style: ElevatedButton.styleFrom(backgroundColor: primaryGreen, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+                style: AppButtonStyles.primary(),
                 child: _isSaving
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text('Confirmar Venda', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      )
+                    : const Text('Confirmar venda'),
               ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancelar', 
-                style: TextStyle(color: secondaryGold, 
-                  fontWeight: FontWeight.bold
-                )
-              ),
+              child: Text('Cancelar', style: AppButtonStyles.smallTextStyle(color: Colors.grey)),
             ),
           ],
         ),

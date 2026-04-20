@@ -9,6 +9,7 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_package_rep
 import 'package:app_clinica_estetica/core/data/models/pacote_template_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/dashboard_repository.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminGerenciadorPromocoesPage extends StatefulWidget {
   const AdminGerenciadorPromocoesPage({super.key});
@@ -297,7 +298,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label.toUpperCase(),
+          label,
           style: TextStyle(fontSize: 10,
             fontWeight: FontWeight.bold,
             color: goldColor,
@@ -367,7 +368,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
             onPressed: _createNewCard,
             icon: Icon(Icons.add_circle_outline, color: goldColor),
             label: Text(
-              'Criar Novo Card',
+              'Criar novo card',
               style: TextStyle(color: goldColor,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
@@ -409,7 +410,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'CARD #${index + 1}',
+                'Card #${index + 1}',
                 style: TextStyle(
                   fontFamily: 'Playfair Display',
                   fontSize: 18,
@@ -457,13 +458,18 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Excluir Card', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Excluir card', style: TextStyle(fontWeight: FontWeight.bold)),
         content: const Text('Tem certeza que deseja excluir esta promoção? As alterações serão definitivas ao salvar.'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
           TextButton(
-            onPressed: () => Navigator.pop(context, true), 
-            child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+            onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.cancelButtonStyle(),
+            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: AppButtonStyles.small(foregroundColor: Colors.red),
+            child: const Text('Excluir'),
           ),
         ],
       ),
@@ -485,7 +491,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Imagem da Promoção',
+          'Imagem da promoção',
           style: TextStyle(fontSize: 10,
             fontWeight: FontWeight.bold,
             color: const Color(0xFF6E8F7B).withOpacity(0.8),
@@ -529,7 +535,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
           children: [
             Expanded(
               child: _buildField(
-                label: 'URL da Imagem',
+                label: 'URL da imagem',
                 initialValue: promo.imagemUrl,
                 hint: 'Cole o link da imagem aqui...',
                 onChanged: (val) => _updateLocalPromotionByIndex(index, promo.copyWith(imagemUrl: val)),
@@ -568,7 +574,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label.toUpperCase(),
+          label,
           style: TextStyle(fontSize: 10,
             fontWeight: FontWeight.bold,
             color: const Color(0xFF6E8F7B).withOpacity(0.8),
@@ -732,7 +738,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Vincular Promoção',
+                                'Vincular promoção',
                                 style: TextStyle(fontFamily: 'Playfair Display', 
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -783,7 +789,7 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
                         const SizedBox(height: 12),
                         _buildModalItem(
                           icon: Icons.link_off,
-                          title: 'Remover Vínculo Atual',
+                          title: 'Remover vínculo atual',
                           onTap: () {
                             _updateLocalPromotionByIndex(index, promo.copyWith(clearServico: true, clearPacote: true));
                             Navigator.pop(context);
@@ -920,15 +926,10 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
           Expanded(
             child: TextButton(
               onPressed: _discardChanges,
-              style: TextButton.styleFrom(
-                foregroundColor: goldColor,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
+              style: AppButtonStyles.cancelButtonStyle(),
               child: Text(
                 'Cancelar',
-                style: TextStyle(fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                style: AppButtonStyles.cancelTextStyle(),
               ),
             ),
           ),
@@ -937,18 +938,10 @@ class _AdminGerenciadorPromocoesPageState extends State<AdminGerenciadorPromocoe
             flex: 2,
             child: ElevatedButton(
               onPressed: _saveAllChanges,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-              ),
+              style: AppButtonStyles.primary(),
               child: Center(
                 child: Text(
-                  'Salvar Alterações',
+                  'Salvar alterações',
                   style: TextStyle(fontWeight: FontWeight.bold,
                     letterSpacing: 1.0,
                   ),

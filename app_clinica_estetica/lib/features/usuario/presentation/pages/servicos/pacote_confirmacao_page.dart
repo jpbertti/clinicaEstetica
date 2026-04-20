@@ -350,7 +350,7 @@ class _PacoteConfirmacaoPageState extends State<PacoteConfirmacaoPage> {
                     strokeWidth: 2,
                   ),
                 )
-              : Text(
+              : const Text(
                   'Confirmar Agendamento',
                   style: TextStyle(fontSize: 16,
                     fontWeight: FontWeight.bold,
