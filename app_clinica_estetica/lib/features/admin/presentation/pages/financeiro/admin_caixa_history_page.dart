@@ -5,6 +5,7 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_caixa_repos
 import 'package:app_clinica_estetica/core/services/pdf_service.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
@@ -126,12 +127,12 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: AppButtonStyles.cancelButtonStyle(),
-            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+            child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: AppButtonStyles.primary(),
-            child: const Text('Salvar'),
+            child: Text(StringUtils.toTitleCase('Salvar')),
           ),
         ],
       ),
@@ -182,12 +183,12 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             style: AppButtonStyles.cancelButtonStyle(),
-            child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+            child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: AppButtonStyles.cancelButtonStyle(),
-            child: const Text('Reabrir', style: TextStyle(color: Colors.red)),
+            child: Text(StringUtils.toTitleCase('Reabrir'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -523,7 +524,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                                   child: TextButton.icon(
                                     onPressed: () => _showCaixaDetails(caixa),
                                     icon: const Icon(Icons.analytics_outlined),
-                                    label: const Text('Ver detalhes do caixa'),
+                                    label: Text(StringUtils.toTitleCase('Ver detalhes do caixa')),
                                     style: AppButtonStyles.cancelButtonStyle(),
                                   ),
                                 ),
@@ -536,7 +537,7 @@ class _AdminCaixaHistoryPageState extends State<AdminCaixaHistoryPage> {
                                       child: OutlinedButton.icon(
                                         onPressed: () => _reopenCaixa(caixa),
                                         icon: const Icon(Icons.lock_open, size: 18),
-                                        label: const Text('Reabrir caixa'),
+                                        label: Text(StringUtils.toTitleCase('Reabrir caixa')),
                                         style: OutlinedButton.styleFrom(
                                           foregroundColor: Colors.red,
                                           side: const BorderSide(color: Colors.red),

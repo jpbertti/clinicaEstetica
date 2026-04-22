@@ -11,6 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_button_styles.dart';
+import '../../../../../core/utils/string_utils.dart';
 
 class AdminProdutosPage extends StatefulWidget {
   const AdminProdutosPage({super.key});
@@ -185,13 +186,12 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/admin/produtos/novo').then((value) {
           if (value == true) _loadAll();
         }),
         backgroundColor: secondaryGold,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Novo produto', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -558,85 +558,88 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
               final imgUrl = product?['imagem_url'] as String?;
               final darkGreen = AppColors.primary;
 
-              return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(12),
-                        image: imgUrl != null ? DecorationImage(image: NetworkImage(imgUrl), fit: BoxFit.cover) : null,
+              return GestureDetector(
+                onTap: () => _showMovementDetail(mov),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                          image: imgUrl != null ? DecorationImage(image: NetworkImage(imgUrl), fit: BoxFit.cover) : null,
+                        ),
+                        child: imgUrl == null ? Icon(Icons.inventory_2_outlined, color: primary.withOpacity(0.2), size: 24) : null,
                       ),
-                      child: imgUrl == null ? Icon(Icons.inventory_2_outlined, color: primary.withOpacity(0.2), size: 24) : null,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product?['nome'] ?? 'Produto',
-                            style: TextStyle(
-                              fontFamily: 'Playfair Display',
-                              fontWeight: FontWeight.w700, 
-                              color: primary, 
-                              fontSize: 14
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product?['nome'] ?? 'Produto',
+                              style: TextStyle(
+                                fontFamily: 'Playfair Display',
+                                fontWeight: FontWeight.w700, 
+                                color: primary, 
+                                fontSize: 14
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(
-                                DateFormat('HH:mm').format(data),
-                                style: const TextStyle(fontSize: 10, color: Colors.grey),
-                              ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
-                                  mov['motivo'] ?? '',
-                                  style: TextStyle(
-                                    fontSize: 10, 
-                                    color: Colors.grey.shade400, 
-                                    fontStyle: FontStyle.italic
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Text(
+                                  DateFormat('HH:mm').format(data),
+                                  style: const TextStyle(fontSize: 10, color: Colors.grey),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: (tipo == 'entrada' ? darkGreen : gold).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '${tipo == 'entrada' ? '+' : '-'}${mov['quantidade']}',
-                        style: TextStyle(fontWeight: FontWeight.w900,
-                          color: tipo == 'entrada' ? darkGreen : gold,
-                          fontSize: 14,
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    mov['motivo'] ?? '',
+                                    style: TextStyle(
+                                      fontSize: 10, 
+                                      color: Colors.grey.shade400, 
+                                      fontStyle: FontStyle.italic
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: (tipo == 'entrada' ? darkGreen : gold).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${tipo == 'entrada' ? '+' : '-'}${mov['quantidade']}',
+                          style: TextStyle(fontWeight: FontWeight.w900,
+                            color: tipo == 'entrada' ? darkGreen : gold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }),
@@ -672,7 +675,7 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancelar', style: AppButtonStyles.smallTextStyle(color: Colors.grey)),
+              child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
             ),
             ElevatedButton(
               onPressed: () {
@@ -680,7 +683,7 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
                 context.push('/admin/caixa');
               },
               style: AppButtonStyles.primary(),
-              child: const Text('Ir para o caixa'),
+              child: Text(StringUtils.toTitleCase('Ir para o caixa')),
             ),
           ],
         ),
@@ -696,6 +699,172 @@ class _AdminProdutosPageState extends State<AdminProdutosPage> with SingleTicker
         builder: (context) => _SellProductModal(product: product, caixa: caixa, onComplete: _loadAll),
       );
     }
+  }
+  Future<void> _showMovementDetail(Map<String, dynamic> mov) async {
+    final motivo = mov['motivo'] as String? ?? '';
+    final isVenda = motivo.startsWith('Venda direta');
+    
+    if (!isVenda) {
+      _showSimpleDetail(mov);
+      return;
+    }
+
+    final refMatch = RegExp(r'Ref: ([a-f\d-]+)').firstMatch(motivo);
+    final saleId = refMatch?.group(1);
+
+    if (saleId == null) {
+      _showSimpleDetail(mov);
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    final sale = await _repository.getSaleDetails(saleId);
+    setState(() => _isLoading = false);
+
+    if (sale == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Detalhes da venda não encontrados.')));
+      }
+      return;
+    }
+
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        contentPadding: EdgeInsets.zero,
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.05),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4)),
+                      ],
+                    ),
+                    child: const Icon(Icons.receipt_long_rounded, color: Colors.white, size: 32),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Detalhes da Venda',
+                    style: TextStyle(
+                      fontFamily: 'Playfair Display',
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  _buildDetailItem(Icons.inventory_2_outlined, 'Produto', sale['produtos']?['nome'] ?? 'Indefinido'),
+                  const Divider(height: 32),
+                  _buildDetailItem(Icons.person_outline, 'Comprador', sale['cliente']?['nome_completo'] ?? 'Cliente não identificado'),
+                  const Divider(height: 32),
+                  _buildDetailItem(Icons.badge_outlined, 'Vendedor', sale['profissional']?['nome_completo'] ?? 'Profissional não identificado'),
+                  const Divider(height: 32),
+                  _buildDetailItem(Icons.payments_outlined, 'Pagamento', StringUtils.toTitleCase(sale['forma_pagamento']?.toString().replaceAll('_', ' ') ?? 'Não informado')),
+                  const Divider(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _buildDetailItem(Icons.calendar_today_outlined, 'Data', DateFormat('dd/MM/yyyy').format(DateTime.parse(sale['criado_em']).toLocal()))),
+                      const SizedBox(width: 16),
+                      Expanded(child: _buildDetailItem(Icons.schedule_outlined, 'Hora', DateFormat('HH:mm').format(DateTime.parse(sale['criado_em']).toLocal()))),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Total:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                  Text(
+                    NumberFormat.simpleCurrency(locale: 'pt_BR').format(sale['valor_total'] ?? 0),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+  void _showSimpleDetail(Map<String, dynamic> mov) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Informação'),
+        content: Text(mov['motivo'] ?? 'Sem detalhes adicionais.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailItem(IconData icon, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 18, color: AppColors.accent),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label.toUpperCase(),
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey.shade400, letterSpacing: 1.2),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.primary),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -857,7 +1026,7 @@ class _ProductCard extends StatelessWidget {
               ElevatedButton(
                 onPressed: onSell,
                 style: AppButtonStyles.small(),
-                child: const Text('Vender'),
+                child: Text(StringUtils.toTitleCase('Vender')),
               ),
             ],
           ),
@@ -973,7 +1142,7 @@ class _SellProductModalState extends State<_SellProductModal> {
                 prefixIcon: Icon(Icons.person_outline),
               ),
               items: [
-                const DropdownMenuItem(value: null, child: Text('Selecione um cliente (venda avulsa)')),
+                DropdownMenuItem(value: null, child: Text(StringUtils.toTitleCase('Selecione um cliente (venda avulsa)'))),
                 ..._clientes.map((c) => DropdownMenuItem(
                       value: c['id'].toString(),
                       child: Text(c['nome_completo']),
@@ -989,12 +1158,12 @@ class _SellProductModalState extends State<_SellProductModal> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.payment_outlined),
               ),
-              items: const [
-                DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                DropdownMenuItem(value: 'pix', child: Text('PIX')),
-                DropdownMenuItem(value: 'cartao_credito', child: Text('Cartão de Crédito')),
-                DropdownMenuItem(value: 'cartao_debito', child: Text('Cartão de Débito')),
-                DropdownMenuItem(value: 'convenio', child: Text('Convênio')),
+              items: [
+                DropdownMenuItem(value: 'dinheiro', child: Text(StringUtils.toTitleCase('Dinheiro'))),
+                DropdownMenuItem(value: 'pix', child: Text(StringUtils.toTitleCase('PIX'))),
+                DropdownMenuItem(value: 'cartao_credito', child: Text(StringUtils.toTitleCase('Cartão de Crédito'))),
+                DropdownMenuItem(value: 'cartao_debito', child: Text(StringUtils.toTitleCase('Cartão de Débito'))),
+                DropdownMenuItem(value: 'convenio', child: Text(StringUtils.toTitleCase('Convênio'))),
               ],
               onChanged: (v) => setState(() => _selectedMeio = v!),
             ),
@@ -1007,7 +1176,7 @@ class _SellProductModalState extends State<_SellProductModal> {
                 prefixIcon: Icon(Icons.badge_outlined),
               ),
               items: [
-                const DropdownMenuItem(value: null, child: Text('Selecione o profissional')),
+                DropdownMenuItem(value: null, child: Text(StringUtils.toTitleCase('Selecione o profissional'))),
                 ..._profissionais.map((p) => DropdownMenuItem(
                       value: p['id'].toString(),
                       child: Text(p['nome_completo']),
@@ -1040,13 +1209,13 @@ class _SellProductModalState extends State<_SellProductModal> {
                         width: 20,
                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                       )
-                    : const Text('Confirmar venda'),
+                    : Text(StringUtils.toTitleCase('Confirmar venda')),
               ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancelar', style: AppButtonStyles.smallTextStyle(color: Colors.grey)),
+              child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
             ),
           ],
         ),

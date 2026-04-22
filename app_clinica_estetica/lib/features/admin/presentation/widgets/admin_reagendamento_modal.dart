@@ -4,6 +4,7 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_notificatio
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AdminReagendamentoModal extends StatefulWidget {
@@ -486,7 +487,7 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
             onPressed: (_selectedStartTime != null) 
                 ? () => setState(() => _isConfirming = true) 
                 : null,
-            style: AppButtonStyles.primary,
+            style: AppButtonStyles.primary(),
             child: const Text('Revisar alteração'),
           ),
         ],
@@ -557,7 +558,7 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
               Expanded(
                 child: TextButton(
                   onPressed: () => setState(() => _isConfirming = false),
-                  child: Text('Voltar', style: AppButtonStyles.small(color: Colors.grey)),
+                  child: Text('Voltar', style: AppButtonStyles.smallTextStyle(color: Colors.grey)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -565,7 +566,7 @@ class _AdminReagendamentoModalState extends State<AdminReagendamentoModal> {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: _isUpdating ? null : _handleConfirm,
-                  style: AppButtonStyles.primary,
+                  style: AppButtonStyles.primary(),
                   child: _isUpdating
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                       : const Text('Confirmar troca'),

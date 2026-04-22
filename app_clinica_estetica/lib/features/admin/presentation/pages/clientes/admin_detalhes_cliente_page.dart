@@ -429,51 +429,54 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
                 final double total = (sale['valor_total'] ?? 0.0).toDouble();
                 final DateTime data = DateTime.parse(sale['criado_em']).toLocal();
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: primaryGreen.withOpacity(0.05)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: bgColor,
-                          borderRadius: BorderRadius.circular(10),
+                return InkWell(
+                  onTap: () => _showVendaDetalhes(sale),
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: primaryGreen.withOpacity(0.05)),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: bgColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: imgUrl != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(imgUrl, fit: BoxFit.cover),
+                                )
+                              : Icon(Icons.inventory_2_outlined, color: primaryGreen.withOpacity(0.3)),
                         ),
-                        child: imgUrl != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(imgUrl, fit: BoxFit.cover),
-                              )
-                            : Icon(Icons.inventory_2_outlined, color: primaryGreen.withOpacity(0.3)),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              nome,
-                              style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen),
-                            ),
-                            Text(
-                              'Qtd: $qtd • ${DateFormat('dd/MM/yyyy HH:mm').format(data)}',
-                              style: const TextStyle(fontSize: 12, color: Colors.black54),
-                            ),
-                          ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                nome,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen),
+                              ),
+                              Text(
+                                'Qtd: $qtd • ${DateFormat('dd/MM/yyyy HH:mm').format(data)}',
+                                style: const TextStyle(fontSize: 12, color: Colors.black54),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        NumberFormat.simpleCurrency(locale: 'pt_BR').format(total),
-                        style: TextStyle(fontWeight: FontWeight.bold, color: goldColor),
-                      ),
-                    ],
+                        Text(
+                          NumberFormat.simpleCurrency(locale: 'pt_BR').format(total),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: goldColor),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -915,6 +918,111 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
       default:
         return Colors.grey;
     }
+  }
+
+  void _showVendaDetalhes(Map<String, dynamic> sale) {
+    final product = sale['produtos'] as Map<String, dynamic>?;
+    final DateTime data = DateTime.parse(sale['criado_em']).toLocal();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        contentPadding: EdgeInsets.zero,
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: primaryGreen.withOpacity(0.05),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: primaryGreen,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.receipt_long_rounded, color: Colors.white, size: 32),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Detalhes da Compra',
+                      style: TextStyle(
+                        fontFamily: 'Playfair Display',
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: primaryGreen,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    _buildPopupDetail(Icons.inventory_2_outlined, 'Produto', product?['nome'] ?? 'Indefinido'),
+                    const Divider(height: 32),
+                    _buildPopupDetail(Icons.shopping_cart_outlined, 'Quantidade', '${sale['quantidade']} unidades'),
+                    const Divider(height: 32),
+                    _buildPopupDetail(Icons.payments_outlined, 'Pagamento', sale['forma_pagamento']?.toString().replaceAll('_', ' ').toUpperCase() ?? 'NÃO INFORMADO'),
+                    const Divider(height: 32),
+                    _buildPopupDetail(Icons.calendar_today_outlined, 'Data', DateFormat('dd/MM/yyyy HH:mm').format(data)),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Total Pago:', style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen.withOpacity(0.6))),
+                    Text(
+                      NumberFormat.simpleCurrency(locale: 'pt_BR').format(sale['valor_total'] ?? 0),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: primaryGreen,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPopupDetail(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: goldColor),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: TextStyle(fontSize: 12, color: primaryGreen.withOpacity(0.5))),
+              Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: primaryGreen)),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 

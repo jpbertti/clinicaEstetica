@@ -8,6 +8,7 @@ import 'package:app_clinica_estetica/core/data/repositories/supabase_professiona
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 
 class AdminEditProfissionalPage extends StatefulWidget {
@@ -411,7 +412,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                                 child: TextButton(
                                   onPressed: () => context.pop(),
                                   style: AppButtonStyles.cancelButtonStyle(),
-                                  child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+                                  child: Text(StringUtils.toTitleCase('cancelar'), style: AppButtonStyles.cancelTextStyle()),
                                 ),
                             ),
                             const SizedBox(width: 16),
@@ -429,7 +430,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                                           strokeWidth: 2,
                                         ),
                                       )
-                                    : const Text('Salvar alterações'),
+                                    : Text(StringUtils.toTitleCase('salvar alterações')),
                               ),
                             ),
                           ],
@@ -477,7 +478,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                       ElevatedButton.icon(
                         onPressed: () => context.push('/admin/profissionais/vincular-servicos', extra: widget.professional),
                         icon: const Icon(Icons.add, size: 18),
-                        label: const Text('Vincular serviços'),
+                        label: Text(StringUtils.toTitleCase('vincular serviços')),
                         style: AppButtonStyles.small(),
                       ),
                     ],
@@ -523,7 +524,7 @@ class _AdminEditProfissionalPageState extends State<AdminEditProfissionalPage> {
                       ElevatedButton.icon(
                         onPressed: () => context.push('/admin/profissionais/vincular-pacotes', extra: widget.professional),
                         icon: const Icon(Icons.add, size: 18),
-                        label: const Text('Vincular pacotes'),
+                        label: Text(StringUtils.toTitleCase('vincular pacotes')),
                         style: AppButtonStyles.small(),
                       ),
                     ],

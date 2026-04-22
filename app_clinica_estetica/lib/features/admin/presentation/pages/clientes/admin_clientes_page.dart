@@ -324,7 +324,7 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
         ),
       ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await context.push('/admin/clientes/novo');
           if (result == true) {
@@ -332,8 +332,7 @@ class _AdminClientesPageState extends State<AdminClientesPage> {
           }
         },
         backgroundColor: goldColor,
-        label: const Text('Novo cliente'),
-        icon: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

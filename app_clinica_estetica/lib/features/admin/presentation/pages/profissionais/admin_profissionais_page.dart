@@ -388,7 +388,7 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
         ),
       ],
     ),
-    floatingActionButton: FloatingActionButton.extended(
+    floatingActionButton: FloatingActionButton(
       onPressed: () async {
         final result = await context.push('/admin/profissionais/novo');
         if (result == true) {
@@ -396,8 +396,7 @@ class _AdminProfissionaisPageState extends State<AdminProfissionaisPage> {
         }
       },
       backgroundColor: accentColor,
-      icon: const Icon(Icons.add, color: Colors.white),
-      label: const Text('Novo profissional', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      child: const Icon(Icons.add, color: Colors.white),
     ),
   );
   }

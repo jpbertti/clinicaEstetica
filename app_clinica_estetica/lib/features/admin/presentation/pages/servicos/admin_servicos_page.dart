@@ -562,7 +562,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
             context: context,
@@ -618,8 +618,7 @@ class _AdminServicosPageState extends State<AdminServicosPage> {
           );
         },
         backgroundColor: accent,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Novo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       body: RefreshIndicator(
         onRefresh: _loadData,

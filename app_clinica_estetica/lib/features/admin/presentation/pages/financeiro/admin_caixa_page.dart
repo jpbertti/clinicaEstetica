@@ -9,6 +9,7 @@ import 'package:app_clinica_estetica/core/services/pdf_service.dart';
 import 'package:app_clinica_estetica/core/services/report_app_bar_service.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 import 'package:app_clinica_estetica/core/theme/app_text_styles.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
@@ -125,7 +126,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar', style: TextStyle(color: const Color(0xFFC7A36B), fontWeight: FontWeight.bold)),
+            child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -135,7 +136,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               Navigator.pop(context, val);
             },
             style: AppButtonStyles.primary(),
-            child: const Text('Abrir'),
+            child: Text(StringUtils.toTitleCase('Abrir caixa')),
           ),
         ],
       ),
@@ -204,17 +205,17 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancelar', style: TextStyle(color: const Color(0xFFC7A36B), fontWeight: FontWeight.bold)),
+            child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
           ),
           ElevatedButton(
-            style: AppButtonStyles.primary(color: Colors.red),
+            style: AppButtonStyles.primary(backgroundColor: Colors.red),
             onPressed: () {
               // Limpa a formatação de moeda antes de converter
               final cleanText = controller.text.replaceAll('.', '').replaceAll(',', '.');
               final val = double.tryParse(cleanText) ?? 0;
               Navigator.pop(context, {'valor': val, 'obs': obsController.text});
             },
-            child: const Text('Confirmar fechamento'),
+            child: Text(StringUtils.toTitleCase('Confirmar fechamento')),
           ),
         ],
       ),
@@ -346,7 +347,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                       child: ElevatedButton.icon(
                         onPressed: _abrirCaixa,
                         icon: const Icon(Icons.lock_open),
-                        label: const Text('Abrir caixa hoje'),
+                        label: Text(StringUtils.toTitleCase('Abrir caixa hoje')),
                         style: AppButtonStyles.primary(),
                       ),
                     ),
@@ -362,7 +363,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                           );
                         },
                         icon: const Icon(Icons.history),
-                        label: const Text('Acessar caixas anteriores'),
+                        label: Text(StringUtils.toTitleCase('Acessar caixas anteriores')),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
@@ -533,8 +534,8 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               child: ElevatedButton.icon(
                 onPressed: _showSangriaDialog,
                 icon: const Icon(Icons.outbox),
-                label: const Text('Registrar retirada (sangria)'),
-                style: AppButtonStyles.primary(color: accentColor),
+                label: Text(StringUtils.toTitleCase('Registrar retirada (sangria)')),
+                style: AppButtonStyles.primary(backgroundColor: accentColor),
               ),
             ),
             const SizedBox(height: 12),
@@ -543,8 +544,8 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               child: ElevatedButton.icon(
                 onPressed: _fecharCaixa,
                 icon: const Icon(Icons.lock),
-                label: const Text('Realizar fechamento do caixa'),
-                style: AppButtonStyles.primary(color: Colors.red),
+                label: Text(StringUtils.toTitleCase('Realizar fechamento do caixa')),
+                style: AppButtonStyles.primary(backgroundColor: Colors.red),
               ),
             ),
 
@@ -627,7 +628,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               TextButton(
                 onPressed: () => _showTransactionDetailsDialog(label, transacoes),
                 child: Text(
-                  'Ver detalhes',
+                  StringUtils.toTitleCase('Ver detalhes'),
                   style: TextStyle(color: AppColors.accent,
                     fontWeight: FontWeight.bold,
                   ),
@@ -753,7 +754,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: AppButtonStyles.primary(),
-            child: const Text('Fechar'),
+            child: Text(StringUtils.toTitleCase('Fechar')),
           ),
         ],
       ),
@@ -793,12 +794,12 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               DropdownButtonFormField<String>(
                 value: selectedMeio,
                 decoration: const InputDecoration(labelText: 'Forma de pagamento', border: OutlineInputBorder()),
-                items: const [
-                  DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                  DropdownMenuItem(value: 'pix', child: Text('PIX')),
-                  DropdownMenuItem(value: 'cartao_credito', child: Text('Cartão de crédito')),
-                  DropdownMenuItem(value: 'cartao_debito', child: Text('Cartão de débito')),
-                  DropdownMenuItem(value: 'convenio', child: Text('Convênio')),
+                items: [
+                  DropdownMenuItem(value: 'dinheiro', child: Text(StringUtils.toTitleCase('Dinheiro'))),
+                  DropdownMenuItem(value: 'pix', child: Text(StringUtils.toTitleCase('PIX'))),
+                  DropdownMenuItem(value: 'cartao_credito', child: Text(StringUtils.toTitleCase('Cartão de crédito'))),
+                  DropdownMenuItem(value: 'cartao_debito', child: Text(StringUtils.toTitleCase('Cartão de débito'))),
+                  DropdownMenuItem(value: 'convenio', child: Text(StringUtils.toTitleCase('Convênio'))),
                 ],
                 onChanged: (v) {
                   if (v != null) setDialogState(() => selectedMeio = v);
@@ -809,7 +810,10 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
                 DropdownButtonFormField<int>(
                   value: selectedParcelas,
                   decoration: const InputDecoration(labelText: 'Parcelas', border: OutlineInputBorder()),
-                  items: List.generate(18, (i) => i + 1).map((p) => DropdownMenuItem(value: p, child: Text('$p x'))).toList(),
+                  items: List.generate(18, (i) => i + 1)
+                      .map((p) => DropdownMenuItem(
+                          value: p, child: Text(StringUtils.toTitleCase('$p x'))))
+                      .toList(),
                   onChanged: (v) {
                     if (v != null) setDialogState(() => selectedParcelas = v);
                   },
@@ -820,12 +824,12 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context), 
-              child: Text('Cancelar', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold))
+              child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle())
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
               style: AppButtonStyles.primary(),
-              child: const Text('Salvar alterações'),
+              child: Text(StringUtils.toTitleCase('Salvar alterações')),
             ),
           ],
         ),
@@ -893,8 +897,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: AppButtonStyles.primary(),
-            child: const Text('Fechar'),
+            child: Text(StringUtils.toTitleCase('Fechar')),
           ),
         ],
       ),
@@ -935,8 +938,7 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            style: AppButtonStyles.primary(),
-            child: const Text('Fechar'),
+            child: Text(StringUtils.toTitleCase('Fechar')),
           ),
         ],
       ),
@@ -972,9 +974,9 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
               DropdownButtonFormField<String>(
                 value: selectedMeio,
                 decoration: const InputDecoration(labelText: 'Meio de retirada', border: OutlineInputBorder()),
-                items: const [
-                  DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                  DropdownMenuItem(value: 'pix', child: Text('PIX transferência')),
+                items: [
+                  DropdownMenuItem(value: 'dinheiro', child: Text(StringUtils.toTitleCase('Dinheiro'))),
+                  DropdownMenuItem(value: 'pix', child: Text(StringUtils.toTitleCase('PIX transferência'))),
                 ],
                 onChanged: (v) {
                   if (v != null) setDialogState(() => selectedMeio = v);
@@ -994,12 +996,12 @@ class _AdminCaixaPageState extends State<AdminCaixaPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancelar', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+              child: Text(StringUtils.toTitleCase('Cancelar'), style: AppButtonStyles.cancelTextStyle()),
             ),
             ElevatedButton(
-              style: AppButtonStyles.primary(color: AppColors.primary),
+              style: AppButtonStyles.primary(backgroundColor: AppColors.primary),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Confirmar retirada'),
+              child: Text(StringUtils.toTitleCase('Confirmar retirada')),
             ),
           ],
         ),

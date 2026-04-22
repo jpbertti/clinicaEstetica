@@ -5,6 +5,7 @@ import 'package:app_clinica_estetica/core/data/repositories/dashboard_repository
 import 'package:app_clinica_estetica/core/app_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 
 // ─── Taxa Input Formatter (Eating Zeros) ───────────────────────────────────
 class _TaxaInputFormatter extends TextInputFormatter {
@@ -242,7 +243,7 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
                     onPressed: _isSaving ? null : () => context.pop(),
                     style: AppButtonStyles.cancelButtonStyle(),
                     child: Text(
-                      'Cancelar',
+                      StringUtils.toTitleCase('Cancelar'),
                       style: AppButtonStyles.cancelTextStyle(),
                     ),
                   ),
@@ -265,8 +266,8 @@ class _AdminTaxasFinanceirasPageState extends State<AdminTaxasFinanceirasPage> {
                               const Icon(Icons.save_rounded, size: 18),
                               const SizedBox(width: 8),
                               Text(
-                                'Salvar taxas',
-                                style: TextStyle(fontWeight: FontWeight.bold,
+                                StringUtils.toTitleCase('Salvar taxas'),
+                                style: const TextStyle(fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                   letterSpacing: 1.2,
                                 ),

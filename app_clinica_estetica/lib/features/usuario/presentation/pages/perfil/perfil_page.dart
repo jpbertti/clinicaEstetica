@@ -527,6 +527,18 @@ class _PerfilPageState extends State<PerfilPage> {
           const SizedBox(height: 16),
           // Meus Pacotes (Visível para todos)
             GestureDetector(
+              onTap: () => context.push('/meus-produtos'),
+              child: _construirItemAcao(
+                icon: Icons.shopping_bag_outlined,
+                title: 'Produtos Comprados',
+                subtitle: 'Histórico de compras de produtos',
+                pColor: AppColors.primary,
+                gColor: AppColors.accent,
+                softColor: AppColors.textSecondary,
+              ),
+            ),
+          const SizedBox(height: 16),
+            GestureDetector(
               onTap: () => context.push('/meus-pacotes'),
               child: _construirItemAcao(
                 icon: Icons.inventory_2_outlined,

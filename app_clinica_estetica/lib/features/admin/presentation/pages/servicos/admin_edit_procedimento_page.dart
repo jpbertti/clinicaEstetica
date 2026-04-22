@@ -636,11 +636,11 @@ class _AdminEditProcedimentoPageState extends State<AdminEditProcedimentoPage> {
                                         strokeWidth: 2,
                                         color: Colors.white,
                                       ))
-                                  : const Row(
+                                  : Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.save, size: 18),
-                                        SizedBox(width: 8),
+                                        const Icon(Icons.save, size: 18),
+                                        const SizedBox(width: 8),
                                         Text(StringUtils.toTitleCase('salvar alterações')),
                                       ],
                                     ),

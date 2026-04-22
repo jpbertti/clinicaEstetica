@@ -2,7 +2,6 @@
 import 'package:app_clinica_estetica/core/data/models/appointment_model.dart';
 import 'package:app_clinica_estetica/core/data/models/evaluation_model.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_appointment_repository.dart';
-import 'package:app_clinica_estetica/core/data/repositories/supabase_product_repository.dart';
 import 'package:app_clinica_estetica/features/auth/data/auth_service.dart';
 import 'package:app_clinica_estetica/core/widgets/app_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +19,11 @@ class AgendaPage extends StatefulWidget {
 }
 
 class _AgendaPageState extends State<AgendaPage> {
-  int _selectedTab = 0; // 0 for Próximos, 1 for Histórico, 2 for Produtos
+  int _selectedTab = 0; // 0 for Próximos, 1 for Histórico
   bool _isLoading = true;
   List<AppointmentModel> _upcomingList = [];
   List<AppointmentModel> _historyList = [];
-  List<Map<String, dynamic>> _productPurchases = [];
   final _appointmentRepo = SupabaseAppointmentRepository();
-  final _productRepo = SupabaseProductRepository();
 
   @override
   void initState() {
@@ -45,13 +42,10 @@ class _AgendaPageState extends State<AgendaPage> {
         
         final upcoming = await _appointmentRepo.getUpcomingAppointments(userId);
         final history = await _appointmentRepo.getPastAppointments(userId);
-        final products = await _productRepo.getProductPurchasesByClient(userId);
-
         if (mounted) {
           setState(() {
             _upcomingList = upcoming;
             _historyList = history;
-            _productPurchases = products;
             _isLoading = false;
           });
         }
@@ -91,22 +85,6 @@ class _AgendaPageState extends State<AgendaPage> {
         map[key] = [];
       }
       map[key]!.add(app);
-    }
-    return map;
-  }
-
-  Map<String, List<Map<String, dynamic>>> _agruparProdutosPorData(
-    List<Map<String, dynamic>> sales,
-  ) {
-    final map = <String, List<Map<String, dynamic>>>{};
-    for (var sale in sales) {
-      if (sale['criado_em'] == null) continue;
-      final date = DateTime.parse(sale['criado_em']).toLocal();
-      final key = _formatarDataGroup(date);
-      if (!map.containsKey(key)) {
-        map[key] = [];
-      }
-      map[key]!.add(sale);
     }
     return map;
   }
@@ -183,12 +161,6 @@ class _AgendaPageState extends State<AgendaPage> {
                         label: 'Histórico',
                         isSelected: _selectedTab == 1,
                         onTap: () => setState(() => _selectedTab = 1),
-                      ),
-                      const SizedBox(width: 32),
-                      _ItemAba(
-                        label: 'Produtos',
-                        isSelected: _selectedTab == 2,
-                        onTap: () => setState(() => _selectedTab = 2),
                       ),
                     ],
                   ),
@@ -282,33 +254,6 @@ class _AgendaPageState extends State<AgendaPage> {
                                   extra: app,
                                 ),
                               ),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      );
-                    }),
-                ] else ...[
-                  // Section: Produtos
-                  if (_productPurchases.isEmpty)
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 40.0),
-                        child: Text(
-                          'Nenhum produto adquirido ainda.',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.primary.withOpacity(0.5),
-                          ),
-                        ),
-                      ),
-                    )
-                  else
-                    ..._agruparProdutosPorData(_productPurchases).entries.map((entry) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _CabecalhoData(label: entry.key),
-                          ...entry.value.map(
-                            (sale) => _CardProduto(sale: sale),
                           ),
                           const SizedBox(height: 24),
                         ],
@@ -1054,122 +999,6 @@ void _mostrarResumoAvaliacao(BuildContext context, EvaluationModel evaluation) {
   );
 }
 
-class _CardProduto extends StatelessWidget {
-  final Map<String, dynamic> sale;
 
-  const _CardProduto({super.key, required this.sale});
-
-  @override
-  Widget build(BuildContext context) {
-    final product = sale['produtos'] as Map<String, dynamic>?;
-    final String nome = product?['nome'] ?? 'Produto';
-    final String? imgUrl = product?['imagem_url'];
-    final int qtd = sale['quantidade'] ?? 0;
-    final double total = (sale['valor_total'] ?? 0.0).toDouble();
-    final DateTime data = DateTime.parse(sale['criado_em']).toLocal();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Imagem do Produto
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: imgUrl != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      imgUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.inventory_2_outlined, color: AppColors.primary),
-                    ),
-                  )
-                : const Icon(
-                    Icons.inventory_2_outlined,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
-          ),
-          const SizedBox(width: 20),
-          // Detalhes
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  nome,
-                  style: GoogleFonts.playfairDisplay(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      'Quantidade: $qtd unidades',
-                      style: GoogleFonts.manrope(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary.withOpacity(0.5),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      DateFormat('HH:mm').format(data),
-                      style: GoogleFonts.manrope(
-                        fontSize: 10,
-                        color: AppColors.primary.withOpacity(0.4),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          // Valor Total
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                NumberFormat.simpleCurrency(locale: 'pt_BR').format(total),
-                style: GoogleFonts.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.accent,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  'PAGO',
-                  style: GoogleFonts.manrope(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.green,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 

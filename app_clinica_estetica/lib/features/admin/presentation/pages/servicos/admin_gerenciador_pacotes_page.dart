@@ -5,6 +5,7 @@ import 'package:app_clinica_estetica/core/data/models/pacote_template_model.dart
 import 'package:app_clinica_estetica/core/data/repositories/supabase_package_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_admin_log_repository.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
 
 class AdminGerenciadorPacotesPage extends StatefulWidget {
   const AdminGerenciadorPacotesPage({super.key});
@@ -107,12 +108,12 @@ class _AdminGerenciadorPacotesPageState extends State<AdminGerenciadorPacotesPag
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            style: AppButtonStyles.small,
+            style: AppButtonStyles.small(),
             child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: AppButtonStyles.small.copyWith(
+            style: AppButtonStyles.small().copyWith(
               foregroundColor: WidgetStateProperty.all(Colors.red),
             ),
             child: const Text('Excluir'),
@@ -194,7 +195,7 @@ class _AdminGerenciadorPacotesPageState extends State<AdminGerenciadorPacotesPag
                     }),
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text('Novo pacote'),
-                    style: AppButtonStyles.primary,
+                    style: AppButtonStyles.primary(),
                   ),
                 ],
               ),

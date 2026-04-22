@@ -344,6 +344,7 @@ CREATE TABLE IF NOT EXISTS public.contas (
     data_vencimento DATE NOT NULL,
     data_pagamento TIMESTAMP WITH TIME ZONE,
     caixa_id UUID REFERENCES public.caixas(id),
+    metadata JSONB DEFAULT '{}'::jsonb,
     criado_por UUID REFERENCES public.perfis(id) ON DELETE SET NULL,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -792,9 +793,18 @@ CREATE POLICY "Admins gerenciam produtos" ON public.produtos FOR ALL TO authenti
 
 -- Políticas de VENDAS_PRODUTOS
 DROP POLICY IF EXISTS "Admins veem vendas" ON public.vendas_produtos;
-CREATE POLICY "Admins veem vendas" ON public.vendas_produtos FOR SELECT TO authenticated USING (is_admin());
-
 DROP POLICY IF EXISTS "Admins gerenciam vendas" ON public.vendas_produtos;
+DROP POLICY IF EXISTS "Clientes podem ver suas próprias compras" ON public.vendas_produtos;
+
+CREATE POLICY "Clientes podem ver suas próprias compras"
+ON public.vendas_produtos
+FOR SELECT
+TO authenticated
+USING (
+    (auth.uid() = cliente_id) OR 
+    (is_admin() OR is_profissional())
+);
+
 CREATE POLICY "Admins gerenciam vendas" ON public.vendas_produtos FOR ALL TO authenticated USING (is_admin());
 
 -- Políticas de DASHBOARD
@@ -1974,8 +1984,14 @@ CREATE TABLE IF NOT EXISTS public.historico_estoque (
 ALTER TABLE public.historico_estoque ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Admins veem historico completo" ON public.historico_estoque;
-CREATE POLICY "Admins veem historico completo" ON public.historico_estoque FOR SELECT TO authenticated USING (
-    is_admin()
+DROP POLICY IF EXISTS "Apenas admin e profissionais veem histórico" ON public.historico_estoque;
+
+CREATE POLICY "Apenas admin e profissionais veem histórico"
+ON public.historico_estoque
+FOR SELECT
+TO authenticated
+USING (
+    is_admin() OR is_profissional()
 );
 
 -- 3. ATUALIZAR FUNÇÃO DE VENDA PARA REGISTRAR NO HISTÓRICO
@@ -2046,6 +2062,7 @@ BEGIN
         data_vencimento,
         data_pagamento,
         caixa_id,
+        metadata,
         criado_em
     ) VALUES (
         'Venda: ' || COALESCE(v_produto_nome, 'Produto'),
@@ -2061,6 +2078,7 @@ BEGIN
         CURRENT_DATE,
         now(),
         NEW.caixa_id,
+        jsonb_build_object('venda_id', NEW.id, 'tipo', 'venda_produto', 'produto_id', NEW.produto_id),
         now()
     );
 

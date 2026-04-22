@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:app_clinica_estetica/core/theme/app_button_styles.dart';
+import 'package:app_clinica_estetica/core/utils/string_utils.dart';
 import '../../../../auth/data/auth_service.dart';
 
 class AdminAddProfissionalPage extends StatefulWidget {
@@ -394,7 +395,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                               child: TextButton(
                                 onPressed: () => context.pop(),
                                 style: AppButtonStyles.cancelButtonStyle(),
-                                child: Text('Cancelar', style: AppButtonStyles.cancelTextStyle()),
+                                child: Text(StringUtils.toTitleCase('cancelar'), style: AppButtonStyles.cancelTextStyle()),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -419,7 +420,7 @@ class _AdminAddProfissionalPageState extends State<AdminAddProfissionalPage> {
                                       const Icon(Icons.person_add, size: 18),
                                     const SizedBox(width: 8),
                                     Text(
-                                      _isSaving ? 'Cadastrando...' : 'Cadastrar profissional',
+                                      _isSaving ? StringUtils.toTitleCase('cadastrando...') : StringUtils.toTitleCase('cadastrar profissional'),
                                     ),
                                   ],
                                 ),

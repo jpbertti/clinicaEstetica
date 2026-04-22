@@ -28,6 +28,7 @@ import 'package:app_clinica_estetica/features/usuario/presentation/pages/agenda/
 import 'package:app_clinica_estetica/features/usuario/presentation/pages/agenda/avaliacao_sucesso_page.dart';
 import 'package:app_clinica_estetica/features/usuario/presentation/pages/perfil/ajuda_suporte_page.dart';
 import 'package:app_clinica_estetica/features/usuario/presentation/pages/perfil/historico_avaliacoes_page.dart';
+import 'package:app_clinica_estetica/features/usuario/presentation/pages/perfil/meus_produtos_page.dart';
 import 'package:app_clinica_estetica/features/usuario/presentation/pages/notificacoes/notificacoes_page.dart';
 import 'package:app_clinica_estetica/features/usuario/presentation/pages/perfil/alterar_senha_page.dart';
 import 'package:app_clinica_estetica/features/auth/data/auth_service.dart';
@@ -255,6 +256,7 @@ final appRouter = GoRouter(
           },
         ),
         GoRoute(path: '/meus-pacotes', builder: (context, state) => const MeusPacotesPage()),
+        GoRoute(path: '/meus-produtos', builder: (context, state) => const MeusProdutosPage()),
         GoRoute(
           path: '/detalhes-agendamento',
           builder: (context, state) {

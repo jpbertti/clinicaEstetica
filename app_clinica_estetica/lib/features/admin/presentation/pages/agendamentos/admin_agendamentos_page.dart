@@ -476,7 +476,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                           size: 18,
                         ),
                         label: Text(
-                          _isMonthlyView ? 'Visualização diária' : 'Visualização mensal',
+                          StringUtils.toTitleCase(_isMonthlyView ? 'Visualização diária' : 'Visualização mensal'),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: primaryGreen,
@@ -496,7 +496,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             TextButton.icon(
                               onPressed: () => setState(() => _isCalendarExpanded = !_isCalendarExpanded),
                               icon: Icon(_isCalendarExpanded ? Icons.keyboard_arrow_up : Icons.calendar_month, color: primaryGreen),
-                              label: Text(_isCalendarExpanded ? 'Fechar calendário' : 'Abrir calendário', style: TextStyle(color: primaryGreen)),
+                              label: Text(StringUtils.toTitleCase(_isCalendarExpanded ? 'Fechar calendário' : 'Abrir calendário'), style: TextStyle(color: primaryGreen)),
                             ),
                             if (_isCalendarExpanded) ...[
                               const SizedBox(height: 10),
@@ -695,11 +695,14 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
               toolbarHeight: 0,
               collapsedHeight: 0,
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(_isMonthlyView ? 10 : 60),
+                preferredSize: Size.fromHeight(_isMonthlyView ? 0 : 96),
                 child: Container(
                   width: double.infinity,
                   color: bgColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20, 
+                    vertical: _isMonthlyView ? 0 : 10
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1536,19 +1539,19 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                     return [
                       if (!isPast) ...[
                         if (status != 'concluido')
-                          const PopupMenuItem(value: 'concluido', child: Text('Concluir')),
-                        const PopupMenuItem(value: 'confirmado', child: Text('Confirmar')),
-                        const PopupMenuItem(value: 'alterar', child: Text('Alterar')),
-                        const PopupMenuItem(value: 'switch_prof', child: Text('Trocar Profissional')),
-                        const PopupMenuItem(value: 'cancelado', child: Text('Cancelar')),
+                          PopupMenuItem(value: 'concluido', child: Text(StringUtils.toTitleCase('Concluir'))),
+                        PopupMenuItem(value: 'confirmado', child: Text(StringUtils.toTitleCase('Confirmar'))),
+                        PopupMenuItem(value: 'alterar', child: Text(StringUtils.toTitleCase('Alterar'))),
+                        PopupMenuItem(value: 'switch_prof', child: Text(StringUtils.toTitleCase('Trocar Profissional'))),
+                        PopupMenuItem(value: 'cancelado', child: Text(StringUtils.toTitleCase('Cancelar'))),
                         if (appt['pago'] != true) ...[
                           const PopupMenuDivider(),
                           PopupMenuItem(
                             value: 'pagar',
                             child: Row(children: [
                               Icon(Icons.attach_money, size: 18, color: primaryGreen),
-                              const SizedBox(width: 8),
-                              const Text('Lançar Pagamento'),
+                               const SizedBox(width: 8),
+                              Text(StringUtils.toTitleCase('Lançar Pagamento')),
                             ]),
                           ),
                         ],
@@ -1558,16 +1561,16 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             value: 'pagar',
                             child: Row(children: [
                               Icon(Icons.edit_outlined, size: 18, color: accent),
-                              const SizedBox(width: 8),
-                              const Text('Editar Pagamento'),
+                               const SizedBox(width: 8),
+                              Text(StringUtils.toTitleCase('Editar Pagamento')),
                             ]),
                           ),
                           PopupMenuItem(
                             value: 'nao_pago',
                             child: Row(children: [
                               Icon(Icons.money_off, size: 18, color: Colors.red),
-                              const SizedBox(width: 8),
-                              const Text('Não Pago (Excluir)'),
+                               const SizedBox(width: 8),
+                              Text(StringUtils.toTitleCase('Não Pago (Excluir)')),
                             ]),
                           ),
                         ],
@@ -1580,9 +1583,9 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             child: Row(
                               children: [
                                 Icon(Icons.payments_outlined, color: primaryGreen, size: 20),
-                                const SizedBox(width: 12),
-                                const Text('Lançar Pagamento'),
-                              ],
+                                 const SizedBox(width: 12),
+                                 Text(StringUtils.toTitleCase('Lançar Pagamento')),
+                               ],
                             ),
                           ),
                         ],
@@ -1592,9 +1595,9 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             child: Row(
                               children: [
                                 Icon(Icons.edit_note, color: accent, size: 20),
-                                const SizedBox(width: 12),
-                                const Text('Editar Pagamento'),
-                              ],
+                                 const SizedBox(width: 12),
+                                 Text(StringUtils.toTitleCase('Editar Pagamento')),
+                               ],
                             ),
                           ),
                           PopupMenuItem(
@@ -1602,9 +1605,9 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             child: Row(
                               children: [
                                 const Icon(Icons.money_off, color: Colors.red, size: 20),
-                                const SizedBox(width: 12),
-                                const Text('Não Pago'),
-                              ],
+                                 const SizedBox(width: 12),
+                                 Text(StringUtils.toTitleCase('Não Pago')),
+                               ],
                             ),
                           ),
                         ],
@@ -1614,9 +1617,9 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             child: Row(
                               children: [
                                 const Icon(Icons.check_circle_outline, color: Colors.green, size: 20),
-                                const SizedBox(width: 12),
-                                const Text('Concluir'),
-                              ],
+                                 const SizedBox(width: 12),
+                                 Text(StringUtils.toTitleCase('Concluir')),
+                               ],
                             ),
                           ),
                           PopupMenuItem(
@@ -1624,9 +1627,9 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                             child: Row(
                               children: [
                                 const Icon(Icons.person_off_outlined, color: Colors.orange, size: 20),
-                                const SizedBox(width: 12),
-                                const Text('No-show'),
-                              ],
+                                 const SizedBox(width: 12),
+                                 Text(StringUtils.toTitleCase('No-show')),
+                               ],
                             ),
                           ),
                         ],
@@ -1636,8 +1639,8 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         value: 'ver_cliente',
                         child: Row(children: [
                           Icon(Icons.person_outline, size: 18, color: primaryGreen),
-                          const SizedBox(width: 8),
-                          const Text('Ver dados do cliente'),
+                           const SizedBox(width: 8),
+                          Text(StringUtils.toTitleCase('Ver dados do cliente')),
                         ]),
                       ),
                     ];
@@ -1795,12 +1798,12 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
               return [
                 if (!isPast) ...[
                   if (status != 'concluido')
-                    const PopupMenuItem(value: 'concluido', child: Text('Concluir')),
+                    PopupMenuItem(value: 'concluido', child: Text(StringUtils.toTitleCase('Concluir'))),
                   
-                  const PopupMenuItem(value: 'confirmado', child: Text('Confirmar')),
-                  const PopupMenuItem(value: 'alterar', child: Text('Alterar')),
-                  const PopupMenuItem(value: 'switch_prof', child: Text('Trocar Profissional')),
-                  const PopupMenuItem(value: 'cancelado', child: Text('Cancelar')),
+                  PopupMenuItem(value: 'confirmado', child: Text(StringUtils.toTitleCase('Confirmar'))),
+                  PopupMenuItem(value: 'alterar', child: Text(StringUtils.toTitleCase('Alterar'))),
+                  PopupMenuItem(value: 'switch_prof', child: Text(StringUtils.toTitleCase('Trocar Profissional'))),
+                  PopupMenuItem(value: 'cancelado', child: Text(StringUtils.toTitleCase('Cancelar'))),
                   
                   if (appt['pago'] != true && status != 'concluido') ...[
                     const PopupMenuDivider(),
@@ -1810,7 +1813,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.attach_money, size: 18, color: primaryGreen),
                           const SizedBox(width: 8),
-                          const Text('Lançar Pagamento'),
+                          Text(StringUtils.toTitleCase('Lançar Pagamento')),
                         ],
                       ),
                     ),
@@ -1823,7 +1826,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.edit_outlined, size: 18, color: accent),
                           const SizedBox(width: 8),
-                          const Text('Editar Pagamento'),
+                          Text(StringUtils.toTitleCase('Editar Pagamento')),
                         ],
                       ),
                     ),
@@ -1833,7 +1836,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.money_off, size: 18, color: Colors.red),
                           const SizedBox(width: 8),
-                          const Text('Não Pago (Excluir)'),
+                          Text(StringUtils.toTitleCase('Não Pago (Excluir)')),
                         ],
                       ),
                     ),
@@ -1848,7 +1851,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.attach_money, size: 18, color: primaryGreen),
                           const SizedBox(width: 8),
-                          const Text('Lançar Pagamento'),
+                          Text(StringUtils.toTitleCase('Lançar Pagamento')),
                         ],
                       ),
                     ),
@@ -1860,7 +1863,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.edit_outlined, size: 18, color: accent),
                           const SizedBox(width: 8),
-                          const Text('Editar Pagamento'),
+                          Text(StringUtils.toTitleCase('Editar Pagamento')),
                         ],
                       ),
                     ),
@@ -1870,7 +1873,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                         children: [
                           Icon(Icons.money_off, size: 18, color: Colors.red),
                           const SizedBox(width: 8),
-                          const Text('Não Pago (Excluir)'),
+                          Text(StringUtils.toTitleCase('Não Pago (Excluir)')),
                         ],
                       ),
                     ),
@@ -1881,7 +1884,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                       children: [
                         Icon(Icons.check_circle_outline, size: 18, color: primaryGreen),
                         const SizedBox(width: 8),
-                        const Text('Concluir'),
+                        Text(StringUtils.toTitleCase('Concluir')),
                       ],
                     ),
                   ),
@@ -1891,7 +1894,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                       children: [
                         Icon(Icons.person_off_outlined, size: 18, color: Colors.deepOrange),
                         const SizedBox(width: 8),
-                        const Text('No-show (Não compareceu)'),
+                        Text(StringUtils.toTitleCase('No-show (Não compareceu)')),
                       ],
                     ),
                   ),
@@ -1903,7 +1906,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                     children: [
                       Icon(Icons.person_outline, size: 18, color: primaryGreen),
                       const SizedBox(width: 8),
-                      const Text('Ver dados do cliente'),
+                      Text(StringUtils.toTitleCase('Ver dados do cliente')),
                     ],
                   ),
                 ),
@@ -1956,12 +1959,12 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 'dinheiro', child: Text('Dinheiro')),
-                    DropdownMenuItem(value: 'pix', child: Text('PIX')),
-                    DropdownMenuItem(value: 'cartao_credito', child: Text('Cartão de Crédito')),
-                    DropdownMenuItem(value: 'cartao_debito', child: Text('Cartão de Débito')),
-                    DropdownMenuItem(value: 'convenio', child: Text('Convênio')),
+                  items: [
+                    DropdownMenuItem(value: 'dinheiro', child: Text(StringUtils.toTitleCase('Dinheiro'))),
+                    DropdownMenuItem(value: 'pix', child: Text(StringUtils.toTitleCase('PIX'))),
+                    DropdownMenuItem(value: 'cartao_credito', child: Text(StringUtils.toTitleCase('Cartão de Crédito'))),
+                    DropdownMenuItem(value: 'cartao_debito', child: Text(StringUtils.toTitleCase('Cartão de Débito'))),
+                    DropdownMenuItem(value: 'convenio', child: Text(StringUtils.toTitleCase('Convênio'))),
                   ],
                   onChanged: (val) {
                     setState(() {
@@ -2018,10 +2021,8 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
-                'Cancelar', 
-                style: TextStyle(color: accent, 
-                  fontWeight: FontWeight.bold,
-                )
+                StringUtils.toTitleCase('Cancelar'), 
+                style: AppButtonStyles.cancelTextStyle(),
               ),
             ),
               ElevatedButton(
@@ -2053,17 +2054,16 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
+            style: AppButtonStyles.cancelButtonStyle(),
             child: Text(
-              'Cancelar', 
-              style: TextStyle(color: accent, 
-                fontWeight: FontWeight.bold,
-              )
+              StringUtils.toTitleCase('Cancelar'), 
+              style: AppButtonStyles.cancelTextStyle(),
             ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: const Text('Confirmar'),
+            style: AppButtonStyles.primary(backgroundColor: Colors.red),
+            child: Text(StringUtils.toTitleCase('Confirmar')),
           ),
         ],
       ),
@@ -2173,7 +2173,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(StringUtils.toTitleCase('Cancelar'))),
           ],
         ),
       );
@@ -2207,7 +2207,14 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
           title: const Text('Confirmar Troca'),
           content: Text('Deseja realmente trocar para o profissional ${selectedProf.nome}?'),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Não')),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              style: AppButtonStyles.cancelButtonStyle(),
+              child: Text(
+                StringUtils.toTitleCase('Não'),
+                style: AppButtonStyles.cancelTextStyle(),
+              ),
+            ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
               style: AppButtonStyles.primary(),

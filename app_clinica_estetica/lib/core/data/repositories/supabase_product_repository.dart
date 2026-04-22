@@ -67,7 +67,7 @@ class SupabaseProductRepository {
   /// Busca o histórico de movimentações (vendas e entradas manuais)
   Future<List<Map<String, dynamic>>> getProductMovements({String? type}) async {
     try {
-      var query = _supabase.from('historico_estoque').select('*, produtos(nome, imagem_url)');
+      var query = _supabase.from('historico_estoque').select('*, produtos(nome, imagem_url, categoria), profissional:perfis!historico_estoque_criado_por_fkey(nome_completo)');
       
       if (type != null && type != 'todos') {
         query = query.eq('tipo_movimentacao', type);
@@ -114,12 +114,26 @@ class SupabaseProductRepository {
     try {
       final res = await _supabase
           .from('vendas_produtos')
-          .select('*, produtos(nome, imagem_url, categoria)')
+          .select('*, produtos(nome, imagem_url, categoria), profissional:perfis!vendas_produtos_profissional_id_fkey(nome_completo)')
           .eq('cliente_id', clientId)
           .order('criado_em', ascending: false);
       return List<Map<String, dynamic>>.from(res as List);
     } catch (e) {
       rethrow;
+    }
+  }
+  /// Busca os detalhes de uma venda específica
+  Future<Map<String, dynamic>?> getSaleDetails(String saleId) async {
+    try {
+      final res = await _supabase
+          .from('vendas_produtos')
+          .select('*, produtos(nome, imagem_url), cliente:perfis!vendas_produtos_cliente_id_fkey(nome_completo), profissional:perfis!vendas_produtos_profissional_id_fkey(nome_completo)')
+          .eq('id', saleId)
+          .maybeSingle();
+      return res;
+    } catch (e) {
+      debugPrint('Erro ao buscar detalhes da venda: $e');
+      return null;
     }
   }
 }
