@@ -1,6 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_clinica_estetica/features/auth/data/auth_service.dart';
+import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AlterarSenhaPage extends StatefulWidget {
   const AlterarSenhaPage({super.key});
@@ -96,22 +98,27 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF2F5E46);
-    const backgroundColor = Color(0xFFF6F4EF);
+    final primaryColor = AppColors.primary;
+    final backgroundColor = AppColors.background;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: backgroundColor,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: primaryColor),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: primaryColor, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Alterar Senha',
-          style: TextStyle(color: primaryColor,
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.playfairDisplay(
+            color: primaryColor,
+            fontWeight: FontWeight.w900,
+            fontSize: 18,
+            letterSpacing: 1.2,
           ),
         ),
         centerTitle: true,

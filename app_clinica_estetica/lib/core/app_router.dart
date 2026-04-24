@@ -47,7 +47,9 @@ import 'package:app_clinica_estetica/features/admin/presentation/pages/relatorio
 import 'package:app_clinica_estetica/features/admin/presentation/pages/relatorios/admin_detalhes_relatorio_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/shell/profissional_shell_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/agenda/profissional_agenda_page.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/pages/agenda/profissional_novo_agendamento_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/relatorios/profissional_relatorios_page.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/pages/relatorios/profissional_detalhes_relatorio_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/perfil/profissional_perfil_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/notificacoes/profissional_notificacoes_page.dart';
 import 'package:app_clinica_estetica/features/profissional/presentation/pages/auth/profissional_confirmacao_logout_page.dart';
@@ -540,8 +542,26 @@ final appRouter = GoRouter(
           builder: (context, state) => const ProfissionalAgendaPage(),
         ),
         GoRoute(
+          path: '/profissional/novo-agendamento',
+          builder: (context, state) => const ProfissionalNovoAgendamentoPage(),
+        ),
+        GoRoute(
           path: '/profissional/relatorios',
           builder: (context, state) => const ProfissionalRelatoriosPage(),
+        ),
+        GoRoute(
+          path: '/profissional/relatorios/detalhes/:category',
+          builder: (context, state) {
+            final category = state.pathParameters['category']!;
+            final extra = state.extra as Map<String, dynamic>?;
+            final range = extra?['range'] as DateTimeRange?;
+            final professionalId = extra?['professionalId'] as String?;
+            return ProfissionalDetalhesRelatorioPage(
+              reportCategory: category,
+              initialRange: range,
+              professionalId: professionalId,
+            );
+          },
         ),
         GoRoute(
           path: '/profissional/perfil',

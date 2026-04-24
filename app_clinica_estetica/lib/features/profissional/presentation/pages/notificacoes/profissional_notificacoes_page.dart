@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/features/auth/data/auth_service.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
 import 'package:app_clinica_estetica/core/data/models/notification_model.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_app_bar.dart';
 
 class ProfissionalNotificacoesPage extends StatefulWidget {
   const ProfissionalNotificacoesPage({super.key});
@@ -81,9 +82,13 @@ class _ProfissionalNotificacoesPageState extends State<ProfissionalNotificacoesP
       lidasAgrupadas[label]!.add(n);
     }
 
-    return Column(
-      children: [
-        _buildSimplifiedHeader(),
+    return Scaffold(
+      backgroundColor: bgColor,
+      appBar: const ProfissionalAppBar(title: 'Notificações', showBackButton: true),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildSimplifiedHeader(),
         Expanded(
           child: _isLoading
               ? Center(child: CircularProgressIndicator(color: primaryGreen))
@@ -139,7 +144,9 @@ class _ProfissionalNotificacoesPageState extends State<ProfissionalNotificacoesP
                       ),
                     ),
         ),
-      ],
+          ],
+        ),
+      ),
     );
   }
 

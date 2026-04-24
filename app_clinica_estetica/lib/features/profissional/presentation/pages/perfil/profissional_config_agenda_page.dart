@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_professional_repository.dart';
 import 'package:app_clinica_estetica/core/data/repositories/supabase_notification_repository.dart';
+import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_app_bar.dart';
 
 class ProfissionalConfigAgendaPage extends StatefulWidget {
   final int initialIndex;
@@ -22,41 +24,34 @@ class _ProfissionalConfigAgendaPageState extends State<ProfissionalConfigAgendaP
       length: 3,
       initialIndex: widget.initialIndex,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: primaryColor, size: 20),
-            onPressed: () => context.pop(),
-          ),
-          title: Text(
-            'Gerenciar Agenda',
-            style: TextStyle(fontFamily: 'Playfair Display', 
-              color: primaryColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-          centerTitle: true,
-          bottom: TabBar(
-            labelColor: primaryColor,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: accentColor,
-            isScrollable: true,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-            tabs: const [
-              Tab(text: 'Horário Trabalho'),
-              Tab(text: 'Horário Almoço'),
-              Tab(text: 'Fechar Agenda'),
-            ],
-          ),
+        backgroundColor: AppColors.background,
+        appBar: const ProfissionalAppBar(
+          title: 'Configurações da Agenda',
+          showBackButton: true,
         ),
-        body: const TabBarView(
+        body: Column(
           children: [
-            _AbaHorarioTrabalho(),
-            _AbaHorarioAlmoco(),
-            _AbaFecharAgenda(),
+            TabBar(
+              labelColor: primaryColor,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: accentColor,
+              isScrollable: true,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              tabs: const [
+                Tab(text: 'Horário Trabalho'),
+                Tab(text: 'Horário Almoço'),
+                Tab(text: 'Fechar Agenda'),
+              ],
+            ),
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  _AbaHorarioTrabalho(),
+                  _AbaHorarioAlmoco(),
+                  _AbaFecharAgenda(),
+                ],
+              ),
+            ),
           ],
         ),
       ),

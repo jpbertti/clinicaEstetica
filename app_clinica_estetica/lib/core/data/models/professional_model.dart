@@ -1,6 +1,7 @@
 class ProfessionalModel {
   final String id;
   final String nome;
+  String get nome_completo => nome; // Alias para compatibilidade
   final String? email;
   final String? avatarUrl;
   final String tipo;

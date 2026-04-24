@@ -183,6 +183,25 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
 
   Future<void> _loadProfessionals() async {
     try {
+      // Se já foi passado um profissional nas props, vamos usá-lo e fixá-lo
+      if (widget.profissional != null) {
+        final prof = ProfessionalModel(
+          id: widget.profissional!.id,
+          nome: widget.profissional!.nomeCompleto,
+          avatarUrl: widget.profissional!.avatarUrl,
+          tipo: widget.profissional!.tipo,
+          cargo: 'Profissional',
+          comissaoProdutosPercentual: 0,
+          comissaoAgendamentosPercentual: 0,
+        );
+        setState(() {
+          _professionals = [prof];
+          _selectedProfessional = prof;
+          _isLoadingProfs = false;
+        });
+        return;
+      }
+
       final String? targetServiceId = widget.service?.id ?? widget.serviceId;
       final String? targetPackageId = widget.pacote?.id;
       

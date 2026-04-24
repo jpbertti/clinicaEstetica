@@ -2354,7 +2354,7 @@ BEGIN
             VALUES (
                 v_admin_id,
                 'Cliente não compareceu (No-Show)',
-                'O cliente ' || COALESCE(v_cliente_nome, 'Desconhecido') || ' não compareceu ao agendamento de ' || COALESCE(v_servico_nome, 'Serviço') || ' com ' || COALESCE(v_profissional_nome, 'Profissional') || ' em ' || TO_CHAR(NEW.data, 'DD/MM/YYYY') || ' às ' || TO_CHAR(NEW.hora_inicio, 'HH24:MI') || '.',
+                'O cliente ' || COALESCE(v_cliente_nome, 'Desconhecido') || ' não compareceu ao agendamento de ' || COALESCE(v_servico_nome, 'Serviço') || ' com ' || COALESCE(v_profissional_nome, 'Profissional') || ' em ' || TO_CHAR(NEW.data_hora, 'DD/MM/YYYY') || ' às ' || TO_CHAR(NEW.data_hora, 'HH24:MI') || '.',
                 'agendamento',
                 jsonb_build_object('agendamento_id', NEW.id, 'status', 'no_show')
             );

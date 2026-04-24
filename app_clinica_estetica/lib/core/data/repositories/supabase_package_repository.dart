@@ -117,6 +117,28 @@ class SupabasePackageRepository implements PackageRepository {
     return (response as List).map((e) => PacoteContratadoModel.fromJson(e)).toList();
   }
 
+  Future<List<PacoteTemplateModel>> getTemplatesByProfessional(String profId) async {
+    final linksResponse = await _supabase
+        .from('profissional_pacotes')
+        .select('pacote_id')
+        .eq('profissional_id', profId);
+    
+    final List<String> linkedIds = (linksResponse as List)
+        .map((e) => e['pacote_id'].toString())
+        .toList();
+
+    if (linkedIds.isEmpty) return [];
+
+    final response = await _supabase
+        .from('pacotes_templates')
+        .select('*, admin_perfil:admin_promocao_id(nome_completo), pacote_servicos(servico_id, quantidade_sessoes, servicos(nome))')
+        .eq('ativo', true)
+        .inFilter('id', linkedIds)
+        .order('titulo', ascending: true);
+
+    return (response as List).map((e) => PacoteTemplateModel.fromJson(e)).toList();
+  }
+
   @override
   Future<PacoteContratadoModel> getContratadoById(String id) async {
     final response = await _supabase

@@ -1,8 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:app_clinica_estetica/features/auth/data/auth_service.dart';
+import 'package:app_clinica_estetica/core/theme/app_colors.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_app_bar.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_bottom_nav_bar.dart';
 
 class ProfissionalPerfilPage extends StatefulWidget {
   const ProfissionalPerfilPage({super.key});
@@ -15,6 +18,13 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
   final _authService = AuthService();
   bool _isUpdating = false;
   final _picker = ImagePicker();
+
+  // Color constants
+  final Color primaryColor = AppColors.primary;
+  final Color goldColor = const Color(0xFFC7A36B);
+  final Color backgroundColor = AppColors.background;
+  final Color softGreen = const Color(0xFF6E8F7B);
+  final Color premiumGray = const Color(0xFF2B2B2B);
 
   Future<void> _selecionarImagem(ImageSource source) async {
     try {
@@ -49,7 +59,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erro ao atualizar imagem: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -57,7 +67,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
   }
 
   void _mostrarOpcoesFonteImagem() {
-    const primaryColor = Color(0xFF2F5E46);
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -68,7 +77,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.photo_library, color: primaryColor),
+              leading: Icon(Icons.photo_library, color: AppColors.primary),
               title: const Text('Escolher da Galeria'),
               onTap: () {
                 Navigator.pop(context);
@@ -76,7 +85,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.camera_alt, color: primaryColor),
+              leading: Icon(Icons.camera_alt, color: AppColors.primary),
               title: const Text('Tirar Foto'),
               onTap: () {
                 Navigator.pop(context);
@@ -91,8 +100,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
 
   void _mostrarDialogoEdicao(String title, String currentValue, {bool isEmail = false, bool isNome = false, bool isCargo = false}) {
     final controller = TextEditingController(text: currentValue);
-    const goldColor = Color(0xFFC7A36B);
-    const primaryColor = Color(0xFF2F5E46);
 
     showDialog(
       context: context,
@@ -174,9 +181,9 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
 
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Perfil atualizado!'),
-                            backgroundColor: Colors.green,
+                          SnackBar(
+                            content: const Text('Perfil atualizado!'),
+                            backgroundColor: AppColors.success,
                           ),
                         );
                         setState(() {});
@@ -220,12 +227,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF2F5E46);
-    const goldColor = Color(0xFFC7A36B);
-    const backgroundColor = Color(0xFFF6F4EF);
-    const softGreen = Color(0xFF6E8F7B);
-    const premiumGray = Color(0xFF2B2B2B);
-
     final String userName = AuthService.currentUserNome ?? 'Profissional';
     final String userCargo = AuthService.currentUserCargo ?? 'Cargo não informado';
 
@@ -233,18 +234,20 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
       children: [
         Scaffold(
           backgroundColor: backgroundColor,
+          appBar: const ProfissionalAppBar(title: 'Perfil'),
+          bottomNavigationBar: const ProfissionalBottomNavigationBar(activeIndex: 2),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  _construirSecaoFotoPerfil(userName, userCargo, softGreen, goldColor, premiumGray),
+                  _construirSecaoFotoPerfil(userName, userCargo),
                   const SizedBox(height: 32),
-                  _construirSecaoInformacoesPessoais(primaryColor, goldColor, premiumGray, softGreen),
+                  _construirSecaoInformacoesPessoais(),
                   const SizedBox(height: 16),
-                  _construirSecaoConfiguracoes(context, primaryColor, goldColor, softGreen),
+                  _construirSecaoConfiguracoes(context),
                   const SizedBox(height: 32),
-                  _construirBotaoSair(context, primaryColor, goldColor, softGreen),
+                  _construirBotaoSair(context),
                   const SizedBox(height: 60),
                 ],
               ),
@@ -254,7 +257,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
         if (_isUpdating)
           Container(
             color: Colors.black.withOpacity(0.3),
-            child: const Center(
+            child: Center(
               child: CircularProgressIndicator(color: goldColor),
             ),
           ),
@@ -262,11 +265,8 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
     );
   }
 
-  Widget _buildVerticalDivider(Color color) {
-    return Container(width: 1, height: 10, color: color.withOpacity(0.2), margin: const EdgeInsets.symmetric(vertical: 2));
-  }
 
-  Widget _construirSecaoFotoPerfil(String userName, String userCargo, Color softGreen, Color goldColor, Color premiumGray) {
+  Widget _construirSecaoFotoPerfil(String userName, String userCargo) {
     return Column(
       children: [
         Stack(
@@ -315,9 +315,9 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.camera_alt,
-                    color: Colors.white,
+                    color: AppColors.white,
                     size: 20,
                   ),
                 ),
@@ -328,10 +328,11 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
         const SizedBox(height: 24),
         Text(
           userName,
-          style: TextStyle(fontFamily: 'Playfair Display', 
+          style: TextStyle(
+            fontFamily: 'Playfair Display',
             fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: premiumGray,
+            color: primaryColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -347,12 +348,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
     );
   }
 
-  Widget _construirSecaoInformacoesPessoais(
-    Color primaryColor,
-    Color goldColor,
-    Color premiumGray,
-    Color softGreen,
-  ) {
+  Widget _construirSecaoInformacoesPessoais() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Container(
@@ -380,14 +376,16 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                   ),
                   child: Icon(
                     Icons.badge_outlined,
-                    color: primaryColor,
+                    color: AppColors.primary,
                     size: 20,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   'Dados Pessoais',
-                  style: TextStyle(fontSize: 18,
+                  style: TextStyle(
+                    fontFamily: 'Playfair Display',
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: primaryColor,
                   ),
@@ -405,7 +403,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                 AuthService.currentUserNome ?? '',
                 isNome: true,
               ),
-              goldColor: goldColor,
             ),
              _construirItemInfo(
               'CARGO',
@@ -417,7 +414,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                 AuthService.currentUserCargo ?? '',
                 isCargo: true,
               ),
-              goldColor: goldColor,
             ),
             _construirItemInfo(
               'E-MAIL',
@@ -429,7 +425,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                 AuthService.currentUserEmail ?? '',
                 isEmail: true,
               ),
-              goldColor: goldColor,
             ),
             _construirItemInfo(
               'TELEFONE',
@@ -441,7 +436,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
                 'Telefone',
                 AuthService.currentUserTelefone ?? '',
               ),
-              goldColor: goldColor,
             ),
           ],
         ),
@@ -449,12 +443,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
     );
   }
 
-  Widget _construirSecaoConfiguracoes(
-    BuildContext context,
-    Color primaryColor,
-    Color goldColor,
-    Color softGreen,
-  ) {
+  Widget _construirSecaoConfiguracoes(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -512,12 +501,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
     );
   }
 
-  Widget _construirBotaoSair(
-    BuildContext context,
-    Color primaryColor,
-    Color goldColor,
-    Color softGreen,
-  ) {
+  Widget _construirBotaoSair(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: GestureDetector(
@@ -526,7 +510,7 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
           icon: Icons.logout_rounded,
           title: 'Sair da conta',
           subtitle: 'Encerrar sessão no aplicativo',
-          pColor: primaryColor,
+          pColor: AppColors.primary,
           gColor: goldColor,
           softGreen: softGreen,
         ),
@@ -541,7 +525,6 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
     Color softGreen, {
     bool isLast = false,
     VoidCallback? onEdit,
-    Color? goldColor,
   }) {
     // Cálculo para alinhar ao FINAL do ícone (Container padding 8 + Icon size 20 = 36 + gap 12 = 48)
     return Padding(
@@ -623,7 +606,9 @@ class _ProfissionalPerfilPageState extends State<ProfissionalPerfilPage> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontSize: 18,
+                  style: TextStyle(
+                    fontFamily: 'Playfair Display',
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: pColor,
                   ),

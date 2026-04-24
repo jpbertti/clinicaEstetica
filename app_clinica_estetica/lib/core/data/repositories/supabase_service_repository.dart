@@ -18,6 +18,32 @@ class SupabaseServiceRepository implements IServiceRepository {
         .toList();
   }
 
+  Future<List<ServiceModel>> getServicesByProfessional(String professionalId) async {
+    // 1. Get linked service IDs
+    final linksResponse = await _client
+        .from('profissional_servicos')
+        .select('servico_id')
+        .eq('profissional_id', professionalId);
+    
+    final List<String> linkedIds = (linksResponse as List)
+        .map((e) => e['servico_id'].toString())
+        .toList();
+
+    if (linkedIds.isEmpty) return [];
+
+    // 2. Get services matching those IDs
+    final response = await _client
+        .from('servicos')
+        .select('*, categorias(nome), admin_perfil:admin_promocao_id(nome_completo)')
+        .eq('ativo', true)
+        .inFilter('id', linkedIds)
+        .order('nome');
+
+    return (response as List)
+        .map((json) => ServiceModel.fromJson(json))
+        .toList();
+  }
+
   @override
   Future<List<ServiceModel>> searchServices(String query) async {
     if (query.isEmpty) return [];

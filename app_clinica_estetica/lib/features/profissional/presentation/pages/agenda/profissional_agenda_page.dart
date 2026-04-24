@@ -12,6 +12,9 @@ import 'package:app_clinica_estetica/core/data/models/professional_model.dart';
 import 'package:app_clinica_estetica/core/theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_clinica_estetica/features/admin/presentation/widgets/admin_reagendamento_modal.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/pages/shell/profissional_shell_page.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_app_bar.dart';
+import 'package:app_clinica_estetica/features/profissional/presentation/widgets/profissional_bottom_nav_bar.dart';
 
 class ProfissionalAgendaPage extends StatefulWidget {
   const ProfissionalAgendaPage({super.key});
@@ -45,12 +48,22 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
   final Color primaryGreen = AppColors.primary;
   final Color accent = AppColors.accent;
   final Color bgColor = AppColors.background;
+  final Color goldColor = const Color(0xFFC7A36B);
 
   @override
   void initState() {
     super.initState();
     _loadInitialData();
+    // Escuta por pedidos de atualização vindos do Shell
+    ProfissionalShellPage.refreshNotifier.addListener(_loadAppointments);
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelectedDay());
+  }
+
+  @override
+  void dispose() {
+    ProfissionalShellPage.refreshNotifier.removeListener(_loadAppointments);
+    _dayScrollController.dispose();
+    super.dispose();
   }
 
   void _scrollToSelectedDay() {
@@ -324,7 +337,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('CANCELAR', style: TextStyle(color: accent, fontWeight: FontWeight.bold)),
+            child: Text('Cancelar', style: TextStyle(color: accent, fontWeight: FontWeight.bold)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -460,7 +473,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-              child: Text('CANCELAR', style: TextStyle(color: accent, fontWeight: FontWeight.bold, letterSpacing: 0.8)),
+              child: Text('Cancelar', style: TextStyle(color: accent, fontWeight: FontWeight.bold, letterSpacing: 0.8)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -524,6 +537,13 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
+      appBar: const ProfissionalAppBar(title: 'Agenda'),
+      bottomNavigationBar: const ProfissionalBottomNavigationBar(activeIndex: 0),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/profissional/novo-agendamento'),
+        backgroundColor: accent,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -533,47 +553,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                 padding: const EdgeInsets.only(top: 20, bottom: 10),
                 child: Column(
                   children: [
-                    // --- Monthly View Button (Green with White labels) ---
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            _isMonthlyView = !_isMonthlyView;
-                            if (_isMonthlyView) {
-                              _isGridView = false;
-                              _isCalendarExpanded = false;
-                            } else {
-                              _selectedDate = DateTime.now();
-                              // Não resetamos _isGridView aqui para respeitar a preferência do usuário
-                            }
-                            _loadAppointments();
-                          });
-                        },
-                        icon: Icon(
-                          _isMonthlyView ? Icons.today : Icons.calendar_month,
-                          color: AppColors.white,
-                          size: 20,
-                        ),
-                        label: Text(
-                          _isMonthlyView ? 'Exibir agendamentos por dia' : 'Mostrar agendamentos do mês',
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryGreen,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 2,
-                        ),
-                      ),
-                    ),
-
-                    // --- Header: Month Navigation ---
+                    // --- Navegação de Mês ---
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -584,11 +564,17 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                         Expanded(
                           child: Center(
                             child: Text(
-                              DateFormat('MMMM yyyy', 'pt_BR').format(_selectedDate).toUpperCase(),
-                              style: TextStyle(fontSize: 18,
+                              () {
+                                String formatted = DateFormat('MMMM yyyy', 'pt_BR').format(_selectedDate);
+                                if (formatted.isEmpty) return '';
+                                return formatted[0].toUpperCase() + formatted.substring(1);
+                              }(),
+                              style: TextStyle(
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: primaryGreen,
-                                letterSpacing: 1.2,
+                                fontFamily: 'Playfair Display',
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
@@ -600,20 +586,103 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                       ],
                     ),
 
+                    // --- Botão Visualização Mensal ---
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 0),
+                      child: TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _isMonthlyView = !_isMonthlyView;
+                            if (_isMonthlyView) _isGridView = false;
+                            _loadAppointments();
+                          });
+                        },
+                        icon: Icon(
+                          _isMonthlyView ? Icons.calendar_view_day : Icons.calendar_month,
+                          color: accent,
+                          size: 18,
+                        ),
+                        label: Text(
+                          _isMonthlyView ? 'Visualização Diária' : 'Visualização Mensal',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: primaryGreen,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // --- Seletor de dia (apenas no modo diário) ---
                     if (!_isMonthlyView) ...[
+                      const SizedBox(height: 10),
+                      _buildDaySelector(),
+                      const SizedBox(height: 10),
                       TextButton.icon(
                         onPressed: () => setState(() => _isCalendarExpanded = !_isCalendarExpanded),
-                        icon: Icon(_isCalendarExpanded ? Icons.keyboard_arrow_up : Icons.calendar_month, color: primaryGreen),
-                        label: Text(_isCalendarExpanded ? 'Fechar Calendário' : 'Abrir Calendário', style: TextStyle(color: primaryGreen)),
+                        icon: Icon(
+                          _isCalendarExpanded ? Icons.keyboard_arrow_up : Icons.calendar_month,
+                          color: primaryGreen,
+                        ),
+                        label: Text(
+                          _isCalendarExpanded ? 'Fechar Calendário' : 'Abrir Calendário',
+                          style: TextStyle(color: primaryGreen),
+                        ),
                       ),
                       if (_isCalendarExpanded) ...[
                         const SizedBox(height: 10),
                         _buildFullCalendar(),
-                      ] else ...[
-                        const SizedBox(height: 10),
-                        _buildDaySelector(),
                       ],
-                    ] else ...[
+                      const SizedBox(height: 10),
+                    ],
+
+                    // --- Filtros: Status + Toggle de Vista ---
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildFilterMenu(
+                            label: 'Status',
+                            currentValue: _selectedStatus.isNotEmpty
+                                ? _selectedStatus[0].toUpperCase() + _selectedStatus.substring(1)
+                                : 'Todos',
+                            options: ['Todos', 'Confirmado', 'Pendente', 'Concluído'],
+                            onSelected: (val) {
+                              setState(() => _selectedStatus = val.toLowerCase() == 'concluído' ? 'concluido' : val.toLowerCase());
+                              _loadAppointments();
+                            },
+                          ),
+                          if (!_isMonthlyView)
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: primaryGreen.withOpacity(0.1)),
+                              ),
+                              child: Row(
+                                children: [
+                                  _buildToggleButton(
+                                    icon: Icons.view_agenda_outlined,
+                                    isSelected: !_isGridView,
+                                    onTap: () => setState(() => _isGridView = false),
+                                  ),
+                                  _buildToggleButton(
+                                    icon: Icons.grid_view_outlined,
+                                    isSelected: _isGridView,
+                                    onTap: () => setState(() => _isGridView = true),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    if (_isMonthlyView) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Row(
@@ -622,8 +691,9 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                             Icon(Icons.calendar_month, color: accent, size: 20),
                             const SizedBox(width: 8),
                             Text(
-                              'VISUALIZAÇÃO MENSAL',
-                              style: TextStyle(fontSize: 14,
+                              'Visualização Mensal',
+                              style: TextStyle(
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryGreen,
                                 letterSpacing: 1.2,
@@ -638,145 +708,127 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
               ),
             ),
 
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverPersistentHeader(
-                key: ValueKey('header_pinned_$_isMonthlyView'),
-                pinned: true,
-                delegate: _StickyHeaderDelegate(
+            // --- Header Sticky com data ---
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: bgColor,
+              scrolledUnderElevation: 0,
+              surfaceTintColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              toolbarHeight: 0,
+              collapsedHeight: 0,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(_isMonthlyView ? 0 : 96),
                 child: Container(
+                  width: double.infinity,
                   color: bgColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: _isMonthlyView ? 0 : 10,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          _buildFilterMenu(
-                            label: 'Status',
-                            currentValue: _selectedStatus.toUpperCase(),
-                            options: ['TODOS', 'CONFIRMADO', 'CANCELADO', 'PENDENTE', 'CONCLUIDO'],
-                            onSelected: (val) {
-                              setState(() => _selectedStatus = val.toLowerCase());
-                              _loadAppointments();
-                            },
-                          ),
-                          const Spacer(),
-                          if (!_isMonthlyView)
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: primaryGreen.withOpacity(0.2)),
-                              ),
-                              child: Row(
-                                children: [
-                                  _buildToggleButton(
-                                    icon: Icons.list,
-                                    isActive: !_isGridView,
-                                    onTap: () => setState(() => _isGridView = false),
-                                  ),
-                                  _buildToggleButton(
-                                    icon: Icons.grid_view,
-                                    isActive: _isGridView,
-                                    onTap: () => setState(() => _isGridView = true),
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
                       if (!_isMonthlyView) ...[
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 4),
                         Text(
-                          DateFormat("EEEE, dd 'de' MMMM 'de' yyyy", 'pt_BR')
-                              .format(_selectedDate)
-                              .split(' ')
-                              .map((word) => word.isNotEmpty 
-                                  ? word.split('-').map((sub) => sub.isNotEmpty ? '${sub[0].toUpperCase()}${sub.substring(1)}' : '').join('-')
-                                  : '')
-                              .join(' '),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 18,
+                          () {
+                            String dateStr = DateFormat("EEEE, dd 'de' MMMM 'de' yyyy", 'pt_BR').format(_selectedDate);
+                            return dateStr.split(' ').map((word) {
+                              if (word.toLowerCase() == 'de') return 'de';
+                              if (word.contains('-')) {
+                                return word.split('-').map((part) =>
+                                  part.isNotEmpty ? part[0].toUpperCase() + part.substring(1) : ''
+                                ).join('-');
+                              }
+                              return word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '';
+                            }).join(' ');
+                          }(),
+                          style: TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: accent,
+                            color: goldColor,
+                            fontFamily: 'Playfair Display',
                           ),
                         ),
                       ],
                     ],
                   ),
                 ),
-                maxExtent: _isMonthlyView ? 70 : 120,
-                minExtent: _isMonthlyView ? 70 : 120,
               ),
             ),
-          ),
-        ];
-      },
-      body: Builder(
-        builder: (context) {
-          return RefreshIndicator(
-            onRefresh: _loadAppointments,
-            color: primaryGreen,
-            child: CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                ),
-                _isLoadingAppts
-                    ? const SliverFillRemaining(
-                        child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
-                      )
-                    : _appointments.isEmpty
-                        ? SliverFillRemaining(
-                            child: SingleChildScrollView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              child: Container(
-                                height: MediaQuery.of(context).size.height * 0.5,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.event_busy, size: 64, color: primaryGreen.withOpacity(0.2)),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      'Nenhum agendamento para este dia.',
-                                      style: TextStyle(color: primaryGreen.withOpacity(0.5)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : (_isMonthlyView
-                            ? _buildMonthlyGroupedList()
-                            : (_isGridView 
-                                ? _buildGridView()
-                                : _buildListView())),
-              ],
-            ),
-          );
+          ];
         },
+        body: _isLoadingAppts
+            ? Center(child: CircularProgressIndicator(color: primaryGreen))
+            : _appointments.isEmpty
+                ? RefreshIndicator(
+                    onRefresh: _loadAppointments,
+                    color: primaryGreen,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.event_busy, size: 64, color: primaryGreen.withOpacity(0.2)),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Nenhum agendamento para este dia.',
+                              style: TextStyle(color: primaryGreen.withOpacity(0.5)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: _loadAppointments,
+                    color: primaryGreen,
+                    child: _isMonthlyView
+                        ? _buildMonthlyGroupedList()
+                        : (_isGridView
+                            ? _buildGridView()
+                            : ListView.builder(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                itemCount: _appointments.length,
+                                itemBuilder: (context, index) {
+                                  final appt = _appointments[index];
+                                  return _buildAppointmentCard(
+                                    appt: appt,
+                                  );
+                                },
+                              )),
+                  ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-  Widget _buildToggleButton({required IconData icon, required bool isActive, required VoidCallback onTap}) {
+
+
+
+  Widget _buildToggleButton({
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive ? primaryGreen : Colors.transparent,
+          color: isSelected ? primaryGreen : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(
           icon,
-          color: isActive ? Colors.white : primaryGreen,
           size: 20,
+          color: isSelected ? Colors.white : primaryGreen.withOpacity(0.4),
         ),
       ),
     );
@@ -786,7 +838,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
   Widget _buildDaySelector() {
     final daysInMonth = DateTime(_selectedDate.year, _selectedDate.month + 1, 0).day;
     return SizedBox(
-      height: 80,
+      height: 95,
       child: ListView.builder(
         controller: _dayScrollController,
         scrollDirection: Axis.horizontal,
@@ -808,7 +860,10 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
               _scrollToSelectedDay(); 
             },
             child: _buildDateItem(
-              DateFormat('EEE', 'pt_BR').format(day).toUpperCase(), 
+              () {
+                String dayStr = DateFormat('EEE', 'pt_BR').format(day);
+                return dayStr.isNotEmpty ? dayStr[0].toUpperCase() + dayStr.substring(1).toLowerCase() : '';
+              }(),
               day.day.toString().padLeft(2, '0'), 
               isSelected,
               isClosed: isClosed,
@@ -1099,20 +1154,6 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
     );
   }
 
-  Widget _buildListView() {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final appt = _appointments[index];
-            return _buildAppointmentCard(appt: appt);
-          },
-          childCount: _appointments.length,
-        ),
-      ),
-    );
-  }
 
   List<Widget> _buildAgendaBlockCards(double hourHeight, int startHour, double maxWidth) {
     return _agendaBlocks.map((block) {
@@ -1351,22 +1392,21 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
       margin: EdgeInsets.only(bottom: useFullHeight ? 0 : 12),
       padding: EdgeInsets.symmetric(
         horizontal: compact ? 12 : 16,
-        vertical: compact ? 6 : 16,
+        vertical: compact ? 8 : 16,
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
         border: compact ? Border.all(color: primaryGreen.withOpacity(0.1)) : null,
       ),
       child: compact
-          // ═══ MODO GRID: Status → Procedimento → Infos | ⋮ ═══
           ? Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1375,7 +1415,6 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // 1. STATUS
                       Container(
                         margin: const EdgeInsets.only(bottom: 6),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1404,7 +1443,7 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                                   : (appt['pago'] == true && status != 'no_show'
                                       ? 'PAGO - ${status.toUpperCase()}'
                                       : status.toUpperCase()),
-                              style: TextStyle(
+                              style: GoogleFonts.manrope(
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,
                                 color: statusColor,
@@ -1414,7 +1453,6 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                           ],
                         ),
                       ),
-                      // 2. PROCEDIMENTO
                       Text(
                         service.toUpperCase(),
                         style: GoogleFonts.playfairDisplay(
@@ -1427,172 +1465,31 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                      // 3. HORARIO
                       Text(
                         '$time ― ${DateFormat('HH:mm').format(endDate)}',
-                        style: TextStyle(
-                          fontSize: 9,
+                        style: GoogleFonts.manrope(
+                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                           color: primaryGreen.withOpacity(0.8),
                         ),
                       ),
                       const SizedBox(height: 5),
-                      // 4. PROFISSIONAL
-                      Text(
-                        appt['profissional']?['nome_completo'] ?? 'Profissional',
-                        style: GoogleFonts.manrope(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: accent.withOpacity(0.8),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      // 5. CLIENTE
                       Text(
                         clientName,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
+                        style: GoogleFonts.manrope(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        '$time ― ${DateFormat('HH:mm').format(endDate)}${_isMonthlyView ? ' (${DateFormat('dd/MM').format(date)})' : ''}',
-                        style: TextStyle(fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: primaryGreen.withOpacity(0.8),
-                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 2),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: AppColors.textLight, size: 18),
-                  onSelected: (value) {
-                    if (value == 'alterar') {
-                      _showReagendarModal(appt);
-                    } else if (value == 'ver_cliente') {
-                      final clientId = appt['perfis']?['id']?.toString() ?? '';
-                      final clientNameLocal = appt['perfis']?['nome_completo'] ?? 'Cliente';
-                      context.push('/admin/clientes/$clientId', extra: clientNameLocal);
-                    } else if (value == 'trocar_profissional') {
-                      _switchProfessional(appt);
-                    } else if (value == 'nao_pago') {
-                      _marcarComoNaoPago(appt);
-                    } else {
-                      _updateStatus(appt, value);
-                    }
-                  },
-                  itemBuilder: (context) {
-                    // isEditable if it belongs to current active cashier (even if concluded)
-                    final isEditable = appt['caixa_id']?.toString() == _activeCaixaId;
-                    return [
-                      if (!isPast) ...[
-                        if (status != 'concluido')
-                          const PopupMenuItem(value: 'concluido', child: Text('Concluir')),
-                        const PopupMenuItem(value: 'confirmado', child: Text('Confirmar')),
-                        const PopupMenuItem(value: 'alterar', child: Text('Alterar / Reagendar')),
-                        const PopupMenuItem(value: 'trocar_profissional', child: Text('Trocar Profissional')),
-                        const PopupMenuItem(value: 'cancelado', child: Text('Cancelar')),
-                        if (appt['pago'] != true) ...[
-                          const PopupMenuDivider(),
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.attach_money, size: 18, color: primaryGreen),
-                              const SizedBox(width: 8),
-                              const Text('Lançar Pagamento'),
-                            ]),
-                          ),
-                        ],
-                        if (isEditable && appt['pago'] == true) ...[
-                          const PopupMenuDivider(),
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.edit_outlined, size: 18, color: accent),
-                              const SizedBox(width: 8),
-                              const Text('Editar Pagamento'),
-                            ]),
-                          ),
-                          PopupMenuItem(
-                            value: 'nao_pago',
-                            child: Row(children: [
-                              Icon(Icons.money_off, size: 18, color: AppColors.error),
-                              const SizedBox(width: 8),
-                              const Text('Não Pago (Excluir)'),
-                            ]),
-                          ),
-                        ],
-                        const PopupMenuDivider(),
-                      ],
-                      if (isPast && (status != 'concluido' || isEditable || appt['pago'] != true) && status != 'cancelado' && status != 'no_show') ...[
-                        if (appt['pago'] != true) ...[
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.attach_money, size: 18, color: primaryGreen),
-                              const SizedBox(width: 8),
-                              const Text('Lançar Pagamento'),
-                            ]),
-                          ),
-                        ],
-                        if (isEditable && appt['pago'] == true) ...[
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.edit_outlined, size: 18, color: accent),
-                              const SizedBox(width: 8),
-                              const Text('Editar Pagamento'),
-                            ]),
-                          ),
-                          PopupMenuItem(
-                            value: 'nao_pago',
-                            child: Row(children: [
-                              Icon(Icons.money_off, size: 18, color: AppColors.error),
-                              const SizedBox(width: 8),
-                              const Text('Não Pago (Excluir)'),
-                            ]),
-                          ),
-                        ],
-                        PopupMenuItem(
-                          value: 'concluido',
-                          child: Row(children: [
-                            Icon(Icons.check_circle_outline, size: 18, color: primaryGreen),
-                            const SizedBox(width: 8),
-                            const Text('Concluir'),
-                          ]),
-                        ),
-                        PopupMenuItem(
-                          value: 'no_show',
-                          child: Row(children: [
-                            Icon(Icons.person_off_outlined, size: 18, color: AppColors.warning),
-                            const SizedBox(width: 8),
-                            const Text('No-show (Não compareceu)'),
-                          ]),
-                        ),
-                        const PopupMenuDivider(),
-                      ],
-                      PopupMenuItem(
-                        value: 'ver_cliente',
-                        child: Row(children: [
-                          Icon(Icons.person_outline, size: 18, color: primaryGreen),
-                          const SizedBox(width: 8),
-                          const Text('Ver dados do cliente'),
-                        ]),
-                      ),
-                    ];
-                  },
-                ),
+                _buildCardActionMenu(appt, isPast, status, statusColor, true),
               ],
             )
-          // ═══ MODO LISTA: layout original ═══
           : Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -1601,16 +1498,18 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                   children: [
                     Text(
                       time,
-                      style: TextStyle(fontSize: 15,
+                      style: GoogleFonts.manrope(
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: primaryGreen,
                       ),
                     ),
                     Text(
                       DateFormat('HH:mm').format(endDate),
-                      style: TextStyle(fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: primaryGreen,
+                      style: GoogleFonts.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: primaryGreen.withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -1621,13 +1520,12 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // 1. STATUS
                       Container(
                         margin: const EdgeInsets.only(bottom: 8),
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
+                          color: statusColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -1650,8 +1548,8 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                                   : (appt['pago'] == true && status != 'no_show'
                                       ? 'PAGO - ${status.toUpperCase()}'
                                       : status.toUpperCase()),
-                              style: TextStyle(
-                                fontSize: 9,
+                              style: GoogleFonts.manrope(
+                                fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: statusColor,
                                 letterSpacing: 0.5,
@@ -1660,7 +1558,6 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                           ],
                         ),
                       ),
-                      // 2. PROCEDIMENTO
                       Text(
                         service.toUpperCase(),
                         style: GoogleFonts.playfairDisplay(
@@ -1673,162 +1570,186 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                      // 3. CLIENTE
                       Text(
                         clientName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      // 4. PROFISSIONAL
-                      Text(
-                        appt['profissional']?['nome_completo'] ?? 'Profissional',
                         style: GoogleFonts.manrope(
                           fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: accent.withOpacity(0.8),
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (_isMonthlyView) ...[
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(
                           DateFormat('dd/MM').format(date),
-                          style: TextStyle(fontSize: 11,
+                          style: GoogleFonts.manrope(
+                            fontSize: 11,
                             fontWeight: FontWeight.bold,
-                            color: primaryGreen.withOpacity(0.6),
+                            color: accent,
                           ),
                         ),
                       ],
                     ],
                   ),
                 ),
-                const SizedBox(width: 4),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: AppColors.textLight, size: 24),
-                  onSelected: (value) {
-                    if (value == 'alterar') {
-                      _showReagendarModal(appt);
-                    } else if (value == 'ver_cliente') {
-                      final clientId = appt['perfis']?['id']?.toString() ?? '';
-                      final clientNameLocal = appt['perfis']?['nome_completo'] ?? 'Cliente';
-                      context.push('/profissional/clientes/$clientId', extra: clientNameLocal);
-                    } else if (value == 'trocar_profissional') {
-                      _switchProfessional(appt);
-                    } else {
-                      _updateStatus(appt, value);
-                    }
-                  },
-                  itemBuilder: (context) {
-                    final isEditable = appt['pago'] == true && appt['caixa_id']?.toString() == _activeCaixaId;
-                    return [
-                      if (!isPast) ...[
-                        if (status != 'concluido')
-                          const PopupMenuItem(value: 'concluido', child: Text('Concluir')),
-                        const PopupMenuItem(value: 'confirmado', child: Text('Confirmar')),
-                        const PopupMenuItem(value: 'alterar', child: Text('Alterar / Reagendar')),
-                        const PopupMenuItem(value: 'trocar_profissional', child: Text('Trocar Profissional')),
-                        const PopupMenuItem(value: 'cancelado', child: Text('Cancelar')),
-                        if (appt['pago'] != true && status != 'concluido') ...[
-                          const PopupMenuDivider(),
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.attach_money, size: 18, color: primaryGreen),
-                              const SizedBox(width: 8),
-                              const Text('Lançar Pagamento'),
-                            ]),
-                          ),
-                        ],
-                        if (isEditable) ...[
-                          const PopupMenuDivider(),
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.edit_outlined, size: 18, color: accent),
-                              const SizedBox(width: 8),
-                              const Text('Editar Pagamento'),
-                            ]),
-                          ),
-                          PopupMenuItem(
-                            value: 'nao_pago',
-                            child: Row(children: [
-                              Icon(Icons.money_off, size: 18, color: AppColors.error),
-                              const SizedBox(width: 8),
-                              const Text('Não Pago (Excluir)'),
-                            ]),
-                          ),
-                        ],
-                        const PopupMenuDivider(),
-                      ],
-                      if (isPast && status != 'concluido' && status != 'cancelado' && status != 'no_show') ...[
-                        if (appt['pago'] != true) ...[
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.attach_money, size: 18, color: primaryGreen),
-                              const SizedBox(width: 8),
-                              const Text('Lançar Pagamento'),
-                            ]),
-                          ),
-                        ],
-                        if (isEditable) ...[
-                          PopupMenuItem(
-                            value: 'pagar',
-                            child: Row(children: [
-                              Icon(Icons.edit_outlined, size: 18, color: accent),
-                              const SizedBox(width: 8),
-                              const Text('Editar Pagamento'),
-                            ]),
-                          ),
-                          PopupMenuItem(
-                            value: 'nao_pago',
-                            child: Row(children: [
-                              Icon(Icons.money_off, size: 18, color: AppColors.error),
-                              const SizedBox(width: 8),
-                              const Text('Não Pago (Excluir)'),
-                            ]),
-                          ),
-                        ],
-                        PopupMenuItem(
-                          value: 'concluido',
-                          child: Row(children: [
-                            Icon(Icons.check_circle_outline, size: 18, color: primaryGreen),
-                            const SizedBox(width: 8),
-                            const Text('Concluir'),
-                          ]),
-                        ),
-                        PopupMenuItem(
-                          value: 'no_show',
-                          child: Row(children: [
-                            Icon(Icons.person_off_outlined, size: 18, color: AppColors.warning),
-                            const SizedBox(width: 8),
-                            const Text('No-show (Não compareceu)'),
-                          ]),
-                        ),
-                        const PopupMenuDivider(),
-                      ],
-                      PopupMenuItem(
-                        value: 'ver_cliente',
-                        child: Row(children: [
-                          Icon(Icons.person_outline, size: 18, color: primaryGreen),
-                          const SizedBox(width: 8),
-                          const Text('Ver dados do cliente'),
-                        ]),
-                      ),
-                    ];
-                  },
-                ),
+                _buildCardActionMenu(appt, isPast, status, statusColor, false),
               ],
             ),
     );
   }
+
+  Widget _buildCardActionMenu(Map<String, dynamic> appt, bool isPast, String status, Color statusColor, bool isCompact) {
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.more_vert, color: AppColors.textLight, size: isCompact ? 18 : 24),
+      onSelected: (value) {
+        if (value == 'alterar') {
+          _showReagendarModal(appt);
+        } else if (value == 'ver_cliente') {
+          final clientId = appt['cliente_id']?.toString() ?? appt['perfis']?['id']?.toString() ?? '';
+          final clientNameLocal = appt['perfis']?['nome_completo'] ?? 'Cliente';
+          if (clientId.isNotEmpty) {
+            context.push('/profissional/clientes/$clientId', extra: clientNameLocal);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('ID do cliente não encontrado')),
+            );
+          }
+        } else if (value == 'trocar_profissional') {
+          _switchProfessional(appt);
+        } else if (value == 'nao_pago') {
+          _marcarComoNaoPago(appt);
+        } else if (value == 'alterar_status_concluido') {
+          _showAlterarStatusConcluidoMenu(appt);
+        } else {
+          _updateStatus(appt, value);
+        }
+      },
+      itemBuilder: (context) {
+        final isEditable = appt['caixa_id']?.toString() == _activeCaixaId;
+        return [
+          if (!isPast) ...[
+            if (status == 'concluido')
+              PopupMenuItem(
+                value: 'alterar_status_concluido',
+                child: Row(children: [
+                  Icon(Icons.edit_road_outlined, size: 18, color: goldColor),
+                  const SizedBox(width: 8),
+                  const Text('Alterar Status'),
+                ]),
+              )
+            else
+              const PopupMenuItem(value: 'concluido', child: Text('Concluir')),
+              
+            const PopupMenuItem(value: 'confirmado', child: Text('Confirmar')),
+            const PopupMenuItem(value: 'alterar', child: Text('Alterar / Reagendar')),
+            const PopupMenuItem(value: 'trocar_profissional', child: Text('Trocar Profissional')),
+            const PopupMenuItem(value: 'cancelado', child: Text('Cancelar')),
+            
+            if (appt['pago'] != true) ...[
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: 'pagar',
+                child: Row(children: [
+                  Icon(Icons.attach_money, size: 18, color: primaryGreen),
+                  const SizedBox(width: 8),
+                  const Text('Lançar Pagamento'),
+                ]),
+              ),
+            ],
+            if (isEditable && appt['pago'] == true) ...[
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: 'pagar',
+                child: Row(children: [
+                  Icon(Icons.edit_outlined, size: 18, color: accent),
+                  const SizedBox(width: 8),
+                  const Text('Editar Pagamento'),
+                ]),
+              ),
+              PopupMenuItem(
+                value: 'nao_pago',
+                child: Row(children: [
+                  Icon(Icons.money_off, size: 18, color: AppColors.error),
+                  const SizedBox(width: 8),
+                  const Text('Não Pago (Excluir)'),
+                ]),
+              ),
+            ],
+            const PopupMenuDivider(),
+          ],
+          if (isPast) ...[
+             if (status == 'concluido')
+              PopupMenuItem(
+                value: 'alterar_status_concluido',
+                child: Row(children: [
+                  Icon(Icons.edit_road_outlined, size: 18, color: goldColor),
+                  const SizedBox(width: 8),
+                  const Text('Alterar Status'),
+                ]),
+              ),
+            if (status != 'concluido' && status != 'cancelado' && status != 'no_show') ...[
+              PopupMenuItem(
+                value: 'concluido',
+                child: Row(children: [
+                  Icon(Icons.check_circle_outline, size: 18, color: primaryGreen),
+                  const SizedBox(width: 8),
+                  const Text('Concluir'),
+                ]),
+              ),
+              PopupMenuItem(
+                value: 'no_show',
+                child: Row(children: [
+                  Icon(Icons.person_off_outlined, size: 18, color: AppColors.warning),
+                  const SizedBox(width: 8),
+                  const Text('No-show (Não compareceu)'),
+                ]),
+              ),
+            ],
+            if (appt['pago'] != true && status != 'cancelado' && status != 'no_show') ...[
+               PopupMenuItem(
+                value: 'pagar',
+                child: Row(children: [
+                  Icon(Icons.attach_money, size: 18, color: primaryGreen),
+                  const SizedBox(width: 8),
+                  const Text('Lançar Pagamento'),
+                ]),
+              ),
+            ],
+            if (isEditable && appt['pago'] == true) ...[
+              PopupMenuItem(
+                value: 'pagar',
+                child: Row(children: [
+                  Icon(Icons.edit_outlined, size: 18, color: accent),
+                  const SizedBox(width: 8),
+                  const Text('Editar Pagamento'),
+                ]),
+              ),
+              PopupMenuItem(
+                value: 'nao_pago',
+                child: Row(children: [
+                  Icon(Icons.money_off, size: 18, color: AppColors.error),
+                  const SizedBox(width: 8),
+                  const Text('Não Pago (Excluir)'),
+                ]),
+              ),
+            ],
+            const PopupMenuDivider(),
+          ],
+          PopupMenuItem(
+            value: 'ver_cliente',
+            child: Row(children: [
+              Icon(Icons.person_outline, size: 18, color: primaryGreen),
+              const SizedBox(width: 8),
+              const Text('Ver dados do cliente'),
+            ]),
+          ),
+        ];
+      },
+    );
+  }
+
 
   Widget _buildFilterMenu({
     required String label,
@@ -1838,33 +1759,75 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
   }) {
     return PopupMenuButton<String>(
       onSelected: onSelected,
-      itemBuilder: (context) => options.map((opt) => PopupMenuItem(value: opt, child: Text(opt))).toList(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      elevation: 4,
+      offset: const Offset(0, 40),
+      itemBuilder: (context) => options.map((opt) {
+        final isSelected = currentValue.toLowerCase() == opt.toLowerCase() ||
+            (currentValue.toLowerCase() == 'concluido' && opt.toLowerCase() == 'concluído');
+
+        Color dotColor = primaryGreen;
+        if (opt.toLowerCase() == 'pendente') dotColor = AppColors.warning;
+        if (opt.toLowerCase() == 'cancelado') dotColor = AppColors.error;
+        if (opt.toLowerCase() == 'confirmado') dotColor = AppColors.success;
+        if (opt.toLowerCase() == 'concluído' || opt.toLowerCase() == 'concluido') dotColor = Colors.blue;
+
+        return PopupMenuItem<String>(
+          value: opt,
+          child: Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                opt,
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? primaryGreen : Colors.black87,
+                  fontSize: 14,
+                ),
+              ),
+              if (isSelected) ...[
+                const Spacer(),
+                Icon(Icons.check, color: primaryGreen, size: 16),
+              ],
+            ],
+          ),
+        );
+      }).toList(),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: primaryGreen.withOpacity(0.2)),
+          border: Border.all(color: primaryGreen.withOpacity(0.15)),
+          boxShadow: [
+            BoxShadow(
+              color: primaryGreen.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 12,
-                color: AppColors.textSecondary,
-              ),
-            ),
+            Icon(Icons.tune_rounded, color: primaryGreen, size: 16),
             const SizedBox(width: 8),
             Text(
               currentValue,
-              style: TextStyle(fontSize: 12,
-                fontWeight: FontWeight.bold,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
                 color: primaryGreen,
+                fontSize: 13,
               ),
             ),
             const SizedBox(width: 4),
-            Icon(Icons.keyboard_arrow_down, size: 16, color: primaryGreen),
+            Icon(Icons.keyboard_arrow_down_rounded, color: primaryGreen, size: 18),
           ],
         ),
       ),
@@ -2010,18 +1973,21 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
 
   Widget _buildMonthlyGroupedList() {
     if (_appointments.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            children: [
-              Icon(Icons.calendar_today_outlined, size: 48, color: primaryGreen.withOpacity(0.2)),
-              const SizedBox(height: 16),
-              Text(
-                'Nenhum agendamento para este mês',
-                style: TextStyle(color: AppColors.textSecondary),
-              ),
-            ],
+      return SliverFillRemaining(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.calendar_today_outlined, size: 48, color: primaryGreen.withOpacity(0.2)),
+                const SizedBox(height: 16),
+                Text(
+                  'Nenhum agendamento para este mês',
+                  style: GoogleFonts.manrope(color: AppColors.textSecondary),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -2053,18 +2019,14 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
-                child: Row(
-                  children: [
-                    Text(
-                      headerDate.toLowerCase(),
-                      style: GoogleFonts.playfairDisplay(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: primaryGreen,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  headerDate.toLowerCase(),
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: primaryGreen,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
               ...dayAppts.map((appt) => Padding(
@@ -2078,31 +2040,61 @@ class _ProfissionalAgendaPageState extends State<ProfissionalAgendaPage> {
       ),
     );
   }
-}
 
-class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-  @override
-  final double maxExtent;
-  @override
-  final double minExtent;
-
-  _StickyHeaderDelegate({
-    required this.child,
-    required this.maxExtent,
-    required this.minExtent,
-  });
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) {
-    return oldDelegate.child != child || 
-           oldDelegate.maxExtent != maxExtent || 
-           oldDelegate.minExtent != minExtent;
+  void _showAlterarStatusConcluidoMenu(Map<String, dynamic> appt) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: bgColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Alterar Status de Concluído',
+                  style: TextStyle(
+                    fontFamily: 'Playfair Display',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: primaryGreen,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.pending_actions, color: goldColor),
+                title: const Text('Voltar para Pendente'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _updateStatus(appt, 'pendente');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.cancel_outlined, color: Colors.red),
+                title: const Text('Cancelar Agendamento'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _updateStatus(appt, 'cancelado');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.calendar_month_outlined, color: primaryGreen),
+                title: const Text('Alterar Data (Reagendar)'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showReagendarModal(appt);
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
