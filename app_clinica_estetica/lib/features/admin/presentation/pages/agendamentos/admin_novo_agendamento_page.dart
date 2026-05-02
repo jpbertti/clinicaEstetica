@@ -195,7 +195,7 @@ class _AdminNovoAgendamentoPageState extends State<AdminNovoAgendamentoPage> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            _currentStep == 0 ? 'Próximo: selecionar cliente' : 'Próximo: escolher data e profissional',
+                            _currentStep == 0 ? 'Próximo: Selecionar Cliente' : 'Agendar',
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

@@ -55,7 +55,7 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
       // Busca avaliações
       final evaluationsResponse = await _supabase
           .from('avaliacoes')
-          .select('*, agendamentos(servicos(nome))')
+          .select('*, agendamentos(data_hora, servicos(nome), perfis!profissional_id(nome_completo))')
           .eq('cliente_id', widget.clientId)
           .order('criado_em', ascending: false);
 
@@ -662,44 +662,66 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
         final eval = _evaluations[index];
         final nota = (eval['nota'] ?? 0) as int;
         
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: primaryGreen.withOpacity(0.05)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    eval['agendamentos']?['servicos']?['nome'] ?? 'Serviço',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen),
-                  ),
-                  Row(
-                    children: List.generate(5, (i) => Icon(
-                      Icons.star,
-                      size: 14,
-                      color: i < nota ? goldColor : Colors.grey[300],
-                    )),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                eval['comentario'] ?? 'Sem comentário.',
-                style: TextStyle(fontSize: 13, color: Colors.black87),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                DateFormat('dd/MM/yyyy').format(DateTime.parse(eval['criado_em'])),
-                style: TextStyle(fontSize: 11, color: Colors.black38),
-              ),
-            ],
+        return InkWell(
+          onTap: () => _showAvaliacaoDetalhes(eval),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: primaryGreen.withOpacity(0.05)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        eval['agendamentos']?['servicos']?['nome'] ?? 'Serviço',
+                        style: TextStyle(fontWeight: FontWeight.bold, color: primaryGreen),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Row(
+                      children: List.generate(5, (i) => Icon(
+                        Icons.star,
+                        size: 14,
+                        color: i < nota ? goldColor : Colors.grey[300],
+                      )),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  eval['comentario'] ?? 'Sem comentário.',
+                  style: TextStyle(fontSize: 13, color: Colors.black87),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      DateFormat('dd/MM/yyyy').format(DateTime.parse(eval['criado_em'])),
+                      style: TextStyle(fontSize: 11, color: Colors.black38),
+                    ),
+                    Icon(Icons.chevron_right, size: 16, color: goldColor.withOpacity(0.5)),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -900,6 +922,150 @@ class _AdminDetalhesClientePageState extends State<AdminDetalhesClientePage> wit
           },
         );
       },
+    );
+  }
+
+  void _showAvaliacaoDetalhes(Map<String, dynamic> eval) {
+    final nota = (eval['nota'] ?? 0) as int;
+    final agendamento = eval['agendamentos'];
+    final servico = agendamento?['servicos']?['nome'] ?? 'Serviço';
+    final profissional = agendamento?['perfis']?['nome_completo'] ?? 'Não informado';
+    final dataAvaliacao = DateTime.parse(eval['criado_em']).toLocal();
+    final dataServico = agendamento?['data_hora'] != null 
+        ? DateTime.parse(agendamento['data_hora']).toLocal() 
+        : null;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        contentPadding: EdgeInsets.zero,
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: primaryGreen.withOpacity(0.05),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: primaryGreen,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.star, color: goldColor, size: 32),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Resumo da Avaliação',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: primaryGreen,
+                        fontFamily: 'Playfair Display',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(5, (i) => Icon(
+                        Icons.star,
+                        size: 24,
+                        color: i < nota ? goldColor : Colors.grey[300],
+                      )),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildModalInfoItem('Serviço', servico),
+                    _buildModalInfoItem('Profissional', profissional),
+                    if (dataServico != null)
+                      _buildModalInfoItem('Data do Serviço', DateFormat('dd/MM/yyyy HH:mm').format(dataServico)),
+                    _buildModalInfoItem('Data da Avaliação', DateFormat('dd/MM/yyyy').format(dataAvaliacao)),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Comentário do Cliente',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: primaryGreen.withOpacity(0.6),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: bgColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: primaryGreen.withOpacity(0.1)),
+                      ),
+                      child: Text(
+                        eval['comentario'] ?? 'Sem comentário.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                          fontStyle: eval['comentario'] == null ? FontStyle.italic : FontStyle.normal,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryGreen,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      elevation: 0,
+                    ),
+                    child: const Text('Fechar', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModalInfoItem(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 11, color: Colors.black45),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: primaryGreen),
+          ),
+        ],
+      ),
     );
   }
 

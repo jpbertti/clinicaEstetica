@@ -36,7 +36,7 @@ class _ProfissionalConfigAgendaPageState extends State<ProfissionalConfigAgendaP
               unselectedLabelColor: Colors.grey,
               indicatorColor: accentColor,
               isScrollable: true,
-              labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              labelStyle: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.5),
               tabs: const [
                 Tab(text: 'Horário Trabalho'),
                 Tab(text: 'Horário Almoço'),
@@ -258,7 +258,7 @@ class _AbaHorarioTrabalhoState extends State<_AbaHorarioTrabalho> {
                         children: [
                           Text(
                             _diasSemanas[index],
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(fontWeight: FontWeight.w800,
                               color: (fechado || clinicaFechada) ? Colors.grey : primaryColor,
                             ),
                           ),
@@ -267,7 +267,7 @@ class _AbaHorarioTrabalhoState extends State<_AbaHorarioTrabalho> {
                               'Clínica Fechada',
                               style: TextStyle(fontSize: 10,
                                 color: Colors.red[300],
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                         ],
@@ -314,7 +314,7 @@ class _AbaHorarioTrabalhoState extends State<_AbaHorarioTrabalho> {
             ),
             child: _isSaving
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : Text('Salvar Configurações', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                : Text('Salvar Configurações', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5)),
           ),
         ),
       ],
@@ -332,7 +332,7 @@ class _AbaHorarioTrabalhoState extends State<_AbaHorarioTrabalho> {
         ),
         child: Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold, color: primaryColor, fontSize: 13),
+          style: TextStyle(fontWeight: FontWeight.w800, color: primaryColor, fontSize: 13),
         ),
       ),
     );
@@ -541,7 +541,7 @@ class _AbaHorarioAlmocoState extends State<_AbaHorarioAlmoco> {
                         children: [
                           Text(
                             _diasSemanas[index],
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(fontWeight: FontWeight.w800,
                               color: (!ativo || clinicaFechada) ? Colors.grey : primaryColor,
                             ),
                           ),
@@ -550,7 +550,7 @@ class _AbaHorarioAlmocoState extends State<_AbaHorarioAlmoco> {
                               'Clínica Fechada',
                               style: TextStyle(fontSize: 10,
                                 color: Colors.red[300],
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                         ],
@@ -597,7 +597,7 @@ class _AbaHorarioAlmocoState extends State<_AbaHorarioAlmoco> {
             ),
             child: _isSaving
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : Text('Salvar Intervalos', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                : Text('Salvar Intervalos', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5)),
           ),
         ),
       ],
@@ -615,7 +615,7 @@ class _AbaHorarioAlmocoState extends State<_AbaHorarioAlmoco> {
         ),
         child: Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold, color: primaryColor, fontSize: 13),
+          style: TextStyle(fontWeight: FontWeight.w800, color: primaryColor, fontSize: 13),
         ),
       ),
     );
@@ -709,8 +709,9 @@ class _AbaFecharAgendaState extends State<_AbaFecharAgenda> {
             label: Text(
               'Novo Bloqueio',
               style: TextStyle(fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 color: Colors.white,
+                letterSpacing: 0.5,
               ),
             ),
             style: ElevatedButton.styleFrom(
@@ -773,7 +774,7 @@ class _AbaFecharAgendaState extends State<_AbaFecharAgenda> {
                                 children: [
                                   Text(
                                     DateFormat('dd/MM/yyyy').format(dataDate),
-                                    style: TextStyle(fontWeight: FontWeight.bold,
+                                    style: TextStyle(fontWeight: FontWeight.w800,
                                       fontSize: 16,
                                       color: Colors.red[800],
                                     ),
@@ -941,7 +942,8 @@ class _NovoBloqueioModalState extends State<_NovoBloqueioModal> {
               'Fechar Agenda',
               style: TextStyle(fontFamily: 'Playfair Display', 
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5,
                 color: primaryColor,
               ),
             ),
@@ -953,7 +955,7 @@ class _NovoBloqueioModalState extends State<_NovoBloqueioModal> {
                   ? DateFormat('dd/MM/yyyy').format(_dataEscolhida!)
                   : 'Selecionar Data',
                 style: TextStyle(fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: _dataEscolhida != null ? primaryColor : Colors.grey,
                 ),
               ),
@@ -964,7 +966,7 @@ class _NovoBloqueioModalState extends State<_NovoBloqueioModal> {
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               activeThumbColor: primaryColor,
-              title: Text('Dia todo', style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text('Dia todo', style: TextStyle(fontWeight: FontWeight.w800)),
               value: _diaTodo,
               onChanged: (v) => setState(() => _diaTodo = v),
             ),

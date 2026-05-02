@@ -902,7 +902,7 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.accent : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -926,38 +926,41 @@ class _AgendamentoPageState extends State<AgendamentoPage> with SingleTickerProv
                   )
                 ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '$startTime - $endTime',
-              style: GoogleFonts.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : AppColors.primary,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '$startTime - $endTime',
+                style: GoogleFonts.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : AppColors.primary,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.access_time_rounded,
-                  size: 14,
-                  color: isSelected ? Colors.white.withOpacity(0.9) : AppColors.accent,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '${duration}min de agendamento',
-                  style: GoogleFonts.manrope(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.white.withOpacity(0.9) : AppColors.textLight,
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.access_time_rounded,
+                    size: 14,
+                    color: isSelected ? Colors.white.withOpacity(0.9) : AppColors.accent,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 4),
+                  Text(
+                    '$duration min',
+                    style: GoogleFonts.manrope(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.white.withOpacity(0.9) : AppColors.textLight,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

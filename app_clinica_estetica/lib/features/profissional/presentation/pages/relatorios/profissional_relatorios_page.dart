@@ -136,17 +136,18 @@ class _ProfissionalRelatoriosPageState
                             'Meu Desempenho',
                             style: TextStyle(
                               fontFamily: 'Playfair Display',
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
                               color: primaryGreen,
+                              letterSpacing: -0.5,
                             ),
                           ),
                           Text(
                             'Seus indicadores e relatórios detalhados',
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.6,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.2,
                               color: accent,
                             ),
                           ),
@@ -257,8 +258,9 @@ class _ProfissionalRelatoriosPageState
                             style: TextStyle(
                               fontFamily: 'Playfair Display',
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: primaryGreen,
+                              letterSpacing: -0.2,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -365,9 +367,9 @@ class _ProfissionalRelatoriosPageState
       title.toUpperCase(),
       style: TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w800,
         color: primaryColor.withOpacity(0.6),
-        letterSpacing: 1.6,
+        letterSpacing: 1.2,
       ),
     );
   }
@@ -394,7 +396,7 @@ class _ProfissionalRelatoriosPageState
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight:
-                      isSelected ? FontWeight.bold : FontWeight.normal,
+                      isSelected ? FontWeight.w800 : FontWeight.normal,
                   color: isSelected ? primaryColor : AppColors.textPrimary,
                 ),
               ),
@@ -427,7 +429,7 @@ class _ProfissionalRelatoriosPageState
               '$label: ',
               style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w800,
                 color: labelColor ?? AppColors.textLight,
               ),
             ),
@@ -435,7 +437,7 @@ class _ProfissionalRelatoriosPageState
               currentValue,
               style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 color: primaryColor,
               ),
             ),
@@ -485,7 +487,7 @@ class _ProfissionalRelatoriosPageState
                   title,
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: 1.0,
                     color: AppColors.textLight,
                   ),
@@ -501,8 +503,9 @@ class _ProfissionalRelatoriosPageState
               style: TextStyle(
                 fontFamily: 'Playfair Display',
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 color: primaryGreen,
+                letterSpacing: -0.5,
               ),
             ),
           ),
@@ -519,7 +522,7 @@ class _ProfissionalRelatoriosPageState
                   '${growth.toStringAsFixed(1)}% $trendLabel',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     color: isPositive
                         ? AppColors.success
                         : AppColors.error,
@@ -530,7 +533,7 @@ class _ProfissionalRelatoriosPageState
                   trendLabel,
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     color: AppColors.textLight,
                   ),
                 ),
@@ -581,15 +584,16 @@ class _ProfissionalRelatoriosPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Playfair Display',
-                      fontWeight: FontWeight.bold,
-                      color: primaryGreen,
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Playfair Display',
+                        fontWeight: FontWeight.w800,
+                        color: primaryGreen,
+                        letterSpacing: -0.2,
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 4),
                   Text(
                     description,

@@ -159,7 +159,7 @@ class _ProfissionalNotificacoesPageState extends State<ProfissionalNotificacoesP
           const SizedBox(height: 16),
           Text(
             'Nenhuma notificação',
-            style: TextStyle(fontSize: 18, color: primaryGreen, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, color: primaryGreen, fontWeight: FontWeight.w800, letterSpacing: -0.5),
           ),
         ],
       ),
@@ -189,7 +189,7 @@ class _ProfissionalNotificacoesPageState extends State<ProfissionalNotificacoesP
   Widget _buildSectionLabel(String label) {
     return Text(
       label,
-      style: TextStyle(fontFamily: 'Playfair Display', fontSize: 18, fontWeight: FontWeight.bold, color: primaryGreen),
+      style: TextStyle(fontFamily: 'Playfair Display', fontSize: 18, fontWeight: FontWeight.w800, color: primaryGreen, letterSpacing: -0.5),
     );
   }
 
@@ -231,12 +231,13 @@ class _ProfissionalNotificacoesPageState extends State<ProfissionalNotificacoesP
                       children: [
                         Text(
                           n.titulo,
-                          style: TextStyle(
-                            fontFamily: 'Playfair Display',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: n.isLida ? primaryGreen.withOpacity(0.6) : primaryGreen,
-                          ),
+                            style: TextStyle(
+                              fontFamily: 'Playfair Display',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: n.isLida ? primaryGreen.withOpacity(0.6) : primaryGreen,
+                              letterSpacing: -0.2,
+                            ),
                         ),
                         const SizedBox(height: 4),
                         Text(

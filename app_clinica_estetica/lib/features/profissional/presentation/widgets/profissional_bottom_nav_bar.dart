@@ -91,7 +91,7 @@ class ProfissionalBottomNavigationBar extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 9,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w800,
               color: isActive ? primaryColor : Colors.black26,
               letterSpacing: 0.5,
             ),

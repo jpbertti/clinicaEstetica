@@ -389,16 +389,16 @@ class _ProfissionalDetalhesRelatorioPageState
 
   Widget _sectionTitle(String title, Color color) => Padding(
     padding: const EdgeInsets.only(left: 4),
-    child: Text(title, style: TextStyle(fontFamily: 'Playfair Display', fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+    child: Text(title, style: TextStyle(fontFamily: 'Playfair Display', fontSize: 20, fontWeight: FontWeight.w800, color: color, letterSpacing: -0.5)),
   );
 
   Widget _indicator(String label, String value, Color color) => Container(
     padding: const EdgeInsets.all(16),
     decoration: _card(),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(label, style: TextStyle(fontSize: 10, color: AppColors.textLight, fontWeight: FontWeight.bold)),
+      Text(label, style: TextStyle(fontSize: 10, color: AppColors.textLight, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
       const SizedBox(height: 4),
-      Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color)),
+      Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: color, letterSpacing: -0.2)),
     ]),
   );
 

@@ -1801,7 +1801,7 @@ class _AdminAgendamentosPageState extends State<AdminAgendamentosPage> {
                     PopupMenuItem(value: 'concluido', child: Text(StringUtils.toTitleCase('Concluir'))),
                   
                   PopupMenuItem(value: 'confirmado', child: Text(StringUtils.toTitleCase('Confirmar'))),
-                  PopupMenuItem(value: 'alterar', child: Text(StringUtils.toTitleCase('Alterar'))),
+                  PopupMenuItem(value: 'alterar', child: Text(StringUtils.toTitleCase('Reagendar'))),
                   PopupMenuItem(value: 'switch_prof', child: Text(StringUtils.toTitleCase('Trocar Profissional'))),
                   PopupMenuItem(value: 'cancelado', child: Text(StringUtils.toTitleCase('Cancelar'))),
                   

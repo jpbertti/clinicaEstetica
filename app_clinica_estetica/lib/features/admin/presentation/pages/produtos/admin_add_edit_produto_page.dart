@@ -495,7 +495,7 @@ class _AdminAddEditProdutoPageState extends State<AdminAddEditProdutoPage> {
                             onPressed: () => context.pop(),
                             child: Text(
                               'Cancelar',
-                              style: AppButtonStyles.cancelTextStyle(),
+                              style: TextStyle(color: AppColors.accent),
                             ),
                           ),
                         ),

@@ -189,8 +189,9 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
                             'Voltar',
                             style: TextStyle(
                               color: AppColors.accent,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               fontSize: 16,
+                              letterSpacing: 0.5,
                             ),
                           ),
                         ),
@@ -215,7 +216,8 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
                             _currentStep == 0 ? 'Próximo: selecionar cliente' : 'Finalizar seleção',
                             style: const TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.2,
                             ),
                           ),
                         ],
@@ -257,7 +259,7 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
                       if (_services.isNotEmpty) ...[
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text('SERVIÇOS', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textLight)),
+                          child: Text('SERVIÇOS', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.textLight, letterSpacing: 1.2)),
                         ),
                         ..._services
                             .where((s) => s.nome.toLowerCase().contains(_procedureSearch.toLowerCase()))
@@ -266,7 +268,7 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
                       if (_packages.isNotEmpty) ...[
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text('PACOTES', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textLight)),
+                          child: Text('PACOTES', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.textLight, letterSpacing: 1.2)),
                         ),
                         ..._packages
                             .where((p) => p.titulo.toLowerCase().contains(_procedureSearch.toLowerCase()))
@@ -332,7 +334,7 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, letterSpacing: -0.2)),
                   Text(sub, style: const TextStyle(color: AppColors.textLight, fontSize: 13)),
                 ],
               ),
@@ -395,7 +397,7 @@ class _ProfissionalNovoAgendamentoPageState extends State<ProfissionalNovoAgenda
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(client['nome_completo'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  Text(client['nome_completo'], style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
                                   Text(client['email'] ?? '', style: const TextStyle(fontSize: 12, color: AppColors.textLight)),
                                 ],
                               ),

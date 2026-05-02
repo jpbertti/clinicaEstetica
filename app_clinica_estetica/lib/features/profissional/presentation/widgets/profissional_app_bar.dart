@@ -63,7 +63,7 @@ class ProfissionalAppBar extends StatelessWidget implements PreferredSizeWidget 
         _formatTitle(title),
         style: GoogleFonts.playfairDisplay(
           color: AppColors.primary,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w800,
           fontSize: 18,
           letterSpacing: 1.2,
         ),
